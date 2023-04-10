@@ -135,26 +135,24 @@ def DBG_CR_LN(self, msg=""):
 		raise Exception
 	except:
 		f = sys.exc_info()[2].tb_frame.f_back
-
 	objname = self.__class__.__name__
 	if hasattr(self, "dbg_func"):
-		self.dbg_func.critical("{}[{}|{}/{:04}] - {}{}".format(COLOR_LIGHT_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		self.dbg_func.critical("{}[{}|{}:{:04}] - {}{}".format(COLOR_LIGHT_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 	else:
 		if ( self._dbg_more <= DBG_LVL_CRITICAL ):
-			print("{}[{}|{}/{:04}] - {}{}\r".format(COLOR_LIGHT_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_LIGHT_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 
 def DBG_ER_LN(self, msg=""):
 	try:
 		raise Exception
 	except:
 		f = sys.exc_info()[2].tb_frame.f_back
-
 	objname = self.__class__.__name__
 	if hasattr(self, "dbg_func"):
-		self.dbg_func.error("{}[{}|{}/{:04}] - {}{}".format(COLOR_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		self.dbg_func.error("{}[{}|{}:{:04}] - {}{}".format(COLOR_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 	else:
 		if ( self._dbg_more <= DBG_LVL_ERROR ):
-			print("{}[{}|{}/{:04}] - {}{}\r".format(COLOR_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 
 def DBG_WN_LN(self, msg=""):
 	try:
@@ -163,10 +161,10 @@ def DBG_WN_LN(self, msg=""):
 		f = sys.exc_info()[2].tb_frame.f_back
 	objname = self.__class__.__name__
 	if hasattr(self, "dbg_func"):
-		self.dbg_func.warning("{}[{}|{}/{:04}] - {}{}".format(COLOR_PURPLE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		self.dbg_func.warning("{}[{}|{}:{:04}] - {}{}".format(COLOR_PURPLE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 	else:
 		if ( self._dbg_more <= DBG_LVL_WARN ):
-			print("{}[{}|{}/{:04}] - {}{}\r".format(COLOR_PURPLE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_PURPLE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 
 def DBG_IF_LN(self, msg=""):
 	try:
@@ -175,10 +173,10 @@ def DBG_IF_LN(self, msg=""):
 		f = sys.exc_info()[2].tb_frame.f_back
 	objname = self.__class__.__name__
 	if hasattr(self, "dbg_func"):
-		self.dbg_func.info("{}[{}|{}/{:04}] - {}{}".format(COLOR_YELLOW, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		self.dbg_func.info("{}[{}|{}:{:04}] - {}{}".format(COLOR_YELLOW, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 	else:
 		if ( self._dbg_more <= DBG_LVL_INFO ):
-			print("{}[{}|{}/{:04}] - {}{}\r".format(COLOR_YELLOW, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_YELLOW, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 
 def DBG_DB_LN(self, msg=""):
 	try:
@@ -187,10 +185,10 @@ def DBG_DB_LN(self, msg=""):
 		f = sys.exc_info()[2].tb_frame.f_back
 	objname = self.__class__.__name__
 	if hasattr(self, "dbg_func"):
-		self.dbg_func.debug("{}[{}|{}/{:04}] - {}{}".format(COLOR_WHITE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
+		self.dbg_func.debug("{}[{}|{}:{:04}] - {}{}".format(COLOR_WHITE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
 	else:
 		if ( self._dbg_more <= DBG_LVL_DEBUG ):
-			print("{}[{}|{}/{:04}] - {}{}\r".format(COLOR_WHITE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
+			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_WHITE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
 
 def DBG_TR_LN(self, msg=""):
 	try:
@@ -200,10 +198,10 @@ def DBG_TR_LN(self, msg=""):
 	objname = self.__class__.__name__
 	objname = self.__class__.__name__
 	if hasattr(self, "dbg_func"):
-		self.dbg_func.trace("{}[{}|{}/{:04}] - {}{}".format(COLOR_LIGHT_GRAY, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
+		self.dbg_func.trace("{}[{}|{}:{:04}] - {}{}".format(COLOR_LIGHT_GRAY, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
 	else:
 		if ( self._dbg_more <= DBG_LVL_TRACE ):
-			self.dbg_func("{}[{}|{}/{:04}] - {}{}\r".format(COLOR_LIGHT_GRAY, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+			self.dbg_func("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_LIGHT_GRAY, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
 
 def DBG_NAME(self):
 	return self.__class__.__name__
@@ -315,11 +313,11 @@ def get_hwaddr(netdev='eth0'):
 	ipaddr = sdata[2].strip().split(' ')[1].split('/')[0]
 	return (macaddr, ipaddr)
 
-STATIC_IP="127.0.0.1"
-#STATIC_IP = "127.0.0.1"
-STATIC_IFACE = "eth0"
-STATIC_PORT = "9981"
-(STATIC_IFACE, STATIC_IP) = get_ipaddr()
+#STATIC_IP="127.0.0.1"
+##STATIC_IP = "127.0.0.1"
+#STATIC_IFACE = "eth0"
+#STATIC_PORT = "9981"
+#(STATIC_IFACE, STATIC_IP) = get_ipaddr()
 
 #******************************************************************************
 # pythonX9
