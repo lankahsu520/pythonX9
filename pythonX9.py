@@ -121,87 +121,74 @@ def remote_debug(server_ip="192.168.56.1", server_port=8864):
 if ( USE_DBG_REMOTE == 1):
 	remote_debug()
 
-def DBG_LEVEL_SET(self):
-	objname = self.__class__.__name__
-	if (self._dbg_logging==1):
-		#logging.basicConfig(level=dbg_more, format='%(message)s', filename = dbg_path)
-		#logger = logging.getLogger(objname)
-		self.dbg_func = logging
-		#if hasattr(self, "dbg_func"):
-		self.dbg_func.basicConfig(level=self._dbg_more, format='%(message)s', filename = self._dbg_path)
+def dbg_more(*args):
+	if not hasattr(dbg_more, "lvl"):
+		dbg_more.lvl = DBG_LVL_DEFAULT  # it doesn't exist yet, so initialize it
+	for arg in args:
+		dbg_more.lvl = arg
+	return dbg_more.lvl
 
-def DBG_CR_LN(self, msg=""):
+def dbg_lvl_set(lvl= DBG_LVL_INFO):
+	dbg_more(lvl)
+
+def DBG_XX_LN(f_back, need_lvl, color, *args):
+	dbg_lvl = dbg_more()
+	if ( len(args) == 2 ):
+		obj = args[0]
+		msg = args[1]
+		objname = "[{}]".format(obj.__class__.__name__)
+		if hasattr(msg, "dbg_more"):
+			dbg_lvl = obj.dbg_more
+	else:
+		obj = None
+		msg = args[0]
+		objname = ""
+
+	filename = os.path.basename(f_back.f_code.co_filename)
+	if ( dbg_more() <= need_lvl ):
+		print("{}{}[{}|{}:{:04}] - {}{}\r".format(color, objname, filename, f_back.f_code.co_name, f_back.f_lineno, (msg), COLOR_NONE))
+
+def DBG_CR_LN(*args):
 	try:
 		raise Exception
 	except:
-		f = sys.exc_info()[2].tb_frame.f_back
-	objname = self.__class__.__name__
-	if hasattr(self, "dbg_func"):
-		self.dbg_func.critical("{}[{}|{}:{:04}] - {}{}".format(COLOR_LIGHT_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
-	else:
-		if ( self._dbg_more <= DBG_LVL_CRITICAL ):
-			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_LIGHT_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		f_back = sys.exc_info()[2].tb_frame.f_back
+	DBG_XX_LN(f_back, DBG_LVL_CRITICAL, COLOR_LIGHT_RED, *args)
 
-def DBG_ER_LN(self, msg=""):
+def DBG_ER_LN(*args):
 	try:
 		raise Exception
 	except:
-		f = sys.exc_info()[2].tb_frame.f_back
-	objname = self.__class__.__name__
-	if hasattr(self, "dbg_func"):
-		self.dbg_func.error("{}[{}|{}:{:04}] - {}{}".format(COLOR_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
-	else:
-		if ( self._dbg_more <= DBG_LVL_ERROR ):
-			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_RED, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		f_back = sys.exc_info()[2].tb_frame.f_back
+	DBG_XX_LN(f_back, DBG_LVL_ERROR, COLOR_RED, *args)
 
-def DBG_WN_LN(self, msg=""):
+def DBG_WN_LN(*args):
 	try:
 		raise Exception
 	except:
-		f = sys.exc_info()[2].tb_frame.f_back
-	objname = self.__class__.__name__
-	if hasattr(self, "dbg_func"):
-		self.dbg_func.warning("{}[{}|{}:{:04}] - {}{}".format(COLOR_PURPLE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
-	else:
-		if ( self._dbg_more <= DBG_LVL_WARN ):
-			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_PURPLE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		f_back = sys.exc_info()[2].tb_frame.f_back
+	DBG_XX_LN(f_back, DBG_LVL_WARN, COLOR_PURPLE, *args)
 
-def DBG_IF_LN(self, msg=""):
+def DBG_IF_LN(*args):
 	try:
 		raise Exception
 	except:
-		f = sys.exc_info()[2].tb_frame.f_back
-	objname = self.__class__.__name__
-	if hasattr(self, "dbg_func"):
-		self.dbg_func.info("{}[{}|{}:{:04}] - {}{}".format(COLOR_YELLOW, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
-	else:
-		if ( self._dbg_more <= DBG_LVL_INFO ):
-			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_YELLOW, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		f_back = sys.exc_info()[2].tb_frame.f_back
+	DBG_XX_LN(f_back, DBG_LVL_INFO, COLOR_YELLOW, *args)
 
-def DBG_DB_LN(self, msg=""):
+def DBG_DB_LN(*args):
 	try:
 		raise Exception
 	except:
-		f = sys.exc_info()[2].tb_frame.f_back
-	objname = self.__class__.__name__
-	if hasattr(self, "dbg_func"):
-		self.dbg_func.debug("{}[{}|{}:{:04}] - {}{}".format(COLOR_WHITE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
-	else:
-		if ( self._dbg_more <= DBG_LVL_DEBUG ):
-			print("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_WHITE, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
+		f_back = sys.exc_info()[2].tb_frame.f_back
+	DBG_XX_LN(f_back, DBG_LVL_DEBUG, COLOR_WHITE, *args)
 
-def DBG_TR_LN(self, msg=""):
+def DBG_TR_LN(*args):
 	try:
 		raise Exception
 	except:
-		f = sys.exc_info()[2].tb_frame.f_back
-	objname = self.__class__.__name__
-	objname = self.__class__.__name__
-	if hasattr(self, "dbg_func"):
-		self.dbg_func.trace("{}[{}|{}:{:04}] - {}{}".format(COLOR_LIGHT_GRAY, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE) )
-	else:
-		if ( self._dbg_more <= DBG_LVL_TRACE ):
-			self.dbg_func("{}[{}|{}:{:04}] - {}{}\r".format(COLOR_LIGHT_GRAY, objname, f.f_code.co_name, f.f_lineno, (msg), COLOR_NONE))
+		f_back = sys.exc_info()[2].tb_frame.f_back
+	DBG_XX_LN(f_back, DBG_LVL_TRACE, COLOR_LIGHT_GRAY, *args)
 
 def DBG_NAME(self):
 	return self.__class__.__name__
@@ -349,7 +336,6 @@ class pythonX9(object):
 		self._dbg_path = dbg_path
 		self._func_cb = func_cb
 		self._usrdata = usrdata
-		DBG_LEVEL_SET(self)
-	
+
 		self._last_time = time.process_time()
 
