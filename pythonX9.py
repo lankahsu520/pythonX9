@@ -231,6 +231,15 @@ def isOS(X):
 def isPYTHON(X):
 	return (sys.version_info[0] == X)
 
+def getPYTHONbver():
+	return "{0[0]}.{0[1]}.{0[2]}".format(sys.version_info)
+
+def chkPYTHONge(major, minor, micro):
+	return (sys.version_info >= (major, minor, micro))
+
+def chkPYTHONle(major, minor, micro):
+	return (sys.version_info <= (major, minor, micro))
+
 def averageX(X):
 	#return np.mean(X)
 	return sum(X) / len(X)
@@ -290,6 +299,7 @@ def get_ipaddr():
 		p=subprocess.Popen(arg,shell=True,stdout=subprocess.PIPE)
 		data = p.communicate()
 		sdata = data[0].decode().split()
+		DBG_ER_LN(">>>{}".format( sdata ))
 		ipaddr = sdata[ sdata.index('src')+1 ]
 		iface = sdata[ sdata.index('dev')+1 ]
 	return (iface, ipaddr)

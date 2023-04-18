@@ -14,16 +14,46 @@ pythonX9 把常用的工具集合在一起，並且將呼叫簡單化。
 # 5. Example or Usage
 
 - dummy_123 - 一個簡單的範本。請善用 DBG_XX_LN.
+```mermaid
+flowchart LR
+	Start([Start])
+	
+	main[main]
+
+	signal[[signal.signal]]
+	signal_handler[signal_handler]
+	parse_arg[[parse_arg]]
+	show_usage[show_usage]
+
+	app_start[app_start]
+	app_watch[[app_watch]]
+
+	app_stop[[app_stop]]
+	app_exit[app_exit]
+	
+	app_release[[app_release]]
+	End([End])
+	
+	Start-->main-->signal-->parse_arg-->app_start-->app_exit-->app_stop
+	signal.->signal_handler
+	
+	parse_arg-->show_usage
+	app_start-->app_watch
+	app_stop-->app_release-->End
+```
 
 ```bash
-$ ./dummy_123.py -d
+$ ./dummy_123.py -d2
+[dummy_123.py|app_start:0015] - (Python version: 3.8.10, chkPYTHONge(3,7,0): True, chkPYTHONle(3,7,0): False)
+[dummy_123.py|app_start:0019] - (IFACE: enp0s3, STATIC_MAC: 08:00:27:a1:f8:36, STATIC_IP: 192.168.0.92)
 [dummy_ctx][dummy_api.py|dummy_init:0011] - enter
-[dummy_123.py|app_exit:0047] - enter
-[dummy_123.py|app_stop:0040] - enter
-[dummy_123.py|app_release:0027] - enter
-[dummy_123.py|app_release:0032] - call dummy_ctx.release ...
+[dummy_123.py|app_exit:0053] - enter
+[dummy_123.py|app_stop:0046] - enter
+[dummy_123.py|app_release:0033] - enter
+[dummy_123.py|app_release:0038] - call dummy_ctx.release ...
 [dummy_ctx][dummy_api.py|release:0007] - enter
-[dummy_123.py|main:0096] - bye bye !!! (is_quit: 1)
+[dummy_123.py|main:0103] - bye bye !!! (is_quit: 1)
+
 ```
 - sysinfo_123 - 查找主機系統資訊，每5秒刷新畫面
 ```bash
