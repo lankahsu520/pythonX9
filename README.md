@@ -25,8 +25,38 @@ $ ./dummy_123.py -d
 [dummy_ctx][dummy_api.py|release:0007] - enter
 [dummy_123.py|main:0096] - bye bye !!! (is_quit: 1)
 ```
+- sysinfo_123 - 查找主機系統資訊，每5秒刷新畫面
+```bash
+$ ./sysinfo_123.py -d 4
+[sysinfo_ctx][sysinfo_api.py|keyboard_recv:0163] - press q to quit the loop ...
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - lo - 127.0.0.1/8
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - lo - ('::1', 0, 0)/128
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s3 - 10.0.2.15/24
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s3 - ('fe80::7549:bd5f:d0ed:32cf', 0, 2)/64
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s9 - 192.168.56.104/24
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s9 - ('fe80::e6d1:c758:6c5c:4cbd', 0, 4)/64
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - docker0 - 172.17.0.1/16
+[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s8 - ('fe80::d49:8acb:9f1b:c4cf', 0, 3)/64
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0094] - --------------------------------------------------------------------------------
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0097] - (cpu_usage: [0.0, 0.0, 0.0, 0.0])
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0098] - (cpu_loadavg: (0.07, 0.06, 0.02))
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0099] - (cpu_count: 4)
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0100] - (cpu_num: 3)
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0102] - (cpu_freq: 2808.0, min: 0.0, max: 0.0)
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0111] - (disk_usage: 17.4 %)
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0113] - (mem_total: 8335740928 bytes, mem_usage: 11.7 %)
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0117] - (battery: 80.0 %, secsleft: 00:00:00, AC: True)
+[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0124] - (fans: {})
+[sysinfo_123.py|app_release:0031] - enter
+[sysinfo_123.py|app_release:0036] - call sysinfo_ctx.release ...
+[sysinfo_123.py|main:0105] - bye bye !!! (is_quit: 1)
+
+```
+
+
 
 # 6. License
+
 pythonX9 is under the New BSD License (BSD-3-Clause).
 
 
