@@ -28,15 +28,16 @@ def app_watch(app_ctx):
 def app_release():
 	global app_list
 
-	DBG_WN_LN("enter")
+	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 	for x in app_list:
 		try:
 			objname = DBG_NAME(x)
 			if not x.release is None:
-				DBG_IF_LN("call {}.release ...".format( objname ) )
+				DBG_DB_LN("call {}.release ...".format( objname ) )
 				x.release() # No handlers could be found for logger "google.api_core.bidi"
 		except Exception:
 			pass
+	DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_stop():
 	global is_quit
@@ -45,6 +46,7 @@ def app_stop():
 		is_quit = 1
 
 		app_release()
+		DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_exit():
 	app_stop()
@@ -102,7 +104,7 @@ def main(argv):
 	app_start()
 
 	app_exit()
-	DBG_IF_LN("bye bye !!! (is_quit: {})".format(is_quit))
+	DBG_WN_LN("{} (is_quit: {})".format(DBG_TXT_BYE_BYE, is_quit))
 
 if __name__ == "__main__":
 	main(sys.argv[0:])

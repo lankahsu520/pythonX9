@@ -55,7 +55,51 @@ $ ./dummy_123.py -d2
 [dummy_123.py|main:0103] - bye bye !!! (is_quit: 1)
 
 ```
+- httpd_123 - 一個很簡單的 Web Server，負責接收檔案，並將內容存至 /tmp
+
+>當初有人挑戰我，上傳檔案不能用 "PUT"。
+>
+>我就解釋給他說，當初 HTTP 剛流行時，上傳檔案，都是用 "PUT"。但不知何時，有的 HTTP Server 是用 "POST"，也有的 HTTP Server 是用 "GET"。
+>
+>說完這些這些，那位人士說我在唬爛。不過我還是要再教育他，不管是用 "PUT"、"POST" 和 "GET"，都只是 HTTP Server 方有沒有嫁接後面的處理程序，至於對錯只能在 SPEC 上說。
+>
+>因為你要對接的 HTTP Server不見得你能掌控。
+
+```mermaid
+flowchart LR
+	httpd_123[httpd_123]
+	curl[curl]
+	saveto[/saveto: /tmp/HTTPServer_ctx-3272277516 /]
+	curl -->|endianness.jpg|httpd_123-->saveto
+```
+```bash
+$ ./httpd_123.py  8087
+Serving HTTP on 0.0.0.0 port 8087 (http://0.0.0.0:8087/) ...
+[httpd_123.py|do_POST:0062] - Enter ...
+[httpd_123.py|dump_header:0022] - ** path **
+[httpd_123.py|dump_header:0023] - /
+[httpd_123.py|dump_header:0024] - ** headers **
+[httpd_123.py|dump_header:0025] - Host: 192.168.56.104:8087
+User-Agent: curl/7.68.0
+Accept: */*
+Content-Length: 46535
+Content-Type: multipart/form-data; boundary=------------------------405c329812b65da4
+Expect: 100-continue
+
+
+[httpd_123.py|dump_header:0029] - ** Body /tmp/HTTPServer_ctx-3272277516 **
+192.168.56.104 - - [19/Apr/2023 15:05:47] "POST / HTTP/1.1" 200 -
+
+```
+
+```bash
+$ curl -d @endianness.jpg http://192.168.56.104:8087
+```
+
+
+
 - sysinfo_123 - 查找主機系統資訊，每5秒刷新畫面
+
 ```bash
 $ ./sysinfo_123.py -d 4
 [sysinfo_ctx][sysinfo_api.py|keyboard_recv:0163] - press q to quit the loop ...

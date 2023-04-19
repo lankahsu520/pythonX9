@@ -2,7 +2,6 @@
 
 import os, sys, errno, getopt, signal, time, io
 from time import sleep
-import logging
 
 import platform
 # pip3 install numpy 
@@ -10,17 +9,13 @@ import platform
 
 import fnmatch # file_find
 
+import random
+
+from pythonX9_def import *
+
 #******************************************************************************
 # define
 #******************************************************************************
-USE_DBG_REMOTE = 0
-
-OS_LINUX = "linux, linux2"
-OS_OSX = "darwin"
-OS_WINDOWS = "win32"
-
-PYTHON_V2 = 2
-PYTHON_V3 = 3
 
 TAG_ACTION = "action"
 
@@ -79,37 +74,6 @@ TAG_URL_AND_TXT = "url_and_txt"
 #******************************************************************************
 # UTIL_EX_DBG
 #******************************************************************************
-logging.TRACE = logging.DEBUG-5
-logging.addLevelName(logging.TRACE, 'TRACE')  
-logging.trace = lambda x: logging.log(logging.TRACE, x)
-
-COLOR_NONE = "\033[0m"
-COLOR_RED = "\033[0;32;31m"
-COLOR_LIGHT_RED = "\033[1;31m"
-COLOR_GREEN = "\033[0;32;32m"
-COLOR_LIGHT_GREEN = "\033[1;32m"
-COLOR_BLUE = "\033[0;32;34m"
-COLOR_LIGHT_BLUE = "\033[1;34m"
-COLOR_DARY_GRAY = "\033[1;30m"
-COLOR_CYAN = "\033[0;36m"
-COLOR_LIGHT_CYAN = "\033[1;36m"
-COLOR_PURPLE = "\033[0;35m"
-COLOR_LIGHT_PURPLE = "\033[1;35m"
-COLOR_BROWN = "\033[0;33m"
-COLOR_YELLOW = "\033[1;33m"
-COLOR_LIGHT_GRAY = "\033[0;37m"
-COLOR_WHITE = "\033[1;37m"
-
-DBG_LVL_CRITICAL = logging.CRITICAL # 50
-DBG_LVL_ERROR = logging.ERROR # 40
-DBG_LVL_WARN = logging.WARNING # 30
-DBG_LVL_INFO = logging.INFO # 20
-DBG_LVL_DEBUG = logging.DEBUG # 10
-DBG_LVL_TRACE = logging.TRACE
-#DBG_LVL_MAX = 5
-
-DBG_LVL_DEFAULT=DBG_LVL_INFO
-#DBG_LVL_DEFAULT=DBG_LVL_TRACE
 
 #** remote debug **
 def remote_debug(server_ip="192.168.56.1", server_port=8864):
@@ -153,15 +117,15 @@ def DBG_XX_LN(f_back, need_lvl, color, *args):
 		obj = args[0]
 		msg = args[1]
 		objname = "[{}]".format(obj.__class__.__name__)
-		if hasattr(msg, "dbg_more"):
-			dbg_lvl = obj.dbg_more
+		if hasattr(obj, "_dbg_more"):
+			dbg_lvl = obj._dbg_more
 	else:
 		obj = None
 		msg = args[0]
 		objname = ""
 
 	filename = os.path.basename(f_back.f_code.co_filename)
-	if ( dbg_more() <= need_lvl ):
+	if ( dbg_lvl <= need_lvl ):
 		print("{}{}[{}|{}:{:04}] - {}{}\r".format(color, objname, filename, f_back.f_code.co_name, f_back.f_lineno, (msg), COLOR_NONE))
 
 def DBG_CR_LN(*args):
@@ -204,7 +168,7 @@ def DBG_TR_LN(*args):
 		raise Exception
 	except:
 		f_back = sys.exc_info()[2].tb_frame.f_back
-	DBG_XX_LN(f_back, DBG_LVL_TRACE, COLOR_LIGHT_GRAY, *args)
+	DBG_XX_LN(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, *args)
 
 def DBG_NAME(self):
 	return self.__class__.__name__
@@ -280,6 +244,11 @@ def file_find(directory, pattern):
 			if fnmatch.fnmatch(basename, pattern):
 				filename = os.path.join(root, basename)
 				yield filename
+
+def os_urandom(count):
+	rand_num = random.randint(1e9, 1e10-1)
+	rand_str = str(rand_num).zfill(count)
+	return rand_str
 
 #******************************************************************************
 # UTIL_EX_NETWORK
