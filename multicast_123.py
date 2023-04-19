@@ -3,22 +3,28 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from sysinfo_api import *
+from multicast_api import *
 
 app_list = []
 is_quit = 0
 app_apps = {
-	"keyboard": 1,
-	"interval": 5
 }
 
+ip="239.255.255.250"
+port=3618
+
+def notify_cb(buffer):
+	DBG_IF_LN("buffer[{}] - {}".format( len(buffer), repr(buffer)) )
+
 def app_start():
-	#dbg_lvl_set(DBG_LVL_TRACE)
-	sysinfo_mgr = sysinfo_ctx(dbg_more=DBG_LVL_TRACE)
-	app_watch(sysinfo_mgr)
-	sysinfo_mgr.start(args=app_apps)
-	#sysinfo_mgr.keyboard_recv()
-	sysinfo_mgr.release()
+	#dbg_lvl_set(DBG_LVL_DEBUG)
+	multicast_mgr = multicast_ctx(dbg_more=DBG_LVL_TRACE, url="239.255.255.250", port=3618, readcb=notify_cb)
+	app_watch(multicast_mgr)
+	multicast_mgr.start( app_apps )
+
+	while (is_quit == 0 ):
+		sleep(1)
+		multicast_mgr.writex("1234567890".encode())
 
 def app_watch(app_ctx):
 	global app_list
@@ -54,7 +60,6 @@ def app_exit():
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
 	print("  -h, --help")
-	print("  -k, --key")
 	print("  -d, --debug level")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
 	app_exit()
@@ -64,7 +69,7 @@ def parse_arg(argv):
 	global app_apps
 
 	try:
-		opts,args = getopt.getopt(argv[1:], "hkd:", ["help", "key", "debug"])
+		opts,args = getopt.getopt(argv[1:], "hd:", ["help", "debug"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -73,15 +78,10 @@ def parse_arg(argv):
 
 	if (len(opts) > 0):
 		for opt, arg in opts:
-			#DBG_IF_LN("opt:{}, arg:{}".format(opt, arg))
 			if opt in ("-h", "--help"):
 				show_usage(argv)
-			elif opt in ("-k", "--key"):
-				app_apps["keyboard"] = 1
 			elif opt in ("-d", "--debug"):
-				#app_apps["debug"] = int(arg)
 				dbg_debug_helper( int(arg) )
-				#DBG_IF_LN("arg:{}".format(arg))
 			else:
 				print ("(opt: {})".format(opt))
 	else:

@@ -8,8 +8,8 @@ class dummy_ctx(pythonX9):
 			self.is_quit = 1
 			DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
 
-	def dummy_init(self):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_INIT))
+	def ctx_init(self):
+		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
@@ -19,7 +19,7 @@ class dummy_ctx(pythonX9):
 
 		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
-		self.dummy_init()
+		self.ctx_init()
 
 	def parse_args(self, args):
 		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 from pythonX9 import *
@@ -154,7 +153,7 @@ class sysinfo_ctx(pythonX9):
 			self.sysinfo_show_watch()
 			sleep(self.interval)
 
-		DBG_IF_LN(self, "exit")
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def thread_init(self):
 		start_new_thread(self.thread_handler, ())
@@ -178,8 +177,8 @@ class sysinfo_ctx(pythonX9):
 			self.is_quit = 1
 			DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
 
-	def sysinfo_init(self):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_INIT))
+	def ctx_init(self):
+		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
 		self.interval = 30
 
 	def __init__(self, **kwargs):
@@ -190,7 +189,7 @@ class sysinfo_ctx(pythonX9):
 
 		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
-		self.sysinfo_init()
+		self.ctx_init()
 
 	def parse_args(self, args):
 		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
