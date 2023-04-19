@@ -14,8 +14,10 @@ import http.server
 
 app_list = []
 is_quit = 0
-http_port = 8087
-http_bind = "0.0.0.0"
+app_apps = {
+	"http_port": 8087,
+	"http_bind": "0.0.0.0"
+}
 
 class HTTPServer_ctx(http.server.SimpleHTTPRequestHandler):
 	def dump_header(self):
@@ -73,11 +75,44 @@ class HTTPServer_ctx(http.server.SimpleHTTPRequestHandler):
 		self.send_response(200)
 		self.end_headers() # curl: (52) Empty reply from server
 
+def app_start():
+	global app_apps
+
+	http.server.test(HandlerClass=HTTPServer_ctx, port=app_apps["http_port"], bind=app_apps["http_bind"])
+
+def app_watch(app_ctx):
+	global app_list
+
+	app_list.append( app_ctx )
+
+def app_release():
+	global app_apps
+	global app_list
+
+	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
+	#try:
+	#app_apps["httpd"].server_close()
+	#except Exception:
+	#	pass
+
+	for x in app_list:
+		try:
+			objname = DBG_NAME(x)
+			if not x.release is None:
+				DBG_DB_LN("call {}.release ...".format( objname ) )
+				x.release() # No handlers could be found for logger "google.api_core.bidi"
+		except Exception:
+			pass
+	DBG_DB_LN("{}".format(DBG_TXT_DONE))
+
 def app_stop():
 	global is_quit
 
 	if ( is_quit == 0 ):
 		is_quit = 1
+
+		app_release()
+		DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_exit():
 	app_stop()
@@ -85,15 +120,15 @@ def app_exit():
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
 	print("  -h, --help")
-	print("  port")
+	print("  -p, --port port number")
 	app_exit()
 	sys.exit(0)
 
 def parse_arg(argv):
-	global http_port
+	global app_apps
 
 	try:
-		opts,args = getopt.getopt(argv[1:], "h", ["help"])
+		opts,args = getopt.getopt(argv[1:], "hd:p:", ["help", "debug", "port"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -104,10 +139,12 @@ def parse_arg(argv):
 		for opt, arg in opts:
 			if opt in ("-h", "--help"):
 				show_usage(argv)
+			elif opt in ("-d", "--debug"):
+				dbg_debug_helper( int(arg) )
+			elif opt in ("-p", "--port"):
+				app_apps["http_port"] = int(arg)
 			else:
 				print ("(opt: {})".format(opt))
-	elif (len(args) > 0):
-		http_port = int(args[0])
 	else:
 		show_usage(argv)
 
@@ -118,11 +155,14 @@ def signal_handler(sig, frame):
 	sys.exit(0)
 
 def main(argv):
-	global http_port
+	global app_apps
+
+	#signal.signal(signal.SIGINT, signal_handler)
+	#signal.signal(signal.SIGTERM, signal_handler)
 
 	parse_arg(argv)
 
-	http.server.test(HandlerClass=HTTPServer_ctx, port=http_port, bind=http_bind)
+	app_start()
 
 	app_exit()
 	DBG_WN_LN("{} (is_quit: {})".format(DBG_TXT_BYE_BYE, is_quit))
