@@ -11,14 +11,14 @@ app_apps = {
 }
 
 def app_start():
-	dbg_lvl_set(DBG_LVL_DEBUG)
+	#dbg_lvl_set(DBG_LVL_DEBUG)
 	DBG_IF_LN("(Python version: {}, chkPYTHONge(3,7,0): {}, chkPYTHONle(3,7,0): {})".format( getPYTHONbver(), chkPYTHONge(3,7,0), chkPYTHONle(3,7,0) ))
 
 	IFACE = "enp0s3"
-	(STATIC_MAC, STATIC_IP) = get_hwaddr( IFACE )
-	DBG_IF_LN("(IFACE: {}, STATIC_MAC: {}, STATIC_IP: {})".format( IFACE, STATIC_MAC, STATIC_IP ))
+	(IFACE_MAC, IFACE_IPv4) = get_hwaddr( IFACE )
+	DBG_IF_LN("(IFACE: {}, IFACE_MAC: {}, IFACE_IPv4: {})".format( IFACE, IFACE_MAC, IFACE_IPv4 ))
 
-	dummy_mgr = dummy_ctx(dbg_more=DBG_LVL_DEBUG)
+	dummy_mgr = dummy_ctx(dbg_more=DBG_LVL_TRACE)
 	app_watch(dummy_mgr)
 	dummy_mgr.start( app_apps )
 
@@ -30,27 +30,27 @@ def app_watch(app_ctx):
 def app_release():
 	global app_list
 
-	DBG_WN_LN("enter")
+	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 	for x in app_list:
 		try:
 			objname = DBG_NAME(x)
 			if not x.release is None:
-				DBG_IF_LN("call {}.release ...".format( objname ) )
+				DBG_DB_LN("call {}.release ...".format( objname ) )
 				x.release() # No handlers could be found for logger "google.api_core.bidi"
 		except Exception:
 			pass
+	DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_stop():
 	global is_quit
 
-	DBG_DB_LN("enter")
 	if ( is_quit == 0 ):
 		is_quit = 1
 
 		app_release()
+		DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_exit():
-	DBG_WN_LN("enter")
 	app_stop()
 
 def show_usage(argv):
@@ -100,7 +100,7 @@ def main(argv):
 	app_start()
 
 	app_exit()
-	DBG_IF_LN("bye bye !!! (is_quit: {})".format(is_quit))
+	DBG_WN_LN("{} (is_quit: {})".format(DBG_TXT_BYE_BYE, is_quit))
 
 if __name__ == "__main__":
 	main(sys.argv[0:])

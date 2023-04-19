@@ -90,7 +90,7 @@ class sysinfo_ctx(pythonX9):
 			hh, mm = divmod(mm, 60)
 			return ("{:02d}:{:02d}:{:02d}").format(hh, mm, ss)
 
-	def sys_info_show_watch(self):
+	def sysinfo_show_watch(self):
 		DBG_DB_LN(self, "--------------------------------------------------------------------------------")
 		#DBG_DB_LN(self, "(cpu_temperature: {})".format(self.cpu_temperature()) )
 		#DBG_DB_LN(self, "(os_gpu_temperature: {})".format(self.os_gpu_temperature()) )
@@ -125,7 +125,7 @@ class sysinfo_ctx(pythonX9):
 		else:
 			DBG_DB_LN(self, "(fans: None)" )
 
-	def sys_info_show_uname(self):
+	def syinfo_show_uname(self):
 		# 3.8 not support dist
 		#DBG_IF_LN(self, "(os_dist: {})".format( platform.dist() ) )
 		#DBG_IF_LN(self, "(linux_distribution: {})".format( platform.linux_distribution() ) )
@@ -140,24 +140,24 @@ class sysinfo_ctx(pythonX9):
 		DBG_IF_LN(self, "(uname_result: {})".format( uname_result ) )
 		#DBG_IF_LN(self, "(mac_ver: {})".format( platform.mac_ver() ) )
 
-	def sys_info_show(self):
+	def sysinfo_show(self):
 		DBG_IF_LN(self, "(Python version: {})".format( sys.version.split('\n')[0] ) )
-		self.sys_info_show_uname()
+		self.syinfo_show_uname()
 		#DBG_IF_LN(self, "(os_net_info: {})".format(self.os_net_info()) )
 		#DBG_IF_LN(self, "(os_net_speed: {})".format(self.os_net_speed()) )
 
-	def loop_ex_helper(self):
+	def thread_handler(self):
 		#DBG_IF_LN(self, "enter")
 		self.os_net_ipaddrs()
 		sleep(1)
 		while ( self.is_quit ==0 ):
-			self.sys_info_show_watch()
+			self.sysinfo_show_watch()
 			sleep(self.interval)
 
 		DBG_IF_LN(self, "exit")
 
-	def sys_loop_ex(self):
-		start_new_thread(self.loop_ex_helper, ())
+	def thread_init(self):
+		start_new_thread(self.thread_handler, ())
 
 	def keyboard_recv(self):
 		DBG_IF_LN(self, "press q to quit the loop ...")
@@ -167,15 +167,19 @@ class sysinfo_ctx(pythonX9):
 			k = self.inkey()
 			#DBG_IF_LN(self, "(k:{})".format(k))
 			if k=='\x0d': # enter
-				self.sys_info_show()
+				self.sysinfo_show()
 			elif k=='\x71': # q
 				self.release()
 				break;
+			DBG_IF_LN(self, "press q to quit the loop ...")
 
 	def release(self):
-		self.is_quit = 1
+		if ( self.is_quit == 0 ):
+			self.is_quit = 1
+			DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
 
-	def sys_init(self):
+	def sysinfo_init(self):
+		DBG_DB_LN(self, "{}".format(DBG_TXT_INIT))
 		self.interval = 30
 
 	def __init__(self, **kwargs):
@@ -184,18 +188,21 @@ class sysinfo_ctx(pythonX9):
 		else:
 			super(sysinfo_ctx, self).__init__(**kwargs)
 
+		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
-		self.sys_init()
+		self.sysinfo_init()
 
 	def parse_args(self, args):
+		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
 		self._args = args
 		self.interval = args["interval"]
 		self.keyboard = args["keyboard"]
 
 	def start(self, args={"keyboard": 0, "interval": 10}):
+		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		if (self.keyboard==1):
-			self.sys_loop_ex()
+			self.thread_init()
 			self.keyboard_recv()
 
 #sysinfo_mgr = sysinfo_ctx(dbg_more=DBG_LVL_TRACE)
