@@ -96,9 +96,35 @@ Expect: 100-continue
 $ curl -d @endianness.jpg http://192.168.56.104:8087
 ```
 
-- multicast_123 - a multicast example.
+- multicast_123.py - a multicast example.
 
-- sysinfo_123 - 查找主機系統資訊，每5秒刷新畫面
+- queuex_123.py - a queue example.
+
+```bash
+$ ./queuex_123.py -d3
+[6397/6397] queuex_api.py|ctx_init:0097 - Enter ...
+[6397/6397] queuex_123.py|app_start:0022 - Push an integer every 100/1000 seconds.
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 1)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 2)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 3)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 4)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 5)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 6)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 7)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 8)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 9)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 10)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 11)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 12)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 13)
+[6397/6398] queuex_123.py|exec_cb:0014 - (data: 14)
+^C[6397/6398] queuex_api.py|thread_handler:0078 - Bye-Bye !!!
+[6397/6397] queuex_api.py|release:0094 - Done.
+[6397/6397] queuex_123.py|main:0108 - Bye-Bye !!! (is_quit: 1)
+
+```
+
+- sysinfo_123.py - 查找主機系統資訊，每5秒刷新畫面
 
 ```bash
 $ ./sysinfo_123.py -d 4
