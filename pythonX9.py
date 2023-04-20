@@ -12,6 +12,10 @@ import random
 
 from pythonX9_def import *
 
+import ctypes
+__NR_gettid = 186  # gettid syscall number
+libc = ctypes.CDLL('libc.so.6')
+
 #******************************************************************************
 # define
 #******************************************************************************
@@ -73,6 +77,8 @@ TAG_URL_AND_TXT = "url_and_txt"
 #******************************************************************************
 # UTIL_EX_DBG
 #******************************************************************************
+def gettid():
+ return libc.syscall(__NR_gettid)
 
 #** remote debug **
 def remote_debug(server_ip="192.168.56.1", server_port=8864):
@@ -116,13 +122,13 @@ def DBG_XX_LN(f_back, need_lvl, color, *args):
 		obj = args[0]
 		msg = args[1]
 		#objname = "[{:04}/{:04}/{}]".format(os.getppid(), os.getpid(), obj.__class__.__name__)
-		objname = "[{:04}/{:04}]".format(os.getppid(), os.getpid())
+		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
 		if hasattr(obj, "_dbg_more"):
 			dbg_lvl = obj._dbg_more
 	else:
 		obj = None
 		msg = args[0]
-		objname = "[{:04}/{:04}]".format(os.getppid(), os.getpid())
+		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
 
 	filename = os.path.basename(f_back.f_code.co_filename)
 	if ( dbg_lvl <= need_lvl ):

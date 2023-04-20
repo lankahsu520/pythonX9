@@ -9,7 +9,7 @@ pythonX9 把常用的工具集合在一起，並且將呼叫簡單化。
 
 # 4. Build
 ```bash
-
+Do nothing
 ```
 # 5. Example or Usage
 
@@ -126,8 +126,6 @@ $ ./sysinfo_123.py -d 4
 [sysinfo_123.py|main:0105] - bye bye !!! (is_quit: 1)
 
 ```
-
-
 
 # 6. License
 
