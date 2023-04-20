@@ -3,7 +3,9 @@
 #from time import sleep
 from pythonX9 import *
 
-from _thread import start_new_thread
+#from _thread import start_new_thread
+import threading
+
 #import platform
 import subprocess # os_gpu_temperature
 # sudo pip3 install psutil
@@ -145,19 +147,6 @@ class sysinfo_ctx(pythonX9):
 		#DBG_IF_LN(self, "(os_net_info: {})".format(self.os_net_info()) )
 		#DBG_IF_LN(self, "(os_net_speed: {})".format(self.os_net_speed()) )
 
-	def thread_handler(self):
-		#DBG_IF_LN(self, "enter")
-		self.os_net_ipaddrs()
-		sleep(1)
-		while ( self.is_quit ==0 ):
-			self.sysinfo_show_watch()
-			sleep(self.interval)
-
-		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
-
-	def thread_init(self):
-		start_new_thread(self.thread_handler, ())
-
 	def keyboard_recv(self):
 		DBG_IF_LN(self, "press q to quit the loop ...")
 
@@ -172,13 +161,32 @@ class sysinfo_ctx(pythonX9):
 				break;
 			DBG_IF_LN(self, "press q to quit the loop ...")
 
+	def thread_handler(self):
+		#DBG_IF_LN(self, "enter")
+		self.os_net_ipaddrs()
+		sleep(1)
+		while ( self.is_quit ==0 ):
+			self.sysinfo_show_watch()
+			sleep(self.interval)
+
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
+
+	def thread_init(self):
+		#start_new_thread(self.thread_handler, ())
+		self.threading = threading.Thread(target=self.thread_handler)
+		self.threading.start()
+
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
-			DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+			if ( self.threading is not None ):
+				self.threading.join()
+			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		self.threading = None
+
 		self.interval = 30
 
 	def __init__(self, **kwargs):
