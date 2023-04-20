@@ -69,8 +69,8 @@ $ ./dummy_123.py -d2
 flowchart LR
 	httpd_123[httpd_123]
 	curl[curl]
-	saveto[/saveto: /tmp/HTTPServer_ctx-3272277516 /]
-	curl -->|endianness.jpg|httpd_123-->saveto
+	saveto[/tmp/HTTPServer_ctx-3272277516 /]
+	curl -->|endianness.jpg|httpd_123-->|saveto|saveto
 ```
 ```bash
 $ ./httpd_123.py  8087
