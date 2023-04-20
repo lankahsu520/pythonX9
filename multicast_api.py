@@ -72,6 +72,19 @@ class multicast_ctx(pythonX9):
 					pass
 		self.closex()
 
+	def thread_wakeup(self):
+		self._cond.acquire()
+		#DBG_IF_LN(self, "call notify ...")
+		self._cond.notify()
+		self._cond.release()
+
+	def thread_sleep(self):
+		self._cond.acquire()
+		#DBG_IF_LN(self, "call wait ...")
+		self._cond.wait()
+		#self._cond.wait(timeout=3)
+		self._cond.release()
+
 	def thread_handler(self):
 		#DBG_IF_LN(self, "enter")
 		self.readx()
@@ -79,13 +92,17 @@ class multicast_ctx(pythonX9):
 
 	def thread_init(self):
 		#start_new_thread(self.thread_handler, ())
+		self._cond = threading.Condition()
 		self.threading = threading.Thread(target=self.thread_handler)
 		self.threading.start()
+		while ( self.isloop == 0):
+			sleep(1)
 
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
 			if ( self.threading is not None ):
+				self.thread_wakeup()
 				self.threading.join()
 			self.closex()
 			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
@@ -93,6 +110,8 @@ class multicast_ctx(pythonX9):
 	def ctx_init(self, url, port, readcb):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
 		self.threading = None
+		self._cond = None
+		self.isloop = 0
 
 		self.sockfd = None
 		self.addr = url
