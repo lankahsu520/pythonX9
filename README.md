@@ -13,7 +13,7 @@ pythonX9 把常用的工具集合在一起，並且將呼叫簡單化。
 ```
 # 5. Example or Usage
 
-- dummy_123 - 一個簡單的範本。請善用 DBG_XX_LN.
+- dummy_123 - a template in python.
 ```mermaid
 flowchart LR
 	Start([Start])
@@ -96,7 +96,7 @@ Expect: 100-continue
 $ curl -d @endianness.jpg http://192.168.56.104:8087
 ```
 
-
+- multicast_123 - a multicast example.
 
 - sysinfo_123 - 查找主機系統資訊，每5秒刷新畫面
 

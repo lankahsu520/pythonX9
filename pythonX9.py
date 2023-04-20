@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os, sys, errno, getopt, signal, time, io
 from time import sleep
 
@@ -116,17 +115,18 @@ def DBG_XX_LN(f_back, need_lvl, color, *args):
 	if ( len(args) == 2 ):
 		obj = args[0]
 		msg = args[1]
-		objname = "[{}]".format(obj.__class__.__name__)
+		#objname = "[{:04}/{:04}/{}]".format(os.getppid(), os.getpid(), obj.__class__.__name__)
+		objname = "[{:04}/{:04}]".format(os.getppid(), os.getpid())
 		if hasattr(obj, "_dbg_more"):
 			dbg_lvl = obj._dbg_more
 	else:
 		obj = None
 		msg = args[0]
-		objname = ""
+		objname = "[{:04}/{:04}]".format(os.getppid(), os.getpid())
 
 	filename = os.path.basename(f_back.f_code.co_filename)
 	if ( dbg_lvl <= need_lvl ):
-		print("{}{}[{}|{}:{:04}] - {}{}\r".format(color, objname, filename, f_back.f_code.co_name, f_back.f_lineno, (msg), COLOR_NONE))
+		print("{}{} {}|{}:{:04} - {}{}\r".format(color, objname, filename, f_back.f_code.co_name, f_back.f_lineno, (msg), COLOR_NONE))
 
 def DBG_CR_LN(*args):
 	try:

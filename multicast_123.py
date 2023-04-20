@@ -22,9 +22,14 @@ def app_start():
 	app_watch(multicast_mgr)
 	multicast_mgr.start( app_apps )
 
+	DBG_IF_LN("Send a packet every 2 seconds {}:{}.".format(multicast_mgr.addr, multicast_mgr.port) )
+
+	idx=1
 	while (is_quit == 0 ):
-		sleep(1)
-		multicast_mgr.writex("1234567890".encode())
+		sleep(2)
+		hello="{}".format(idx)
+		multicast_mgr.writex(hello.encode())
+		idx+=1
 
 def app_watch(app_ctx):
 	global app_list

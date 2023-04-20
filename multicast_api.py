@@ -3,7 +3,8 @@
 #from time import sleep
 from pythonX9 import *
 
-from _thread import start_new_thread
+#from _thread import start_new_thread
+import threading
 
 import select, socket
 import struct
@@ -18,14 +19,14 @@ class multicast_ctx(pythonX9):
 		if not self.sockfd is None:
 			self.sockfd.close()
 			self.sockfd = None
-			DBG_WN_LN(self, "{}".format(DBG_TXT_DONE) )
+			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE) )
 
 	def serverx(self):
 		mreq = struct.pack("4sl", socket.inet_aton(self.addr), socket.INADDR_ANY)
 		self.sockfd.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
+		DBG_IF_LN(self, "bind ... ({}:{})".format(self.addr, self.port) )
 		self.sockfd.bind((self.addr, self.port))
-		DBG_WN_LN(self, "bind {}:{}".format(self.addr, self.port) )
 
 	def writex(self, buf):
 		DBG_DB_LN(self, "send {}:{} - {}".format(self.addr, self.port, buf) )
@@ -42,7 +43,7 @@ class multicast_ctx(pythonX9):
 		rlist = [self.sockfd]
 		wlist, xlist  = [], []
 
-		DBG_IF_LN(self, "{}".format( DBG_TXT_RUN_LOOP ) )
+		DBG_WN_LN(self, "{}".format( DBG_TXT_RUN_LOOP ) )
 		while ( self.is_quit == 0 ):
 			readable, writeable, exceptional = select.select(rlist, wlist, xlist, 1)
 
@@ -77,16 +78,22 @@ class multicast_ctx(pythonX9):
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def thread_init(self):
-		start_new_thread(self.thread_handler, ())
+		#start_new_thread(self.thread_handler, ())
+		self.threading = threading.Thread(target=self.thread_handler)
+		self.threading.start()
 
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
+			if ( self.threading is not None ):
+				self.threading.join()
 			self.closex()
-			DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self, url, port, readcb):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		self.threading = None
+
 		self.sockfd = None
 		self.addr = url
 		self.port = port

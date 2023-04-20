@@ -6,7 +6,7 @@ class dummy_ctx(pythonX9):
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
-			DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
