@@ -13,7 +13,7 @@ Do nothing
 ```
 # 5. Example or Usage
 
-- dummy_123 - a template in python.
+#### - dummy_123 - a template in python.
 ```mermaid
 flowchart LR
 	Start([Start])
@@ -58,8 +58,10 @@ $ ./dummy_123.py -d4
 [8465/8465] dummy_123.py|main:0103 - Bye-Bye !!! (is_quit: 1)
 
 ```
-- httpd_123 - 一個很簡單的 Web Server，負責接收檔案，並將內容存至 /tmp
+#### - httpd_123 - a simple Web Server
 
+>負責接收檔案，並將內容存至 ./tmp。
+>
 >當初有人挑戰我，上傳檔案不能用 "PUT"。
 >
 >我就解釋給他說，當初 HTTP 剛流行時，上傳檔案，都是用 "PUT"。但不知何時，有的 HTTP Server 是用 "POST"，也有的 HTTP Server 是用 "GET"。
@@ -99,9 +101,41 @@ Expect: 100-continue
 $ curl -d @endianness.jpg http://192.168.56.104:8087
 ```
 
-- multicast_123.py - a multicast example.
+#### - multicast_123.py - a multicast example.
 
-- queuex_123.py - a queue example.
+```bash
+$ ./multicast_123.py -d4
+[4977/4977] multicast_api.py|__init__:0110 - Enter ...
+[4977/4977] multicast_api.py|ctx_init:0091 - Enter ...
+[4977/4977] multicast_api.py|start:0119 - Start !!!
+[4977/4977] multicast_api.py|parse_args:0115 - Enter ...
+[4977/4978] multicast_api.py|serverx:0027 - bind ... (239.255.255.250:3618)
+[4977/4978] multicast_api.py|readx:0045 - Run loop ...
+[4977/4977] multicast_123.py|app_start:0025 - Send a packet every 2 seconds 239.255.255.250:3618.
+[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'1'
+[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'1'
+[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'2'
+[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'2'
+[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'3'
+[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'3'
+[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'4'
+[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'4'
+^C[4977/4977] multicast_123.py|app_release:0042 - Enter ...
+[4977/4977] multicast_123.py|app_release:0047 - call multicast_ctx.release ...
+[4977/4977] threadx_api.py|threadx_wakeup:0033 - call notify ...
+[4977/4978] multicast_api.py|closex:0021 - Done.
+[4977/4978] multicast_api.py|threadx_handler:0079 - Bye-Bye !!!
+[4977/4977] multicast_api.py|release:0088 - Done.
+[4977/4977] multicast_123.py|app_release:0051 - Done.
+[4977/4977] multicast_123.py|app_stop:0060 - Done.
+[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'5'
+[4977/4977] multicast_123.py|main:0112 - Bye-Bye !!! (is_quit: 1)
+
+```
+
+#### - queuex_123.py - a queue example.
+
+>網路都只會介紹什麼是 queue，但是實際操作經驗零。這邊給你一個很好範例，特別是當你要操作TTY或是一些序列設備時，就會發現這有多好用。
 
 ```bash
 $ ./queuex_123.py -d4
