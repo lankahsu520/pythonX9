@@ -43,16 +43,19 @@ flowchart LR
 ```
 
 ```bash
-$ ./dummy_123.py -d2
-[dummy_123.py|app_start:0015] - (Python version: 3.8.10, chkPYTHONge(3,7,0): True, chkPYTHONle(3,7,0): False)
-[dummy_123.py|app_start:0019] - (IFACE: enp0s3, STATIC_MAC: 08:00:27:a1:f8:36, STATIC_IP: 192.168.0.92)
-[dummy_ctx][dummy_api.py|dummy_init:0011] - enter
-[dummy_123.py|app_exit:0053] - enter
-[dummy_123.py|app_stop:0046] - enter
-[dummy_123.py|app_release:0033] - enter
-[dummy_123.py|app_release:0038] - call dummy_ctx.release ...
-[dummy_ctx][dummy_api.py|release:0007] - enter
-[dummy_123.py|main:0103] - bye bye !!! (is_quit: 1)
+$ ./dummy_123.py -d4
+[8465/8465] dummy_123.py|app_start:0015 - (Python version: 3.8.10, chkPYTHONge(3,7,0): True, chkPYTHONle(3,7,0): False)
+[8465/8465] dummy_123.py|app_start:0019 - (IFACE: enp0s3, IFACE_MAC: 08:00:27:33:73:52, IFACE_IPv4: 10.0.2.15)
+[8465/8465] dummy_api.py|__init__:0020 - Enter ...
+[8465/8465] dummy_api.py|ctx_init:0012 - Enter ...
+[8465/8465] dummy_api.py|start:0029 - Start !!!
+[8465/8465] dummy_api.py|parse_args:0025 - Enter ...
+[8465/8465] dummy_123.py|app_release:0033 - Enter ...
+[8465/8465] dummy_123.py|app_release:0038 - call dummy_ctx.release ...
+[8465/8465] dummy_api.py|release:0009 - Done.
+[8465/8465] dummy_123.py|app_release:0042 - Done.
+[8465/8465] dummy_123.py|app_stop:0051 - Done.
+[8465/8465] dummy_123.py|main:0103 - Bye-Bye !!! (is_quit: 1)
 
 ```
 - httpd_123 - 一個很簡單的 Web Server，負責接收檔案，並將內容存至 /tmp
@@ -101,26 +104,25 @@ $ curl -d @endianness.jpg http://192.168.56.104:8087
 - queuex_123.py - a queue example.
 
 ```bash
-$ ./queuex_123.py -d3
-[6397/6397] queuex_api.py|ctx_init:0097 - Enter ...
-[6397/6397] queuex_123.py|app_start:0022 - Push an integer every 100/1000 seconds.
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 1)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 2)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 3)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 4)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 5)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 6)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 7)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 8)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 9)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 10)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 11)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 12)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 13)
-[6397/6398] queuex_123.py|exec_cb:0014 - (data: 14)
-^C[6397/6398] queuex_api.py|thread_handler:0078 - Bye-Bye !!!
-[6397/6397] queuex_api.py|release:0094 - Done.
-[6397/6397] queuex_123.py|main:0108 - Bye-Bye !!! (is_quit: 1)
+$ ./queuex_123.py -d4
+[8474/8474] queuex_api.py|ctx_init:0075 - Enter ...
+[8474/8474] queuex_123.py|app_start:0022 - Push an integer every 100/1000 seconds.
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 1)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 2)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 3)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 4)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 5)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 6)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 7)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 8)
+[8474/8475] queuex_123.py|exec_cb:0014 - (data: 9)
+^C[8474/8474] queuex_123.py|app_release:0038 - Enter ...
+[8474/8474] queuex_123.py|app_release:0043 - call queuex_ctx.release ...
+[8474/8475] queuex_api.py|threadx_handler:0064 - Bye-Bye !!!
+[8474/8474] queuex_api.py|release:0072 - Done.
+[8474/8474] queuex_123.py|app_release:0047 - Done.
+[8474/8474] queuex_123.py|app_stop:0056 - Done.
+[8474/8474] queuex_123.py|main:0108 - Bye-Bye !!! (is_quit: 1)
 
 ```
 
@@ -128,28 +130,46 @@ $ ./queuex_123.py -d3
 
 ```bash
 $ ./sysinfo_123.py -d 4
-[sysinfo_ctx][sysinfo_api.py|keyboard_recv:0163] - press q to quit the loop ...
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - lo - 127.0.0.1/8
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - lo - ('::1', 0, 0)/128
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s3 - 10.0.2.15/24
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s3 - ('fe80::7549:bd5f:d0ed:32cf', 0, 2)/64
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s9 - 192.168.56.104/24
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s9 - ('fe80::e6d1:c758:6c5c:4cbd', 0, 4)/64
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - docker0 - 172.17.0.1/16
-[sysinfo_ctx][sysinfo_api.py|os_net_ipaddrs:0066] - enp0s8 - ('fe80::d49:8acb:9f1b:c4cf', 0, 3)/64
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0094] - --------------------------------------------------------------------------------
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0097] - (cpu_usage: [0.0, 0.0, 0.0, 0.0])
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0098] - (cpu_loadavg: (0.07, 0.06, 0.02))
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0099] - (cpu_count: 4)
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0100] - (cpu_num: 3)
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0102] - (cpu_freq: 2808.0, min: 0.0, max: 0.0)
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0111] - (disk_usage: 17.4 %)
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0113] - (mem_total: 8335740928 bytes, mem_usage: 11.7 %)
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0117] - (battery: 80.0 %, secsleft: 00:00:00, AC: True)
-[sysinfo_ctx][sysinfo_api.py|sys_info_show_watch:0124] - (fans: {})
-[sysinfo_123.py|app_release:0031] - enter
-[sysinfo_123.py|app_release:0036] - call sysinfo_ctx.release ...
-[sysinfo_123.py|main:0105] - bye bye !!! (is_quit: 1)
+[8510/8510] sysinfo_api.py|__init__:0201 - Enter ...
+[8510/8510] sysinfo_api.py|ctx_init:0190 - Enter ...
+[8510/8510] sysinfo_api.py|start:0212 - Start !!!
+[8510/8510] sysinfo_api.py|parse_args:0206 - Enter ...
+[8510/8510] sysinfo_api.py|keyboard_recv:0151 - press q to quit the loop ...
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - lo - 127.0.0.1/8
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - lo - ('::1', 0, 0)/128
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s3 - 10.0.2.15/24
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s3 - ('fe80::7549:bd5f:d0ed:32cf', 0, 2)/64
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s9 - 192.168.56.104/24
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s9 - ('fe80::e6d1:c758:6c5c:4cbd', 0, 4)/64
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - docker0 - 172.17.0.1/16
+[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s8 - ('fe80::d49:8acb:9f1b:c4cf', 0, 3)/64
+[8510/8510] sysinfo_api.py|sysinfo_show:0145 - (Python version: 3.8.10 (default, Mar 13 2023, 10:26:41) )
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0133 - (os_platform: Linux-5.15.0-67-generic-x86_64-with-glibc2.29)
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0134 - (os_system: Linux)
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0135 - (os_node: build20-vbx)
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0136 - (os_release: 5.15.0-67-generic)
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0137 - (os_version: #74~20.04.1-Ubuntu SMP Wed Feb 22 14:52:34 UTC 2023)
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0138 - (os_machine: x86_64)
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0139 - (os_processor: x86_64)
+[8510/8510] sysinfo_api.py|syinfo_show_uname:0141 - (uname_result: uname_result(system='Linux', node='build20-vbx', release='5.15.0-67-generic', version='#74~20.04.1-Ubuntu SMP Wed Feb 22 14:52:34 UTC 2023', machine='x86_64', processor='x86_64'))
+[8510/8510] sysinfo_api.py|keyboard_recv:0162 - press q to quit the loop ...
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0095 - --------------------------------------------------------------------------------
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0098 - (cpu_usage: [2.0, 0.0, 1.0, 0.0])
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0099 - (cpu_loadavg: (0.14, 0.07, 0.06))
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0100 - (cpu_count: 4)
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0101 - (cpu_num: 1)
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0103 - (cpu_freq: 2808.0, min: 0.0, max: 0.0)
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0112 - (disk_usage: 17.4 %)
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0114 - (mem_total: 8335757312 bytes, mem_usage: 16.1 %)
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0118 - (battery: 78.0 %, secsleft: 00:00:00, AC: True)
+[8510/8511] sysinfo_api.py|sysinfo_show_watch:0125 - (fans: {})
+q[8510/8511] sysinfo_api.py|threadx_handler:0173 - Bye-Bye !!!
+[8510/8510] sysinfo_api.py|release:0187 - Done.
+[8510/8510] sysinfo_123.py|app_release:0031 - Enter ...
+[8510/8510] sysinfo_123.py|app_release:0036 - call sysinfo_ctx.release ...
+[8510/8510] sysinfo_123.py|app_release:0040 - Done.
+[8510/8510] sysinfo_123.py|app_stop:0049 - Done.
+[8510/8510] sysinfo_123.py|main:0107 - Bye-Bye !!! (is_quit: 1)
 
 ```
 
