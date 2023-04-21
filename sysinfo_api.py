@@ -163,18 +163,21 @@ class sysinfo_ctx(pythonX9):
 
 	def thread_handler(self):
 		#DBG_IF_LN(self, "enter")
+		self.isloop = 1
 		self.os_net_ipaddrs()
 		sleep(1)
 		while ( self.is_quit ==0 ):
 			self.sysinfo_show_watch()
 			sleep(self.interval)
-
+		self.isloop = 0
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def thread_init(self):
 		#start_new_thread(self.thread_handler, ())
 		self.threading = threading.Thread(target=self.thread_handler)
 		self.threading.start()
+		while ( self.isloop == 0):
+			sleep(1)
 
 	def release(self):
 		if ( self.is_quit == 0 ):

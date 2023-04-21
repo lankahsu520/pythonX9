@@ -75,6 +75,7 @@ class queuex_ctx(pythonX9):
 		self.isloop = 1
 		while ( self.is_quit == 0 ):
 			self.queuex_pop()
+		self.isloop = 0
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def thread_init(self):
