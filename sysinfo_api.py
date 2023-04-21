@@ -161,13 +161,13 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 
 	def threadx_handler(self):
 		#DBG_IF_LN(self, "enter")
-		self.threadx_set_loop(1)
+		self.threadx_set_inloop(1)
 		self.os_net_ipaddrs()
 		sleep(1)
 		while ( self.is_quit ==0 ):
 			self.sysinfo_show_watch()
 			self.threadx_sleep(self.interval)
-		self.threadx_set_loop(0)
+		self.threadx_set_inloop(0)
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):

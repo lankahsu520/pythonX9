@@ -29,7 +29,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		return ret
 
 	def queuex_push(self, data):
-		if ( self.is_quit == 0 ) and ( self.threadx_isloop() == 1):
+		if ( self.is_quit == 0 ) and ( self.threadx_inloop() == 1):
 			if ( self.queuex_isfull() == 0 ):
 				self.threadx_lock()
 				self.queue.append(data)
@@ -42,7 +42,9 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		data_pop = None
 		if ( self.is_quit == 0 ):
 			if ( self.queuex_isempty() == 0 ):
+				self.threadx_lock()
 				data_pop = self.queue.pop(0)
+				self.threadx_unlock()
 				if not data_pop is None:
 					if not self.exec_cb is None:
 						self.exec_cb(data_pop)
@@ -50,23 +52,21 @@ class queuex_ctx(pythonX9, threadx_ctx):
 					#	DBG_IF_LN(self, "(data_pop: {} / {})".format( data_pop, self.queue ) )
 					if not self.free_cb is None:
 						self.free_cb(data_pop)
-
-					#sleep(500/1000)
 			else:
 				self.threadx_sleep(3)
 
 	def threadx_handler(self):
 		#DBG_IF_LN(self, "enter")
-		self.threadx_set_loop(1)
+		self.threadx_set_inloop(1)
 		while ( self.is_quit == 0 ):
 			self.queuex_pop()
-		self.threadx_set_loop(0)
+		self.threadx_set_inloop(0)
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
-			if ( self.threading is not None ):
+			if ( self.threadx_inloop() == 1 ):
 				self.threadx_wakeup()
 				self.threadx_join()
 			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))

@@ -73,9 +73,9 @@ class multicast_ctx(pythonX9, threadx_ctx):
 
 	def threadx_handler(self):
 		#DBG_IF_LN(self, "enter")
-		self.threadx_set_loop(1)
+		self.threadx_set_inloop(1)
 		self.readx()
-		self.threadx_set_loop(0)
+		self.threadx_set_inloop(0)
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
