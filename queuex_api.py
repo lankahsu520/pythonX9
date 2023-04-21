@@ -1,18 +1,16 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 from pythonX9 import *
+from threadx_api import *
 
-#from _thread import start_new_thread
-import threading
-
-class queuex_ctx(pythonX9):
+class queuex_ctx(pythonX9, threadx_ctx):
 
 	def queuex_length(self):
 		ret = 0
 		if ( self.is_quit == 0 ):
-			self._cond.acquire()
+			self.threadx_lock()
 			ret = len(self.queue)
-			self._cond.release()
+			self.threadx_unlock()
 		return ret
 
 	#1: full, 0: not full
@@ -31,12 +29,12 @@ class queuex_ctx(pythonX9):
 		return ret
 
 	def queuex_push(self, data):
-		if ( self.is_quit == 0 ):
+		if ( self.is_quit == 0 ) and ( self.threadx_isloop() == 1):
 			if ( self.queuex_isfull() == 0 ):
-				self._cond.acquire()
+				self.threadx_lock()
 				self.queue.append(data)
-				self._cond.notify()
-				self._cond.release()
+				self.threadx_notify()
+				self.threadx_unlock()
 			else:
 				DBG_WN_LN("Skip ! (data: {})".format( data ))
 
@@ -55,50 +53,26 @@ class queuex_ctx(pythonX9):
 
 					#sleep(500/1000)
 			else:
-				self.thread_sleep()
+				self.threadx_sleep(3)
 
-	def thread_wakeup(self):
-		self._cond.acquire()
-		DBG_TR_LN(self, "call notify ...")
-		self._cond.notify()
-		self._cond.release()
-
-	def thread_sleep(self):
-		self._cond.acquire()
-		DBG_TR_LN(self, "call wait ...")
-		#self._cond.wait()
-		self._cond.wait(timeout=3)
-		self._cond.release()
-
-	def thread_handler(self):
+	def threadx_handler(self):
 		#DBG_IF_LN(self, "enter")
-		self.isloop = 1
+		self.threadx_set_loop(1)
 		while ( self.is_quit == 0 ):
 			self.queuex_pop()
-		self.isloop = 0
+		self.threadx_set_loop(0)
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
-
-	def thread_init(self):
-		#start_new_thread(self.thread_handler, ())
-		self._cond = threading.Condition()
-		self.threading = threading.Thread(target=self.thread_handler)
-		self.threading.start()
-		while ( self.isloop == 0):
-			sleep(1)
 
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
 			if ( self.threading is not None ):
-				self.thread_wakeup()
-				self.threading.join()
+				self.threadx_wakeup()
+				self.threadx_join()
 			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self, name, queue_size, exec_cb, free_cb):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
-		self.threading = None
-		self._cond = None
-		self.isloop = 0
 
 		self.queue = []
 
@@ -124,7 +98,7 @@ class queuex_ctx(pythonX9):
 	def start(self, args={}):
 		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
 		self.parse_args(args)
-		self.thread_init()
+		self.threadx_init()
 
 #queuex_mgr = queuex_ctx("HelloQueueX", 10, None, None)
 #queuex_mgr.release()

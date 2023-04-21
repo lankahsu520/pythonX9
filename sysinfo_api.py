@@ -2,9 +2,7 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 from pythonX9 import *
-
-#from _thread import start_new_thread
-import threading
+from threadx_api import *
 
 #import platform
 import subprocess # os_gpu_temperature
@@ -12,7 +10,7 @@ import subprocess # os_gpu_temperature
 # https://psutil.readthedocs.io/en/latest/
 import psutil # cpu_usage
 
-class sysinfo_ctx(pythonX9):
+class sysinfo_ctx(pythonX9, threadx_ctx):
 	def cpu_count(self):
 		cpu_c = psutil.cpu_count()
 		return cpu_c
@@ -161,29 +159,23 @@ class sysinfo_ctx(pythonX9):
 				break;
 			DBG_IF_LN(self, "press q to quit the loop ...")
 
-	def thread_handler(self):
+	def threadx_handler(self):
 		#DBG_IF_LN(self, "enter")
-		self.isloop = 1
+		self.threadx_set_loop(1)
 		self.os_net_ipaddrs()
 		sleep(1)
 		while ( self.is_quit ==0 ):
 			self.sysinfo_show_watch()
-			sleep(self.interval)
-		self.isloop = 0
+			self.threadx_sleep(self.interval)
+		self.threadx_set_loop(0)
 		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
-
-	def thread_init(self):
-		#start_new_thread(self.thread_handler, ())
-		self.threading = threading.Thread(target=self.thread_handler)
-		self.threading.start()
-		while ( self.isloop == 0):
-			sleep(1)
 
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
 			if ( self.threading is not None ):
-				self.threading.join()
+				self.threadx_wakeup()
+				self.threadx_join()
 			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self):
@@ -212,7 +204,7 @@ class sysinfo_ctx(pythonX9):
 		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		if (self.keyboard==1):
-			self.thread_init()
+			self.threadx_init()
 			self.keyboard_recv()
 
 #sysinfo_mgr = sysinfo_ctx(dbg_more=DBG_LVL_TRACE)
