@@ -28,12 +28,26 @@ class queuex_ctx(pythonX9, threadx_ctx):
 			ret = 1;
 		return ret
 
+	def queuex_gosleep(self):
+		if ( self.threadx_inloop() == 1 ):
+			self.threadx_lock()
+			self._ishold = 1
+			self.threadx_unlock()
+
+	def queuex_wakeup(self):
+		if ( self.threadx_inloop() == 1 ):
+			self.threadx_lock()
+			self._ishold = 0
+			self.threadx_notify()
+			self.threadx_unlock()
+
 	def queuex_push(self, data):
 		if ( self.is_quit == 0 ) and ( self.threadx_inloop() == 1):
 			if ( self.queuex_isfull() == 0 ):
 				self.threadx_lock()
 				self.queue.append(data)
-				self.threadx_notify()
+				if ( self._ishold == 0 ):
+					self.threadx_notify()
 				self.threadx_unlock()
 			else:
 				DBG_WN_LN("Skip ! (data: {})".format( data ))
@@ -52,6 +66,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 					#	DBG_IF_LN(self, "(data_pop: {} / {})".format( data_pop, self.queue ) )
 					if not self.free_cb is None:
 						self.free_cb(data_pop)
+					#sleep(3/1000)
 			else:
 				self.threadx_sleep(3)
 
@@ -80,6 +95,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		self.max_data = queue_size
 		self.exec_cb = exec_cb
 		self.free_cb = free_cb
+		self._ishold = 0
 
 	def __init__(self, name, queue_size, exec_cb, free_cb, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
