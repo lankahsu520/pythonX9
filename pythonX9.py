@@ -199,8 +199,11 @@ def file_find(directory, pattern):
 				filename = os.path.join(root, basename)
 				yield filename
 
-def os_urandom(count):
+def os_urandom():
 	rand_num = random.randint(1e9, 1e10-1)
+	return rand_num
+def os_urandom_str(count):
+	rand_num = os_urandom()
 	rand_str = str(rand_num).zfill(count)
 	return rand_str
 
