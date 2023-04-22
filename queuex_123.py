@@ -21,7 +21,7 @@ def app_start():
 	queuex_mgr.start( app_apps )
 
 	queuex_mgr.queuex_gosleep()
-	DBG_IF_LN("Push an integer every 100/1000 seconds.")
+	DBG_IF_LN("Push an integer every 10/1000 seconds.")
 	idx=1
 	while (is_quit == 0 ):
 		sleep(10/1000)
@@ -53,6 +53,7 @@ def app_release():
 def app_stop():
 	global is_quit
 
+	# dont block this function or print, signal_handler->app_stop
 	if ( is_quit == 0 ):
 		is_quit = 1
 

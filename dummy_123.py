@@ -44,6 +44,7 @@ def app_release():
 def app_stop():
 	global is_quit
 
+	# dont block this function or print, signal_handler->app_stop
 	if ( is_quit == 0 ):
 		is_quit = 1
 
