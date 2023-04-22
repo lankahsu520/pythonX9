@@ -13,23 +13,30 @@ app_apps = {
 def exec_cb(data):
 	DBG_IF_LN("(data: {})".format( data ))
 
-def app_start():
+def queue_test(is_stack=0):
 	global is_quit
 	#dbg_lvl_set(DBG_LVL_DEBUG)
-	queuex_mgr = queuex_ctx(dbg_more=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=30, exec_cb=exec_cb, free_cb=None)
+	queuex_mgr = queuex_ctx(dbg_more=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=20, exec_cb=exec_cb, free_cb=None, is_stack=is_stack)
 	app_watch(queuex_mgr)
 	queuex_mgr.start( app_apps )
 
 	queuex_mgr.queuex_gosleep()
-	DBG_IF_LN("Push an integer every 10/1000 seconds.")
+	DBG_IF_LN("Push an integer every 10/1000 seconds. (is_stack: {})".format( is_stack ))
 	idx=1
 	while (is_quit == 0 ):
 		sleep(10/1000)
 		DBG_DB_LN("call queuex_push ... (idx: {})".format( idx ) )
 		queuex_mgr.queuex_push(idx)
 		idx+=1
-		if ( idx == 20):
+		if ( idx == 6):
 			queuex_mgr.queuex_wakeup()
+		if ((idx%11==0)):
+			break
+
+def app_start():
+	queue_test(is_stack=0)
+	queue_test(is_stack=1)
+
 
 def app_watch(app_ctx):
 	global app_list

@@ -133,30 +133,66 @@ $ ./multicast_123.py -d4
 
 ```
 
-#### - queuex_123.py - a queue example.
+#### - queuex_123.py - a queue and stack example.
 
 >網路都只會介紹什麼是 queue，但是實際操作經驗零。這邊給你一個很好範例，特別是當你要操作TTY或是一些序列設備時，就會發現這有多好用。
 
 ```bash
 $ ./queuex_123.py -d4
-[8474/8474] queuex_api.py|ctx_init:0075 - Enter ...
-[8474/8474] queuex_123.py|app_start:0022 - Push an integer every 100/1000 seconds.
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 1)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 2)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 3)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 4)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 5)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 6)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 7)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 8)
-[8474/8475] queuex_123.py|exec_cb:0014 - (data: 9)
-^C[8474/8474] queuex_123.py|app_release:0038 - Enter ...
-[8474/8474] queuex_123.py|app_release:0043 - call queuex_ctx.release ...
-[8474/8475] queuex_api.py|threadx_handler:0064 - Bye-Bye !!!
-[8474/8474] queuex_api.py|release:0072 - Done.
-[8474/8474] queuex_123.py|app_release:0047 - Done.
-[8474/8474] queuex_123.py|app_stop:0056 - Done.
-[8474/8474] queuex_123.py|main:0108 - Bye-Bye !!! (is_quit: 1)
+[6822/6822] queuex_api.py|ctx_init:0094 - Enter ...
+[6822/6822] queuex_123.py|queue_test:0024 - Push an integer every 10/1000 seconds. (is_stack: 0)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 1)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 2)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 3)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 4)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 5)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 1)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 2)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 3)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 4)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 5)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 6)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 6)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 7)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 7)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 8)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 8)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 9)
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 9)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 10)
+[6822/6822] queuex_api.py|ctx_init:0094 - Enter ...
+[6822/6823] queuex_123.py|exec_cb:0014 - (data: 10)
+[6822/6822] queuex_123.py|queue_test:0024 - Push an integer every 10/1000 seconds. (is_stack: 1)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 1)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 2)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 3)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 4)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 5)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 5)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 4)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 3)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 2)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 1)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 6)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 6)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 7)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 7)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 8)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 8)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 9)
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 9)
+[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 10)
+[6822/6822] queuex_123.py|app_release:0049 - Enter ...
+[6822/6824] queuex_123.py|exec_cb:0014 - (data: 10)
+[6822/6822] queuex_123.py|app_release:0054 - call queuex_ctx.release ...
+[6822/6823] queuex_api.py|threadx_handler:0083 - Bye-Bye !!!
+[6822/6822] queuex_api.py|release:0091 - Done.
+[6822/6822] queuex_123.py|app_release:0054 - call queuex_ctx.release ...
+[6822/6824] queuex_api.py|threadx_handler:0083 - Bye-Bye !!!
+[6822/6822] queuex_api.py|release:0091 - Done.
+[6822/6822] queuex_123.py|app_release:0058 - Done.
+[6822/6822] queuex_123.py|app_exit:0070 - Done.
+[6822/6822] queuex_123.py|main:0120 - Bye-Bye !!! (is_quit: 1)
 
 ```
 
