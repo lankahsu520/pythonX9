@@ -27,7 +27,7 @@ class HTTPServer_ctx(http.server.SimpleHTTPRequestHandler):
 		DBG_IF_LN("{}".format(self.headers))
 
 		#path = self.translate_path(self.path)
-		self.filename = "/tmp/{}-{}".format( self.__class__.__name__, os_urandom(10) )
+		self.filename = "/tmp/{}-{}".format( self.__class__.__name__, os_urandom_str(10) )
 		DBG_IF_LN("** Body {} **".format( self.filename))
 
 	def do_PUT(self):
