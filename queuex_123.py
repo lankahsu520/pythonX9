@@ -14,18 +14,22 @@ def exec_cb(data):
 	DBG_IF_LN("(data: {})".format( data ))
 
 def app_start():
+	global is_quit
 	#dbg_lvl_set(DBG_LVL_DEBUG)
-	queuex_mgr = queuex_ctx(dbg_more=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=10, exec_cb=exec_cb, free_cb=None)
+	queuex_mgr = queuex_ctx(dbg_more=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=30, exec_cb=exec_cb, free_cb=None)
 	app_watch(queuex_mgr)
 	queuex_mgr.start( app_apps )
 
+	queuex_mgr.queuex_gosleep()
 	DBG_IF_LN("Push an integer every 100/1000 seconds.")
 	idx=1
 	while (is_quit == 0 ):
-		sleep(100/1000)
+		sleep(10/1000)
+		DBG_DB_LN("call queuex_push ... (idx: {})".format( idx ) )
 		queuex_mgr.queuex_push(idx)
 		idx+=1
-		#DBG_WN_LN("idx: {}", idx);
+		if ( idx == 20):
+			queuex_mgr.queuex_wakeup()
 
 def app_watch(app_ctx):
 	global app_list
@@ -52,11 +56,10 @@ def app_stop():
 	if ( is_quit == 0 ):
 		is_quit = 1
 
-		app_release()
-		DBG_DB_LN("{}".format(DBG_TXT_DONE))
-
 def app_exit():
 	app_stop()
+	app_release()
+	DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
@@ -90,11 +93,12 @@ def parse_arg(argv):
 
 def signal_handler(sig, frame):
 	if sig in (signal.SIGINT, signal.SIGTERM):
-		app_exit()
+		app_stop()
 		return
 	sys.exit(0)
 
 def main(argv):
+	global is_quit
 	global app_apps
 
 	signal.signal(signal.SIGINT, signal_handler)

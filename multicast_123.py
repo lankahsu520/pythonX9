@@ -56,11 +56,10 @@ def app_stop():
 	if ( is_quit == 0 ):
 		is_quit = 1
 
-		app_release()
-		DBG_DB_LN("{}".format(DBG_TXT_DONE))
-
 def app_exit():
 	app_stop()
+	app_release()
+	DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
@@ -94,11 +93,12 @@ def parse_arg(argv):
 
 def signal_handler(sig, frame):
 	if sig in (signal.SIGINT, signal.SIGTERM):
-		app_exit()
+		app_stop()
 		return
 	sys.exit(0)
 
 def main(argv):
+	global is_quit
 	global app_apps
 
 	signal.signal(signal.SIGINT, signal_handler)
