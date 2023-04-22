@@ -9,7 +9,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		ret = 0
 		if ( self.is_quit == 0 ):
 			self.threadx_lock()
-			ret = len(self.queue)
+			ret = len(self.items)
 			self.threadx_unlock()
 		return ret
 
@@ -45,7 +45,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		if ( self.is_quit == 0 ) and ( self.threadx_inloop() == 1):
 			if ( self.queuex_isfull() == 0 ):
 				self.threadx_lock()
-				self.queue.append(data)
+				self.items.append(data)
 				if ( self._ishold == 0 ):
 					self.threadx_notify()
 				self.threadx_unlock()
@@ -55,15 +55,19 @@ class queuex_ctx(pythonX9, threadx_ctx):
 	def queuex_pop(self):
 		data_pop = None
 		if ( self.is_quit == 0 ):
-			if ( self.queuex_isempty() == 0 ):
+			if ( self.queuex_isempty() == 0 ) and ( self._ishold == 0 ):
 				self.threadx_lock()
-				data_pop = self.queue.pop(0)
+
+				idx = 0
+				if ( self.is_stack == 1 ):
+					idx = -1
+				data_pop = self.items.pop(idx)
 				self.threadx_unlock()
 				if not data_pop is None:
 					if not self.exec_cb is None:
 						self.exec_cb(data_pop)
 					#else:
-					#	DBG_IF_LN(self, "(data_pop: {} / {})".format( data_pop, self.queue ) )
+					#	DBG_IF_LN(self, "(data_pop: {} / {})".format( data_pop, self.items ) )
 					if not self.free_cb is None:
 						self.free_cb(data_pop)
 					#sleep(3/1000)
@@ -86,18 +90,19 @@ class queuex_ctx(pythonX9, threadx_ctx):
 				self.threadx_join()
 			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
-	def ctx_init(self, name, queue_size, exec_cb, free_cb):
+	def ctx_init(self, name, queue_size, exec_cb, free_cb, is_stack=0):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
 
-		self.queue = []
+		self.items = []
 
 		self.name = name
 		self.max_data = queue_size
 		self.exec_cb = exec_cb
 		self.free_cb = free_cb
+		self.is_stack = is_stack
 		self._ishold = 0
 
-	def __init__(self, name, queue_size, exec_cb, free_cb, **kwargs):
+	def __init__(self, name, queue_size, exec_cb, free_cb, is_stack=0, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
 			super().__init__(**kwargs)
 		else:
@@ -105,7 +110,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 
 		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
-		self.ctx_init(name, queue_size, exec_cb, free_cb)
+		self.ctx_init(name, queue_size, exec_cb, free_cb, is_stack)
 
 	def parse_args(self, args):
 		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
