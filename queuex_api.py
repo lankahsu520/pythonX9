@@ -7,10 +7,9 @@ class queuex_ctx(pythonX9, threadx_ctx):
 
 	def queuex_length(self):
 		ret = 0
-		if ( self.is_quit == 0 ):
-			self.threadx_lock()
-			ret = len(self.items)
-			self.threadx_unlock()
+		self.threadx_lock()
+		ret = len(self.items)
+		self.threadx_unlock()
 		return ret
 
 	#1: full, 0: not full
@@ -63,12 +62,12 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		if ( self.is_quit == 0 ):
 			if ( self.queuex_isempty() == 0 ) and ( self.queuex_ishold() == 0 ):
 				self.threadx_lock()
-
 				idx = 0
 				if ( self._is_stack == 1 ):
 					idx = -1
 				data_pop = self.items.pop(idx)
 				self.threadx_unlock()
+
 				if not data_pop is None:
 					if not self.exec_cb is None:
 						self.exec_cb(data_pop)
