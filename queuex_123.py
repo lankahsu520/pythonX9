@@ -55,12 +55,10 @@ def queue_test_dict():
 		if ((idx%11==0)):
 			break
 
-
 def app_start():
 	queue_test(is_stack=0)
 	queue_test(is_stack=1)
 	queue_test_dict()
-
 
 def app_watch(app_ctx):
 	global app_list

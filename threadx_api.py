@@ -25,8 +25,11 @@ class threadx_ctx(object):
 	def threadx_join(self):
 		self._threading.join()
 
-	def threadx_wait(self, itimeout=3):
-		self._cond.wait(timeout=itimeout)
+	def threadx_wait(self, timeout=1):
+		if ( timeout >0 ):
+			self._cond.wait(timeout=timeout)
+		else:
+			self._cond.wait()
 
 	def threadx_wakeup(self):
 		self.threadx_lock()
