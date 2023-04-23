@@ -1,3 +1,21 @@
+# -*- coding: utf-8 -*-
+"""
+ ***************************************************************************
+ * Copyright (C) 2023, Lanka Hsu, <lankahsu@gmail.com>, et al.
+ *
+ * This software is licensed as described in the file COPYING, which
+ * you should have received as part of this distribution.
+ *
+ * You may opt to use, copy, modify, merge, publish, distribute and/or sell
+ * copies of the Software, and permit persons to whom the Software is
+ * furnished to do so, under the terms of the COPYING file.
+ *
+ * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
+ * KIND, either express or implied.
+ *
+ ***************************************************************************
+"""
+
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 from pythonX9 import *
@@ -153,7 +171,7 @@ class statex_ctx(pythonX9, threadx_ctx):
 			self.is_quit = 1
 			if ( self.threadx_inloop() == 1 ):
 				self.threadx_wakeup()
-				self.threadx_join()
+			self.threadx_join()
 			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self, name, state_size, is_hold=0):
