@@ -196,8 +196,8 @@ $ ./queuex_123.py -d4
 
 ```
 
-- statex_123.py - state machine example.
-- sysinfo_123.py - 查找主機系統資訊，每5秒刷新畫面
+#### - statex_123.py - state machine example.
+#### - sysinfo_123.py - 查找主機系統資訊，每5秒刷新畫面
 
 ```bash
 $ ./sysinfo_123.py -d 4
