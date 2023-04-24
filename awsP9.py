@@ -16,14 +16,19 @@
  ***************************************************************************
 """
 #https://boto3.amazonaws.com/v1/documentation/api/latest/index.html
+#pip3 install boto3
 import boto3
 from pythonX9 import *
 import botocore
 
 AWS_SERVICE_S3="s3"
+AWS_SERVICE_DYNAMODB="dynamodb"
 REGION_US_WEST_1='us-west-1'
 
-class awsX9_ctx(pythonX9):
+class awsP9_ctx(pythonX9):
+
+	# A low-level client representing Amazon Simple Storage Service (S3)
+	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html
 	def s3_create_bucket(self, s3_bucket_name):
 		self.s3_error_code = 0
 		self.s3_bucket = None
@@ -153,6 +158,24 @@ class awsX9_ctx(pythonX9):
 			self.s3_error_code = error_code
 		return self.s3_response
 
+	# A low-level client representing Amazon DynamoDB
+	# https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html
+	def db_list_tables(self, StartTableName="", limit=10):
+		try:
+			if (StartTableName == ""):
+				self.db_response = self.dbcli.list_tables(Limit=limit)
+			else:
+				self.db_response = self.dbcli.list_tables(ExclusiveStartTableName=StartTableName, Limit=limit)
+		except botocore.exceptions.ClientError as e:
+			error_code = int(e.response['Error']['Code'])
+			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, self.s3_bucket_name ))
+			self.db_error_code = error_code
+		except ClientError as e:
+			error_code = int(e.response['Error']['Code'])
+			DBG_ER_LN(self, "{} (error_code:{}, s3_bucket_name: {})".format( e.__str__(), error_code, self.s3_bucket_name ))
+			self.db_error_code = error_code
+		return self.db_response
+
 	def release(self):
 		self.is_quit = 1
 
@@ -160,13 +183,16 @@ class awsX9_ctx(pythonX9):
 		if ( isPYTHON(PYTHON_V3) ):
 			super().__init__(**kwargs)
 		else:
-			super(awsX9_ctx, self).__init__(**kwargs)
+			super(awsP9_ctx, self).__init__(**kwargs)
 
 		self._kwargs = kwargs
 		self.region = region
 		self.aws_service = aws_service
-		if ( self.aws_service == "s3" ):
-			self.s3src = boto3.resource("s3")
-			self.s3cli = boto3.client("s3")
-		DBG_IF_LN(self, "(region: {}, aws_service: {})".format( region, aws_service ))
 
+		DBG_IF_LN(self, "(region: {}, aws_service: {})".format( region, aws_service ))
+		for service in aws_service:
+			if ( service == "s3" ):
+				self.s3src = boto3.resource("s3")
+				self.s3cli = boto3.client("s3")
+			elif ( service == "dynamodb" ):
+				self.dbcli = boto3.client("dynamodb")
