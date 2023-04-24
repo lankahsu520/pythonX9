@@ -24,7 +24,7 @@ from awsP9 import *
 
 S3_REGION_NAME=REGION_US_WEST_1
 
-aws_service = [ "s3", "dynamodb" ]
+aws_service = [ "dynamodb" ]
 app_list = []
 is_quit = 0
 app_apps = {
