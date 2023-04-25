@@ -35,6 +35,22 @@ def demo_dynamodb(awsP9_mgr):
 	awsP9_mgr.db_list_tables()
 	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
 
+	TableName = awsP9_mgr.db_response["TableNames"][0]
+	response = awsP9_mgr.db_describe_table( TableName );
+	DBG_IF_LN("(TableNames: {}, describe: {})".format(TableName, response))
+
+	awsP9_mgr.db_create_table(TableName="Music1", pk="Artist", sk="SongTitle")
+	#sleep(2)
+
+	awsP9_mgr.db_list_tables()
+	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
+
+	awsP9_mgr.db_delete_table(TableName="Music1")
+
+	awsP9_mgr.db_list_tables()
+	DBG_IF_LN("(TableNames: {})".format(awsP9_mgr.db_response["TableNames"]))
+
+
 def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)
 	awsP9_mgr = awsP9_ctx(aws_service=aws_service, region=S3_REGION_NAME, dbg_more=DBG_LVL_DEBUG)
@@ -126,3 +142,5 @@ def main(argv):
 
 if __name__ == "__main__":
 	main(sys.argv[0:])
+
+# PYTHONPATH=./python ./awsP9-db_123.py -d 3
