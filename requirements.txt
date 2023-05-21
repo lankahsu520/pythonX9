@@ -1,0 +1,3 @@
+#https://pypi.org/project/netifaces/
+netifaces==0.11.0
+

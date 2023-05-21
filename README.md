@@ -4,6 +4,8 @@ pythonX9 把常用的工具集合在一起，並且將呼叫簡單化。
 
 # 2. Depend on
 
+- [netifaces (0.11.0)](https://pypi.org/project/netifaces/)
+
 # 3. Current Status
 
 
