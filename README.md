@@ -43,6 +43,8 @@ flowchart LR
 ```
 
 ```bash
+$ make dummy_123.py
+or
 $ ./dummy_123.py -d4
 [8465/8465] dummy_123.py|app_start:0015 - (Python version: 3.8.10, chkPYTHONge(3,7,0): True, chkPYTHONle(3,7,0): False)
 [8465/8465] dummy_123.py|app_start:0019 - (IFACE: enp0s3, IFACE_MAC: 08:00:27:33:73:52, IFACE_IPv4: 10.0.2.15)
@@ -104,6 +106,8 @@ $ curl -d @endianness.jpg http://192.168.56.104:8087
 #### - multicast_123.py - a multicast example.
 
 ```bash
+$ make multicast_123.py
+or
 $ ./multicast_123.py -d4
 [4977/4977] multicast_api.py|__init__:0110 - Enter ...
 [4977/4977] multicast_api.py|ctx_init:0091 - Enter ...
@@ -138,6 +142,8 @@ $ ./multicast_123.py -d4
 >網路都只會介紹什麼是 queue，但是實際操作經驗零。這邊給你一個很好範例，特別是當你要操作TTY或是一些序列設備時，就會發現這有多好用。
 
 ```bash
+$ make queuex_123.py
+or
 $ ./queuex_123.py -d4
 [6822/6822] queuex_api.py|ctx_init:0094 - Enter ...
 [6822/6822] queuex_123.py|queue_test:0024 - Push an integer every 10/1000 seconds. (is_stack: 0)
@@ -197,9 +203,42 @@ $ ./queuex_123.py -d4
 ```
 
 #### - statex_123.py - state machine example.
+
+```bash
+$ make statex_123.py
+or
+$ ./queuex_123.py -d4
+[7221/7221] statex_api.py|ctx_init:0178 - Enter ...
+[7221/7221] statex_api.py|statex_push:0072 - (name: Idle)
+[7221/7222] statex_123.py|exec_cb_Idle:0064 - (name: Idle)
+[7221/7221] statex_api.py|statex_push:0072 - (name: CableLinked)
+[7221/7222] statex_123.py|exec_cb_CableLinked:0054 - (name: CableLinked)
+[7221/7222] statex_123.py|leave_cb_Idle:0067 - (name: Idle)
+[7221/7221] statex_api.py|statex_push:0072 - (name: NetworkOn)
+[7221/7222] statex_123.py|exec_cb_NetworkOn:0044 - (name: NetworkOn)
+[7221/7222] statex_123.py|leave_cb_CableLinked:0057 - (name: CableLinked)
+[7221/7221] statex_api.py|statex_push:0072 - (name: CloudConnected)
+[7221/7222] statex_123.py|exec_cb_CloudConnected:0034 - (name: CloudConnected)
+[7221/7222] statex_123.py|leave_cb_NetworkOn:0047 - (name: NetworkOn)
+[7221/7221] statex_api.py|statex_remove:0109 - (name: NetworkOn)
+[7221/7221] statex_api.py|statex_pop:0092 - (name: CloudConnected)
+[7221/7221] statex_123.py|exec_cb_CableLinked:0054 - (name: CableLinked)
+[7221/7221] statex_123.py|leave_cb_CloudConnected:0037 - (name: CloudConnected)
+[7221/7221] statex_123.py|app_release:0109 - Enter ...
+[7221/7221] statex_123.py|app_release:0114 - call statex_ctx.release ...
+[7221/7222] statex_api.py|threadx_handler:0167 - Bye-Bye !!!
+[7221/7221] statex_api.py|release:0175 - Done.
+[7221/7221] statex_123.py|app_release:0118 - Done.
+[7221/7221] statex_123.py|app_exit:0130 - Done.
+[7221/7221] statex_123.py|main:0180 - Bye-Bye !!! (is_quit: 1)
+
+```
+
 #### - sysinfo_123.py - 查找主機系統資訊，每5秒刷新畫面
 
 ```bash
+$ make sysinfo_123.py
+or 
 $ ./sysinfo_123.py -d 4
 [8510/8510] sysinfo_api.py|__init__:0201 - Enter ...
 [8510/8510] sysinfo_api.py|ctx_init:0190 - Enter ...
