@@ -31,9 +31,11 @@ def app_start():
 	#dbg_lvl_set(DBG_LVL_DEBUG)
 	DBG_IF_LN("(Python version: {}, chkPYTHONge(3,7,0): {}, chkPYTHONle(3,7,0): {})".format( getPYTHONbver(), chkPYTHONge(3,7,0), chkPYTHONle(3,7,0) ))
 
-	IFACE = "enp0s3"
-	(IFACE_MAC, IFACE_IPv4) = get_hwaddr( IFACE )
-	DBG_IF_LN("(IFACE: {}, IFACE_MAC: {}, IFACE_IPv4: {})".format( IFACE, IFACE_MAC, IFACE_IPv4 ))
+	IFACEs =get_ifaces()
+	for IFACE in IFACEs:
+		#IFACE = "enp0s3"
+		(IFACE_MAC, IFACE_IPv4) = get_hwaddr( IFACE )
+		DBG_IF_LN("(IFACE: {}, IFACE_MAC: {}, IFACE_IPv4: {})".format( IFACE, IFACE_MAC, IFACE_IPv4 ))
 
 	dummy_mgr = dummy_ctx(dbg_more=DBG_LVL_TRACE)
 	app_watch(dummy_mgr)
