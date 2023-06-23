@@ -93,7 +93,7 @@ class multicast_ctx(pythonX9, threadx_ctx):
 		self.threadx_set_inloop(1)
 		self.readx()
 		self.threadx_set_inloop(0)
-		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):

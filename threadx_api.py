@@ -75,7 +75,7 @@ class threadx_ctx(object):
 		self.threadx_set_inloop(1)
 		DBG_WN_LN(self, "Please override this function !!!")
 		self.threadx_set_inloop(0)
-		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
