@@ -63,23 +63,25 @@ def dbg_more(*args):
 	return dbg_more.lvl
 
 def dbg_lvl_set(lvl= DBG_LVL_INFO):
-	dbg_more(lvl)
+	return dbg_more(lvl)
 
 def dbg_debug_helper(lvl):
+	ret = lvl
 	if lvl == 0:
-		dbg_lvl_set(DBG_LVL_CRITICAL)
+		ret = dbg_lvl_set(DBG_LVL_CRITICAL)
 	elif lvl == 1:
-		dbg_lvl_set(DBG_LVL_ERROR)
+		ret = dbg_lvl_set(DBG_LVL_ERROR)
 	elif lvl == 2:
-		dbg_lvl_set(DBG_LVL_WARN)
+		ret = dbg_lvl_set(DBG_LVL_WARN)
 	elif lvl == 3:
-		dbg_lvl_set(DBG_LVL_INFO)
+		ret = dbg_lvl_set(DBG_LVL_INFO)
 	elif lvl == 4:
-		dbg_lvl_set(DBG_LVL_DEBUG)
+		ret = dbg_lvl_set(DBG_LVL_DEBUG)
 	elif lvl == 5:
-		dbg_lvl_set(DBG_LVL_TRACE)
+		ret = dbg_lvl_set(DBG_LVL_TRACE)
 	else:
-		dbg_lvl_set(DBG_LVL_DEFAULT)
+		ret = dbg_lvl_set(DBG_LVL_DEFAULT)
+	return ret
 
 def DBG_XX_LN(f_back, need_lvl, color, *args):
 	dbg_lvl = dbg_more()

@@ -34,7 +34,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 	def queuex_isfull(self):
 		ret = 0
 		if ( self.queuex_length() >= self.max_data ):
-			#DBG_WN_LN("{} is full.".format( self.name ))
+			#DBG_WN_LN(self, "{} is full.".format( self.name ))
 			ret = 1;
 		return ret
 
@@ -73,7 +73,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 					self.threadx_notify()
 				self.threadx_unlock()
 			else:
-				DBG_WN_LN("Skip ! (data: {})".format( data ))
+				DBG_WN_LN(self, "Skip ! (data: {})".format( data ))
 
 	def queuex_pop(self):
 		data_pop = None
@@ -103,7 +103,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		while ( self.is_quit == 0 ):
 			self.queuex_pop()
 		self.threadx_set_inloop(0)
-		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
