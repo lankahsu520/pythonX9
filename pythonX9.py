@@ -270,8 +270,15 @@ def get_hwaddr(netdev='eth0'):
 	p=subprocess.Popen(arg,shell=True,stdout=subprocess.PIPE)
 	data = p.communicate()
 	sdata = data[0].decode().split('\n')
-	macaddr = sdata[1].strip().split(' ')[1]
-	ipaddr = sdata[2].strip().split(' ')[1].split('/')[0]
+	#DBG_IF_LN(">>>{}".format( sdata ))
+	if (len(sdata)>2):
+		macaddr = sdata[1].strip().split(' ')[1]
+	else:
+		macaddr = ''
+	if (len(sdata)>3):
+		ipaddr = sdata[2].strip().split(' ')[1].split('/')[0]
+	else:
+		ipaddr = ''
 	return (macaddr, ipaddr)
 
 #STATIC_IP="127.0.0.1"
