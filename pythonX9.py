@@ -30,6 +30,7 @@ import random
 from pythonX9_def import *
 from pythonX9_tag import *
 
+import threading
 import ctypes
 __NR_gettid = 186  # gettid syscall number
 libc = ctypes.CDLL('libc.so.6')
@@ -39,7 +40,9 @@ libc = ctypes.CDLL('libc.so.6')
 #******************************************************************************
 
 def gettid():
- return libc.syscall(__NR_gettid)
+	#return libc.syscall(__NR_gettid)
+	return threading.get_ident()
+	#return threading.get_native_id()
 
 
 #******************************************************************************
