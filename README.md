@@ -37,7 +37,7 @@ flowchart LR
 	End([End])
 	
 	Start-->main-->signal-->parse_arg-->app_start-->app_exit-->app_stop
-	signal.->signal_handler
+	signal-->signal_handler
 	
 	parse_arg-->show_usage
 	app_start-->app_watch
