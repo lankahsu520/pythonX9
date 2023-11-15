@@ -1,6 +1,6 @@
 # 1. Overview
 
-pythonX9 把常用的工具集合在一起，並且將呼叫簡單化。
+> pythonX9 把常用的工具集合在一起，並且將呼叫簡單化。
 
 # 2. Depend on
 
@@ -285,10 +285,47 @@ q[8510/8511] sysinfo_api.py|threadx_handler:0173 - Bye-Bye !!!
 
 ```
 
-# 6. License
 
-pythonX9 is under the New BSD License (BSD-3-Clause).
+# 6. Documentation
+> Run an example and read it.
 
+# Appendix
 
-# 7. Documentation
-Run an example and read it.
+# I. Study
+
+# II. Debug
+
+## II.1. [`trace`](https://docs.python.org/3/library/trace.html#module-trace) — Trace or track Python statement execution
+
+```bash
+# trace line by line
+$ python3 -m trace \
+	--ignore-dir=/usr/lib/python3.8 \
+	--trace ./dummy_123.py -d4
+```
+
+# III. Glossary
+
+# IV. Tool Usage
+
+## IV.1. [eric](https://eric-ide.python-projects.org)
+
+> 希望在 ubuntu 有 Python editor 且能 debug，不要求有強大的功能。
+>
+> eric 安裝方便，所以選擇此 IDE。
+
+> Eric is a full featured Python editor and IDE, written in Python. It is based on the cross platform Qt UI toolkit, integrating the highly flexible Scintilla editor control. It is designed to be usable as everdays' quick and dirty editor as well as being usable as a professional project management tool integrating many advanced features Python offers the professional coder. eric includes a plug-in system, which allows easy extension of the IDE functionality with plug-ins downloadable from the net.
+>
+> Current stable version is eric7 based on PyQt6 (with Qt6) and Python 3.
+
+```bash
+$ sudo apt install -y eric
+```
+
+# Author
+
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+> pythonX9 is under the New BSD License (BSD-3-Clause).
