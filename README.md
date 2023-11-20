@@ -328,4 +328,4 @@ $ sudo apt install -y eric
 
 # License
 
-> pythonX9 is under the New BSD License (BSD-3-Clause).
+> [pythonX9](https://github.com/lankahsu520/pythonX9) is under the New BSD License (BSD-3-Clause).
