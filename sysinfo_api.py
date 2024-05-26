@@ -108,7 +108,7 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 			return ("{:02d}:{:02d}:{:02d}").format(hh, mm, ss)
 
 	def sysinfo_show_watch(self):
-		DBG_DB_LN(self, "--------------------------------------------------------------------------------")
+		DBG_DB0_LN("--------------------------------------------------------------------------------")
 		#DBG_DB_LN(self, "(cpu_temperature: {})".format(self.cpu_temperature()) )
 		#DBG_DB_LN(self, "(os_gpu_temperature: {})".format(self.os_gpu_temperature()) )
 		DBG_DB_LN(self, "(cpu_usage: {})".format(self.cpu_usage()) )

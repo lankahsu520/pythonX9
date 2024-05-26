@@ -86,6 +86,38 @@ def dbg_debug_helper(lvl):
 		ret = dbg_lvl_set(DBG_LVL_DEFAULT)
 	return ret
 
+def DBG_00_LN(need_lvl, color, *args):
+	dbg_lvl = dbg_more()
+	if ( len(args) == 2 ):
+		obj = args[0]
+		msg = args[1]
+		if hasattr(obj, "_dbg_more"):
+			dbg_lvl = obj._dbg_more
+	else:
+		obj = None
+		msg = args[0]
+
+	if ( dbg_lvl <= need_lvl ):
+		print("{}{}{}\r".format(color, (msg), COLOR_NONE))
+
+def DBG_CR0_LN(*args):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_LIGHT_RED, *args)
+
+def DBG_ER0_LN(*args):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_RED, *args)
+
+def DBG_WN0_LN(*args):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_PURPLE, *args)
+
+def DBG_IF0_LN(*args):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_YELLOW, *args)
+
+def DBG_DB0_LN(*args):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_WHITE, *args)
+
+def DBG_TR0_LN(*args):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_DARY_GRAY, *args)
+
 def DBG_XX_LN(f_back, need_lvl, color, *args):
 	dbg_lvl = dbg_more()
 	if ( len(args) == 2 ):
@@ -222,7 +254,8 @@ def file_find(directory, pattern):
 				yield filename
 
 def os_urandom():
-	rand_num = random.randint(1e9, 1e10-1)
+	rand_num = random.randint(0, sys.maxsize)
+	DBG_WN_LN("(rand_num: {})".format(rand_num))
 	return rand_num
 def os_urandom_str(count):
 	rand_num = os_urandom()
