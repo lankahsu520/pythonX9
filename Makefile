@@ -28,6 +28,9 @@ PYTHON_FILES = \
 DEBUG=4
 DEBUG_ARG=-d $(DEBUG)
 
+export PJ_PYTHON_VER=$(shell python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))')
+export MAKE_DBG='==\> python $(PJ_PYTHON_VER) -'
+
 #********************************************************************************
 #** All **
 #********************************************************************************
@@ -48,15 +51,18 @@ clean:
 
 distclean: clean
 
+layer_python_reqen:
+	pip3 install --upgrade --force-reinstall --target $(PWD)/python -r requirements.txt
+
 layer_python:
-	@echo '----->> $@ - $(PWD)/python'
+	@echo '$(MAKE_DBG) $@: $(PWD)/python'
 	@if [ ! -d "$(PWD)/python" ]; then \
-		(pip3 install --target $(PWD)/python -r requirements.txt); \
+		(pip3 install --upgrade --force-reinstall --target $(PWD)/python -r requirements.txt); \
 		for libs in $(GITHUB_LIBS); do (git clone $$libs github_libs && $(PJ_SH_CP) github_libs/*.py $(PWD)/python && rm -rf github_libs); done \
 	fi
 	@echo
 
 $(PYTHON_FILES): layer_python
 	@echo
-	@echo '----->> run $@'
+	@echo '$(MAKE_DBG) run: $@'
 	PYTHONPATH=$(PWD)/python ./$@ $(DEBUG_ARG)
