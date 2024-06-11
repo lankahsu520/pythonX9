@@ -19,6 +19,7 @@ GITHUB_LIBS = \
 
 #** PYTHON_FILES **
 PYTHON_FILES = \
+														youtube_123.py \
 														dummy_123.py \
 														multicast_123.py \
 														queuex_123.py \

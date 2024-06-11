@@ -6,3 +6,11 @@ netifaces2
 psutil
 #https://pypi.org/project/ifaddr/
 ifaddr
+#https://pypi.org/project/streamlink/
+#sudo apt install -y streamlink
+streamlink==6.7.4
+#https://pypi.org/project/lxml/
+#sudo apt install -y python3-lxml
+#lxml
+#https://pypi.org/project/launchpadlib/
+#launchpadlib

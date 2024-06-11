@@ -5,8 +5,15 @@
 # 2. Depend on
 
 - [netifaces (0.11.0)](https://pypi.org/project/netifaces/)
+- [streamlink](https://pypi.org/project/streamlink/)
+
+> This plugin does not support protected videos, try youtube-dl instead
 
 # 3. Current Status
+
+>不敢臭屁自己寫的有多完美，但是秉持著對 c 的嚴謹態度，至少能維持一定的水平的產出。
+>
+>雖然 python 入手容易，但是看到那些“不謹慎的成品”，並且掛上 AI 高手的名號，真的心生恐懼！
 
 
 # 4. Build
@@ -284,9 +291,35 @@ q[8510/8511] sysinfo_api.py|threadx_handler:0173 - Bye-Bye !!!
 [8510/8510] sysinfo_123.py|main:0107 - Bye-Bye !!! (is_quit: 1)
 
 ```
+#### - youtube_123.py - a streamlink example.
 
+>使用 streamlink  api 方式下載 youtube 影片
+
+```bash
+$ make youtube_123.py
+==> python 3.12 - layer_python: /work/codebase/lankahsu520/pythonX9/python
+
+
+==> python 3.12 - run: youtube_123.py
+PYTHONPATH=/work/codebase/lankahsu520/pythonX9/python ./youtube_123.py -d 4
+[10130/139874243954496] youtube_123.py|app_start:0033 - (Python version: 3.12.3, chkPYTHONge(3,8,0): True, chkPYTHONle(3,8,0): False)
+[10130/139874243954496] streamlink_api.py|streams_urlparse:0031 - (stream_url: https://www.youtube.com/watch?v=a_9_38JpdYU)
+[10130/139874243954496] streamlink_api.py|streams_urlparse:0032 - (urlparse: ParseResult(scheme='https', netloc='www.youtube.com', path='/watch', params='', query='v=a_9_38JpdYU', fragment=''))
+[10130/139874243954496] streamlink_api.py|streams_choice:0051 - (quality: 240p / dict_keys(['audio_mp4a', 'audio_opus', '144p', '240p', '360p', '480p', '720p', '1080p', 'worst', 'best']))
+[10130/139874243954496] streamlink_api.py|streams_savetofile:0080 - (filename: ./240p.mp4, chunksize:1024)
+./240p.mp4: 37,503,875 bytes
+
+[10130/139874243954496] streamlink_api.py|streams_streaming:0069 - Download complete !!!
+[10130/139874243954496] youtube_123.py|app_release:0053 - Enter ...
+[10130/139874243954496] youtube_123.py|app_release:0058 - call streamlink_ctx.release ...
+[10130/139874243954496] youtube_123.py|app_release:0062 - Done.
+[10130/139874243954496] youtube_123.py|app_exit:0075 - Done.
+[10130/139874243954496] youtube_123.py|main:0125 - Bye-Bye !!! (is_quit: 1)
+
+```
 
 # 6. Documentation
+
 > Run an example and read it.
 
 # Appendix
