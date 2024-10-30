@@ -89,7 +89,7 @@ flowchart LR
 	curl -->|endianness.jpg|httpd_123-->|saveto|saveto
 ```
 ```bash
-$ ./httpd_123.py  8087
+$ ./httpd_123.py -p 8087
 Serving HTTP on 0.0.0.0 port 8087 (http://0.0.0.0:8087/) ...
 [httpd_123.py|do_POST:0062] - Enter ...
 [httpd_123.py|dump_header:0022] - ** path **
@@ -110,6 +110,8 @@ Expect: 100-continue
 
 ```bash
 $ curl -d @endianness.jpg http://192.168.56.104:8087
+
+$ gimp /tmp/HTTPServer_ctx-3272277516
 ```
 
 #### - multicast_123.py - a multicast example.
