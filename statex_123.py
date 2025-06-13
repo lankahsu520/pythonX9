@@ -22,14 +22,11 @@
 
 from statex_api import *
 
-app_list = []
+appX_list = []
 is_quit = 0
-app_apps = {
+is_release = 0
+argsX = {
 }
-
-app_apps = {
-}
-
 def exec_cb_CloudConnected(data):
 	DBG_IF_LN("(name: {})".format( data["name"] ))
 
@@ -70,12 +67,31 @@ StatexIdle ={
 	"name": "Idle", "priority": 999, "init_cb": None, "exec_cb": exec_cb_Idle, "leave_cb": leave_cb_Idle
 }
 
-def app_start():
-	global is_quit
-	statex_mgr = statex_ctx(dbg_more=DBG_LVL_DEBUG, name="HelloStateX", state_size=20, is_hold=0)
+def argsX_set(name, val):
+	global argsX
+	argsX[name]=val
 
+def argsX_get(name):
+	return argsX[name]
+
+def argsX_dump():
+	#dbg_lvl_set(DBG_LVL_TRACE)
+	DBG_IF_LN("{}".format( argsX ) )
+
+def app_quit_get():
+	return is_quit
+
+def app_quit_set(mode):
+	global is_quit
+	is_quit=mode
+
+def app_start():
+	argsX_dump()
+
+	statex_mgr = statex_ctx(dbg_lvl=DBG_LVL_DEBUG, name="HelloStateX", state_size=20, is_hold=0)
 	app_watch(statex_mgr)
-	statex_mgr.start( app_apps )
+
+	statex_mgr.start( argsX )
 	statex_mgr.statex_gosleep()
 	#statex_mgr.statex_push(name="Idle", priority=999, exec_cb=exec_cb_Idle, free_cb=free_cb_Idle)
 	statex_mgr.statex_wakeup()
@@ -97,36 +113,37 @@ def app_start():
 	# Idle->CableLinked
 	statex_mgr.statex_pop()
 
-
 def app_watch(app_ctx):
-	global app_list
+	global appX_list
 
-	app_list.append( app_ctx )
+	appX_list.append( app_ctx )
 
 def app_release():
-	global app_list
+	global appX_list
+	global is_release
 
-	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
-	for x in app_list:
-		try:
-			objname = DBG_NAME(x)
-			if not x.release is None:
-				DBG_DB_LN("call {}.release ...".format( objname ) )
-				x.release() # No handlers could be found for logger "google.api_core.bidi"
-		except Exception:
-			pass
-	DBG_DB_LN("{}".format(DBG_TXT_DONE))
+	if ( is_release == 0 ):
+		is_release = 1
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
+		for x in appX_list:
+			try:
+				objname = DBG_NAME(x)
+				if not x.release is None:
+					DBG_DB_LN("call {}.release ...".format( objname ) )
+					x.release() # No handlers could be found for logger "google.api_core.bidi"
+			except Exception:
+				pass
+		DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_stop():
-	global is_quit
-
 	# dont block this function or print, signal_handler->app_stop
-	if ( is_quit == 0 ):
-		is_quit = 1
+	if ( app_quit_get() == 0 ):
+		app_quit_set(1)
+
+		app_release()
 
 def app_exit():
 	app_stop()
-	app_release()
 	DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def show_usage(argv):
@@ -138,7 +155,7 @@ def show_usage(argv):
 	sys.exit(0)
 
 def parse_arg(argv):
-	global app_apps
+	global argsX
 
 	try:
 		opts,args = getopt.getopt(argv[1:], "hd:", ["help", "debug"])
@@ -166,9 +183,6 @@ def signal_handler(sig, frame):
 	sys.exit(0)
 
 def main(argv):
-	global is_quit
-	global app_apps
-
 	signal.signal(signal.SIGINT, signal_handler)
 	signal.signal(signal.SIGTERM, signal_handler)
 
@@ -177,7 +191,7 @@ def main(argv):
 	app_start()
 
 	app_exit()
-	DBG_WN_LN("{} (is_quit: {})".format(DBG_TXT_BYE_BYE, is_quit))
+	DBG_WN_LN("{} (app_quit_get: {})".format(DBG_TXT_BYE_BYE, app_quit_get()) )
 
 if __name__ == "__main__":
 	main(sys.argv[0:])

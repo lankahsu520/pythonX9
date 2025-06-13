@@ -24,6 +24,7 @@ PYTHON_FILES = \
 														multicast_123.py \
 														queuex_123.py \
 														statex_123.py \
+														stockx_123.py \
 														sysinfo_123.py
 
 DEBUG=4

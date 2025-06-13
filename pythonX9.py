@@ -91,8 +91,8 @@ def DBG_00_LN(need_lvl, color, *args):
 	if ( len(args) == 2 ):
 		obj = args[0]
 		msg = args[1]
-		if hasattr(obj, "_dbg_more"):
-			dbg_lvl = obj._dbg_more
+		if hasattr(obj, "_dbg_lvl"):
+			dbg_lvl = obj._dbg_lvl
 	else:
 		obj = None
 		msg = args[0]
@@ -125,8 +125,8 @@ def DBG_XX_LN(f_back, need_lvl, color, *args):
 		msg = args[1]
 		#objname = "[{:04}/{:04}/{}]".format(os.getppid(), os.getpid(), obj.__class__.__name__)
 		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
-		if hasattr(obj, "_dbg_more"):
-			dbg_lvl = obj._dbg_more
+		if hasattr(obj, "_dbg_lvl"):
+			dbg_lvl = obj._dbg_lvl
 	else:
 		obj = None
 		msg = args[0]
@@ -257,6 +257,7 @@ def os_urandom():
 	rand_num = random.randint(0, sys.maxsize)
 	DBG_WN_LN("(rand_num: {})".format(rand_num))
 	return rand_num
+
 def os_urandom_str(count):
 	rand_num = os_urandom()
 	rand_str = str(rand_num).zfill(count)
@@ -320,6 +321,7 @@ def get_hwaddr(netdev='eth0'):
 #STATIC_PORT = "9981"
 #(STATIC_IFACE, STATIC_IP) = get_ipaddr()
 
+
 #******************************************************************************
 # pythonX9
 #******************************************************************************
@@ -343,9 +345,9 @@ class pythonX9(object):
 	def release(self):
 		self.is_quit = 1
 
-	def __init__(self, dbg_more=DBG_LVL_DEFAULT, dbg_logging=0, dbg_path="", func_cb=None, usrdata=None):
+	def __init__(self, dbg_lvl=DBG_LVL_DEFAULT, dbg_logging=0, dbg_path="", func_cb=None, usrdata=None):
 		self.is_quit = 0
-		self._dbg_more = dbg_more
+		self._dbg_lvl = dbg_lvl
 		self._dbg_logging = dbg_logging
 		self._dbg_path = dbg_path
 		self._func_cb = func_cb
