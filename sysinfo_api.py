@@ -224,7 +224,7 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 			self.threadx_init()
 			self.keyboard_recv()
 
-#sysinfo_mgr = sysinfo_ctx(dbg_more=DBG_LVL_TRACE)
+#sysinfo_mgr = sysinfo_ctx(dbg_lvl=DBG_LVL_TRACE)
 #sysinfo_mgr.start(args={"keyboard": 1, "interval": 5})
 ##sysinfo_mgr.keyboard_recv()
 #sysinfo_mgr.release()

@@ -20,12 +20,25 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from dummy_api import *
+from stockx_api import *
+from datetime import datetime
+
+stock_no = '0050'           # ªÑ²¼¥N½X
+
+#date_range = [2024, 2025]
+#date_range = [2022, 2023, 2024, 2025]
+date_range = [2024, 2025]
+year_ago = 1
 
 appX_list = []
 is_quit = 0
 is_release = 0
 argsX = {
+	"stock_no": stock_no
+	,"date_range": date_range
+	,"year_ago": 4
+	,"renew": False
+	,"verbose": False
 }
 
 def argsX_set(name, val):
@@ -49,18 +62,19 @@ def app_quit_set(mode):
 def app_start():
 	argsX_dump()
 
-	DBG_IF_LN("(Python version: {}, chkPYTHONge(3,7,0): {}, chkPYTHONle(3,7,0): {})".format( getPYTHONbver(), chkPYTHONge(3,7,0), chkPYTHONle(3,7,0) ))
+	stockx_mgr = stockx_ctx()
+	app_watch(stockx_mgr)
 
-	IFACEs =get_ifaces()
-	for IFACE in IFACEs:
-		#IFACE = "enp0s3"
-		(IFACE_MAC, IFACE_IPv4) = get_hwaddr( IFACE )
-		DBG_IF_LN("(IFACE: {}, IFACE_MAC: {}, IFACE_IPv4: {})".format( IFACE, IFACE_MAC, IFACE_IPv4 ))
+	stockx_mgr.start( argsX )
+	if ( argsX_get("verbose") == True ) and (app_quit_get()==0):
+		stockx_mgr.history_display_on_screen()
 
-	dummy_mgr = dummy_ctx(dbg_lvl=DBG_LVL_TRACE)
-	app_watch(dummy_mgr)
+	if (app_quit_get()==0):
+		stockx_mgr.history_save_to_csv()
 
-	dummy_mgr.start( argsX )
+	stockx_mgr.buy_prices_helper()
+
+	stockx_mgr.buy_return_display_on_screen()
 
 def app_watch(app_ctx):
 	global appX_list
@@ -99,13 +113,16 @@ def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
 	print("  -h, --help")
 	print("  -d, --debug level")
+	print("  -s, --stock Stock symbol")
+	print("  -y, --year N years ago")
+	print("  -v, --verbose")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
 	app_exit()
 	sys.exit(0)
 
 def parse_arg(argv):
 	try:
-		opts,args = getopt.getopt(argv[1:], "hd:", ["help", "debug"])
+		opts,args = getopt.getopt(argv[1:], "hd:s:y:rv", ["help", "debug", "stock", "year", "renew", "verbose"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -118,6 +135,16 @@ def parse_arg(argv):
 				show_usage(argv)
 			elif opt in ("-d", "--debug"):
 				dbg_debug_helper( int(arg) )
+			elif opt in ("-s", "--stock"):
+				argsX_set("stock_no", arg)
+			elif opt in ("-y", "--year"):
+				argsX_set("year_ago", int(arg))
+				NOW_YEAR = datetime.today().year
+				argsX_set("date_range", list(range(NOW_YEAR - argsX["year_ago"], NOW_YEAR + 1)) )
+			elif opt in ("-r", "--renew"):
+				argsX_set("renew", True)
+			elif opt in ("-v", "--verbose"):
+				argsX_set("verbose", True)
 			else:
 				print ("(opt: {})".format(opt))
 	else:

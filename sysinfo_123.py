@@ -22,64 +22,85 @@
 
 from sysinfo_api import *
 
-app_list = []
+appX_list = []
 is_quit = 0
-app_apps = {
-	"keyboard": 1,
-	"interval": 5
+is_release = 0
+argsX = {
+	"keyboard": 1
+	,"interval": 5
 }
 
-def app_start():
+def argsX_set(name, val):
+	global argsX
+	argsX[name]=val
+
+def argsX_get(name):
+	return argsX[name]
+
+def argsX_dump():
 	#dbg_lvl_set(DBG_LVL_TRACE)
-	sysinfo_mgr = sysinfo_ctx(dbg_more=DBG_LVL_TRACE)
+	DBG_IF_LN("{}".format( argsX ) )
+
+def app_quit_get():
+	return is_quit
+
+def app_quit_set(mode):
+	global is_quit
+	is_quit=mode
+
+def app_start():
+	argsX_dump()
+
+	sysinfo_mgr = sysinfo_ctx(dbg_lvl=DBG_LVL_TRACE)
 	app_watch(sysinfo_mgr)
-	sysinfo_mgr.start(args=app_apps)
+
+	sysinfo_mgr.start(args=argsX)
 	#sysinfo_mgr.keyboard_recv()
 	sysinfo_mgr.release()
 
 def app_watch(app_ctx):
-	global app_list
+	global appX_list
 
-	app_list.append( app_ctx )
+	appX_list.append( app_ctx )
 
 def app_release():
-	global app_list
+	global appX_list
+	global is_release
 
-	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
-	for x in app_list:
-		try:
-			objname = DBG_NAME(x)
-			if not x.release is None:
-				DBG_DB_LN("call {}.release ...".format( objname ) )
-				x.release() # No handlers could be found for logger "google.api_core.bidi"
-		except Exception:
-			pass
-	DBG_DB_LN("{}".format(DBG_TXT_DONE))
+	if ( is_release == 0 ):
+		is_release = 1
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
+		for x in appX_list:
+			try:
+				objname = DBG_NAME(x)
+				if not x.release is None:
+					DBG_DB_LN("call {}.release ...".format( objname ) )
+					x.release() # No handlers could be found for logger "google.api_core.bidi"
+			except Exception:
+				pass
+		DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_stop():
-	global is_quit
-
 	# dont block this function or print, signal_handler->app_stop
-	if ( is_quit == 0 ):
-		is_quit = 1
+	if ( app_quit_get() == 0 ):
+		app_quit_set(1)
+
+		app_release()
 
 def app_exit():
 	app_stop()
-	app_release()
 	DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
 	print("  -h, --help")
-	print("  -k, --key")
 	print("  -d, --debug level")
+	print("  -k, --key")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
 	app_exit()
 	sys.exit(0)
 
 def parse_arg(argv):
-	global app_apps
-
 	try:
 		opts,args = getopt.getopt(argv[1:], "hkd:", ["help", "key", "debug"])
 	except getopt.GetoptError:
@@ -94,9 +115,8 @@ def parse_arg(argv):
 			if opt in ("-h", "--help"):
 				show_usage(argv)
 			elif opt in ("-k", "--key"):
-				app_apps["keyboard"] = 1
+				argsX_set("keyboard", 1)
 			elif opt in ("-d", "--debug"):
-				#app_apps["debug"] = int(arg)
 				dbg_debug_helper( int(arg) )
 				#DBG_IF_LN("arg:{}".format(arg))
 			else:
@@ -111,9 +131,6 @@ def signal_handler(sig, frame):
 	sys.exit(0)
 
 def main(argv):
-	global is_quit
-	global app_apps
-
 	signal.signal(signal.SIGINT, signal_handler)
 	signal.signal(signal.SIGTERM, signal_handler)
 
@@ -122,7 +139,7 @@ def main(argv):
 	app_start()
 
 	app_exit()
-	DBG_WN_LN("{} (is_quit: {})".format(DBG_TXT_BYE_BYE, is_quit))
+	DBG_WN_LN("{} (app_quit_get: {})".format(DBG_TXT_BYE_BYE, app_quit_get()) )
 
 if __name__ == "__main__":
 	main(sys.argv[0:])

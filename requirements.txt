@@ -14,3 +14,5 @@ streamlink==6.7.4
 #lxml
 #https://pypi.org/project/launchpadlib/
 #launchpadlib
+#https://pypi.org/project/pandas/
+pandas

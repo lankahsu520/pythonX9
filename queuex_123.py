@@ -22,25 +22,26 @@
 
 from queuex_api import *
 
-app_list = []
+appX_list = []
 is_quit = 0
-app_apps = {
+is_release = 0
+argsX = {
 }
 
 def exec_cb(data):
 	DBG_IF_LN("(data: {})".format( data ))
 
 def queue_test(is_stack=0):
-	global is_quit
 	#dbg_lvl_set(DBG_LVL_DEBUG)
-	queuex_mgr = queuex_ctx(dbg_more=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=20, exec_cb=exec_cb, free_cb=None, is_stack=is_stack)
+	queuex_mgr = queuex_ctx(dbg_lvl=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=20, exec_cb=exec_cb, free_cb=None, is_stack=is_stack)
 	app_watch(queuex_mgr)
-	queuex_mgr.start( app_apps )
+
+	queuex_mgr.start( argsX )
 
 	queuex_mgr.queuex_gosleep()
 	DBG_IF_LN("Push an integer every 10/1000 seconds. (is_stack: {})".format( is_stack ))
 	idx=1
-	while (is_quit == 0 ):
+	while (app_quit_get() == 0 ):
 		sleep(10/1000)
 		item=idx
 		DBG_DB_LN("call queuex_push ... (item: {})".format( item ) )
@@ -52,16 +53,16 @@ def queue_test(is_stack=0):
 			break
 
 def queue_test_dict():
-	global is_quit
 	#dbg_lvl_set(DBG_LVL_DEBUG)
-	queuex_mgr = queuex_ctx(dbg_more=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=20, exec_cb=exec_cb, free_cb=None, is_stack=0, is_sort=1, dict_key="key")
+	queuex_mgr = queuex_ctx(dbg_lvl=DBG_LVL_DEBUG, name="HelloQueueX", queue_size=20, exec_cb=exec_cb, free_cb=None, is_stack=0, is_sort=1, dict_key="key")
 	app_watch(queuex_mgr)
-	queuex_mgr.start( app_apps )
+
+	queuex_mgr.start( argsX )
 
 	queuex_mgr.queuex_gosleep()
 
 	idx=1
-	while (is_quit == 0 ):
+	while (app_quit_get() == 0 ):
 		sleep(10/1000)
 		item={"key":os_urandom(),"idx":idx}
 		DBG_DB_LN("call queuex_push ... (item: {})".format( item ) )
@@ -72,40 +73,62 @@ def queue_test_dict():
 		if ((idx%11==0)):
 			break
 
+def argsX_set(name, val):
+	global argsX
+	argsX[name]=val
+
+def argsX_get(name):
+	return argsX[name]
+
+def argsX_dump():
+	#dbg_lvl_set(DBG_LVL_TRACE)
+	DBG_IF_LN("{}".format( argsX ) )
+
+def app_quit_get():
+	return is_quit
+
+def app_quit_set(mode):
+	global is_quit
+	is_quit=mode
+
 def app_start():
+	argsX_dump()
+
 	queue_test(is_stack=0)
 	queue_test(is_stack=1)
 	queue_test_dict()
 
 def app_watch(app_ctx):
-	global app_list
+	global appX_list
 
-	app_list.append( app_ctx )
+	appX_list.append( app_ctx )
 
 def app_release():
-	global app_list
+	global appX_list
+	global is_release
 
-	DBG_DB_LN("{}".format(DBG_TXT_ENTER))
-	for x in app_list:
-		try:
-			objname = DBG_NAME(x)
-			if not x.release is None:
-				DBG_DB_LN("call {}.release ...".format( objname ) )
-				x.release() # No handlers could be found for logger "google.api_core.bidi"
-		except Exception:
-			pass
-	DBG_DB_LN("{}".format(DBG_TXT_DONE))
+	if ( is_release == 0 ):
+		is_release = 1
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
+		for x in appX_list:
+			try:
+				objname = DBG_NAME(x)
+				if not x.release is None:
+					DBG_DB_LN("call {}.release ...".format( objname ) )
+					x.release() # No handlers could be found for logger "google.api_core.bidi"
+			except Exception:
+				pass
+		DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def app_stop():
-	global is_quit
-
 	# dont block this function or print, signal_handler->app_stop
-	if ( is_quit == 0 ):
-		is_quit = 1
+	if ( app_quit_get() == 0 ):
+		app_quit_set(1)
+
+		app_release()
 
 def app_exit():
 	app_stop()
-	app_release()
 	DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 def show_usage(argv):
@@ -117,8 +140,6 @@ def show_usage(argv):
 	sys.exit(0)
 
 def parse_arg(argv):
-	global app_apps
-
 	try:
 		opts,args = getopt.getopt(argv[1:], "hd:", ["help", "debug"])
 	except getopt.GetoptError:
@@ -145,9 +166,6 @@ def signal_handler(sig, frame):
 	sys.exit(0)
 
 def main(argv):
-	global is_quit
-	global app_apps
-
 	signal.signal(signal.SIGINT, signal_handler)
 	signal.signal(signal.SIGTERM, signal_handler)
 
@@ -156,7 +174,7 @@ def main(argv):
 	app_start()
 
 	app_exit()
-	DBG_WN_LN("{} (is_quit: {})".format(DBG_TXT_BYE_BYE, is_quit))
+	DBG_WN_LN("{} (app_quit_get: {})".format(DBG_TXT_BYE_BYE, app_quit_get()) )
 
 if __name__ == "__main__":
 	main(sys.argv[0:])
