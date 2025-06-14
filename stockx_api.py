@@ -22,6 +22,7 @@ from pythonX9 import *
 from threadx_api import *
 
 import pandas as pd
+import numpy
 import requests, json
 from time import sleep
 import datetime
@@ -64,7 +65,13 @@ class stockx_ctx(pythonX9):
 					sleep(0.5)  # 避免被擋，放慢一點
 					if ( self.is_quit == 1 ):
 						break
-		all_data = all_data.sort_values(by='DATE').reset_index(drop=True)
+
+		if hasattr(all_data, "DATE"):
+			all_data = all_data.sort_values(by='DATE').reset_index(drop=True)
+		else:
+			all_data = None
+			DBG_ER_LN(self, "all_data is None !!!")
+
 		if ( self.is_quit == 1 ):
 			print(" Quit !!!", flush=True)
 		else:
@@ -72,6 +79,10 @@ class stockx_ctx(pythonX9):
 		return all_data
 
 	def buy_prices_helper(self):
+		if self.stock_history is None:
+			DBG_ER_LN(self, "stock_history is None !!!")
+			return
+
 		self.buy_return = []
 		df = self.stock_history
 
@@ -112,17 +123,20 @@ class stockx_ctx(pythonX9):
 					if not past_day.empty:
 						prev_record = past_day.iloc[-1]
 						#DBG_IF_LN(self, "(day: {}, try_day: {}, prev_record: {}, {})".format(day, try_day.strftime("%Y-%m-%d"), prev_record["DATE"].strftime("%Y-%m-%d"), prev_record["CLOSEYEST"]))
-						buy_prices_long.append(prev_record["CLOSEYEST"])
+						if not numpy.isnan( prev_record["CLOSEYEST"] ):
+							buy_prices_long.append(prev_record["CLOSEYEST"])
 
 						# --- short ---
 						if (try_day>=short_years_ago):
 							#DBG_IF_LN(self, "(day: {}, try_day: {}, prev_record: {}, {})".format(day, try_day.strftime("%Y-%m-%d"), prev_record["DATE"].strftime("%Y-%m-%d"), prev_record["CLOSEYEST"]))
-							buy_prices_short.append(prev_record["CLOSEYEST"])
+							if not numpy.isnan( prev_record["CLOSEYEST"] ):
+								buy_prices_short.append(prev_record["CLOSEYEST"])
 
 						# --- medium ---
 						if (try_day>=medium_years_ago):
 							#DBG_IF_LN(self, "(day: {}, try_day: {}, prev_record: {}, {})".format(day, try_day.strftime("%Y-%m-%d"), prev_record["DATE"].strftime("%Y-%m-%d"), prev_record["CLOSEYEST"]))
-							buy_prices_medium.append(prev_record["CLOSEYEST"])
+							if not numpy.isnan( prev_record["CLOSEYEST"] ):
+								buy_prices_medium.append(prev_record["CLOSEYEST"])
 
 			# --- 報酬率計算 ---
 			def calc_return(prices, final_price):
@@ -158,6 +172,10 @@ class stockx_ctx(pythonX9):
 			self.final_price = final_price
 
 	def buy_return_display_on_screen(self):
+		if self.buy_return is None:
+			DBG_ER_LN(self, "stock_history is None !!!")
+			return
+
 		# --- 匯出結果 ---
 		report_df = pd.DataFrame(self.buy_return)
 		#report_df["Day"] = report_df["Day"].astype(int)
@@ -187,11 +205,19 @@ class stockx_ctx(pythonX9):
 		return Path(self.history_filename).exists()
 
 	def history_save_to_csv(self):
+		if self.stock_history is None:
+			DBG_ER_LN(self, "stock_history is None !!!")
+			return
+
 		# 儲存 CSV（可選）
 		if ( self.is_new == True ):
 			self.stock_history.to_csv(self.history_filename, index=False, encoding="utf-8-sig")
 
 	def history_display_on_screen(self):
+		if self.stock_history is None:
+			DBG_ER_LN(self, "stock_history is None !!!")
+			return
+
 		df = self.stock_history
 		# 自訂格式化輸出
 		print("{:<12} {:<14}".format( "DATE", "CLOSEYEST") )
@@ -209,6 +235,8 @@ class stockx_ctx(pythonX9):
 		self.NOW_t = datetime.date.today()
 		self.NOW_YEAR = self.NOW_t.year
 		self.NOW_MONTH = self.NOW_t.month
+		self.stock_history = None
+		self.buy_return = None
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
