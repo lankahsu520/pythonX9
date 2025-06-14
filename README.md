@@ -218,7 +218,7 @@ $ ./queuex_123.py -d4
 ```bash
 $ make statex_123.py
 or
-$ ./queuex_123.py -d4
+$ ./statex_123.py -d4
 [7221/7221] statex_api.py|ctx_init:0178 - Enter ...
 [7221/7221] statex_api.py|statex_push:0072 - (name: Idle)
 [7221/7222] statex_123.py|exec_cb_Idle:0064 - (name: Idle)
@@ -248,6 +248,14 @@ $ ./queuex_123.py -d4
 #### - stockx_123.py - 利用股票的收盤價計算每月存股的報酬率
 
 > 先從臺灣證券交易所取得歷史收盤價，`日日存`的報酬率
+>
+> 列出短、中、長
+>
+> 		def parse_args(self, args):
+> 			...
+> 			self.buy_short = 1
+> 			self.buy_medium = 3
+> 			self.buy_long = 5
 
 ```bash
 $ ./stockx_123.py -d3 -y 10 -r -s 0050
