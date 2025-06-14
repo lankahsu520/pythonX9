@@ -31,7 +31,46 @@ from calendar import monthrange
 
 class stockx_ctx(pythonX9):
 
-	def fetch_stock_month(self, stock_no, year, month):
+	def is_otc_stock(self, stock_no, year, month):
+		"""判斷股票是否是櫃買（OTC）"""
+		date = f"{year}{month:02d}01"
+		url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date={date}&stockNo={stock_no}'
+		try:
+			r = requests.get(url, timeout=2)
+			data = r.json()
+			self.is_otc = data.get("stat") != "OK"
+		except Exception:
+			self.is_otc = True
+
+	def fetch_otc_monthly(self, stock_no, year, month):
+		"""抓取櫃買股票整個月份的每日資料"""
+		date = f"{year}/{month:02d}/01"
+		#url = f'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code={stock_no}&date={date}&response=csv'
+		url = f'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code={stock_no}&date={date}'
+		#headers = {"User-Agent": "Mozilla/5.0"}
+		res = requests.get(url)
+		res.encoding = 'utf-8'
+		data = res.json()
+		if data.get("stat") != "ok" or "tables" not in data or not data["tables"]:
+			return pd.DataFrame()
+
+		records = []
+		for row in data["tables"][0]["data"]:
+			try:
+				# 日期轉換：113/01/02 → 2024-01-02
+				date_str = row[0]
+				y, m, d = map(int, date_str.split("/"))
+				full_date = pd.Timestamp(year=y + 1911, month=m, day=d)
+
+				close_price = float(row[6].replace(",", ""))
+				records.append({"DATE": full_date, "CLOSEYEST": close_price})
+			except Exception as e:
+				print(f"\r[跳過錯誤資料] {row}: {e}")
+				continue
+
+		return pd.DataFrame(records)
+
+	def fetch_twse_monthly(self, stock_no, year, month):
 		date = f"{year}{month:02d}01"
 		#https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20250613&stockNo=0050
 		url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date={date}&stockNo={stock_no}'
@@ -50,16 +89,27 @@ class stockx_ctx(pythonX9):
 		df['收盤價'] = pd.to_numeric(df['收盤價'].str.replace(',', ''), errors='coerce')
 		return df[['日期', '收盤價']].rename(columns={'日期': 'DATE', '收盤價': 'CLOSEYEST'})
 
+	def fetch_stock_auto(self, stock_no, year, month):
+		"""自動抓取股票資料（可辨識上櫃 vs 上市）"""
+		if (self.is_otc == True) :
+			return self.fetch_otc_monthly(stock_no, year, month)
+		else:
+			return self.fetch_twse_monthly(stock_no, year, month)
+
 	def fetch_helper(self):
 		all_data = pd.DataFrame()
 		print("[{}] ".format(self.stock_no), end="", flush=True)
+
+		self.is_otc_stock(self.stock_no, self.NOW_YEAR, self.NOW_MONTH)
+
 		for y in self.date_range:
 			if ( self.is_quit == 1 ):
 				break
 			for m in range(1, 13):
 					if (y == self.NOW_YEAR and m > self.NOW_MONTH):  # 最多到 6 月
 							break
-					df = self.fetch_stock_month(self.stock_no, y, m)
+
+					df = self.fetch_stock_auto(self.stock_no, y, m)
 					all_data = pd.concat([all_data, df])
 					print(".", end="", flush=True)
 					sleep(0.5)  # 避免被擋，放慢一點
@@ -181,13 +231,13 @@ class stockx_ctx(pythonX9):
 		#report_df["Day"] = report_df["Day"].astype(int)
 		#print(report_df)
 		#print(report_df.dtypes)
-		print("Day {}-Year                 {}-Year                 {}-Year                 Sum".format(self.buy_short, self.buy_medium, self.buy_long) )
-		print(f"{'':<4}{'(%)':<6}{'count':<7}{'average':<10}{'(%)':<6}{'count':<7}{'average':<10}{'(%)':<6}{'count':<7}{'average':<10}(%)")
+		print("Day {}-Year                  {}-Year                  {}-Year                  Sum".format(self.buy_short, self.buy_medium, self.buy_long) )
+		print(f"{'':<4}{'(%)':<7}{'count':<7}{'average':<10}{'(%)':<7}{'count':<7}{'average':<10}{'(%)':<7}{'count':<7}{'average':<10}(%)")
 		for idx, row in report_df.iterrows():
 			print("{:<4}".format( int(row['Day']) ), end="")
-			print("{:<6}{:<7}{:<10.02f}".format( row['Short']['return_pct'], row['Short']['count'], row['Short']['avg_price'] ), end="")
-			print("{:<6}{:<7}{:<10.02f}".format( row['Medium']['return_pct'], row['Medium']['count'], row['Medium']['avg_price'] ), end="")
-			print("{:<6}{:<7}{:<10.02f}".format( row['Long']['return_pct'], row['Long']['count'], row['Long']['avg_price'] ), end="" )
+			print("{:<7}{:<7}{:<10.02f}".format( row['Short']['return_pct'], row['Short']['count'], row['Short']['avg_price'] ), end="")
+			print("{:<7}{:<7}{:<10.02f}".format( row['Medium']['return_pct'], row['Medium']['count'], row['Medium']['avg_price'] ), end="")
+			print("{:<7}{:<7}{:<10.02f}".format( row['Long']['return_pct'], row['Long']['count'], row['Long']['avg_price'] ), end="" )
 			print("{:<10.02f}".format( row['Short']['return_pct'] + row['Medium']['return_pct'] + row['Long']['return_pct'] ) )
 			#print("{:<4}{:<6}{:<7}{:<10.02f}{:<6}{:<7}{:<10.02f}".format( int(row['Day']), row['Short']['return_pct'], row['Short']['count'], row['Short']['avg_price'], row['Medium']['return_pct'], row['Medium']['count'], row['Medium']['avg_price']))
 			#print("[{}] ".format(self.stock_no), end="", flush=True)
@@ -237,6 +287,7 @@ class stockx_ctx(pythonX9):
 		self.NOW_MONTH = self.NOW_t.month
 		self.stock_history = None
 		self.buy_return = None
+		self.is_otc = False
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
