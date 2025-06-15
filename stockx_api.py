@@ -29,6 +29,10 @@ import datetime
 from pathlib import Path
 from calendar import monthrange
 
+import matplotlib.pyplot as plt
+import matplotlib
+import numpy as np
+
 class stockx_ctx(pythonX9):
 
 	def is_otc_stock(self, stock_no, year, month):
@@ -221,6 +225,72 @@ class stockx_ctx(pythonX9):
 			})
 			self.final_price = final_price
 
+	def buy_return_plot_lines_on_screen(self):
+		if self.buy_return is None:
+			DBG_ER_LN(self, "stock_history is None !!!")
+			return
+
+		DBG_IF_LN("Plotting lines ...")
+
+		# --- 匯出結果 ---
+		report_df = pd.DataFrame(self.buy_return)
+
+		# 解析巢狀結構
+		report_df["Short_return"] = report_df["Short"].apply(lambda x: x.get("return_pct") if isinstance(x, dict) else None)
+		report_df["Medium_return"] = report_df["Medium"].apply(lambda x: x.get("return_pct") if isinstance(x, dict) else None)
+		report_df["Long_return"] = report_df["Long"].apply(lambda x: x.get("return_pct") if isinstance(x, dict) else None)
+
+		# 畫圖
+		plt.figure(figsize=(12, 6))
+		plt.plot(report_df["Day"], report_df["Short_return"], label=f"{self.buy_short}-Year", color="red", marker="o")
+		plt.plot(report_df["Day"], report_df["Medium_return"], label=f"{self.buy_medium}-Year", color="blue", marker="o")
+		plt.plot(report_df["Day"], report_df["Long_return"], label=f"{self.buy_long}-Year", color="green", marker="o")
+
+		plt.axhline(0, color="gray", linestyle="--")  # 零報酬線
+
+		plt.title(f"{self.stock_no}", fontsize=14)
+		plt.xlabel("Day (1~31)")
+		plt.ylabel("Rate of return (%)")
+		plt.legend()
+		plt.grid(True)
+		plt.tight_layout()
+		plt.show()
+
+	def buy_return_plot_bars_on_screen(self):
+		if self.buy_return is None:
+			DBG_ER_LN(self, "stock_history is None !!!")
+			return
+
+		DBG_IF_LN("Plotting ...")
+
+		# --- 匯出結果 ---
+		report_df = pd.DataFrame(self.buy_return)
+
+		# 解析巢狀結構
+		report_df["Short_return"] = report_df["Short"].apply(lambda x: x.get("return_pct") if isinstance(x, dict) else None)
+		report_df["Medium_return"] = report_df["Medium"].apply(lambda x: x.get("return_pct") if isinstance(x, dict) else None)
+		report_df["Long_return"] = report_df["Long"].apply(lambda x: x.get("return_pct") if isinstance(x, dict) else None)
+
+		# 畫圖
+		plt.figure(figsize=(12, 6))
+
+		x = np.arange(len(report_df))  # X 座標：0,1,2,...
+		width = 0.25            # 條形寬度
+		plt.bar(x-width, report_df["Short_return"], width, label=f"{self.buy_short}-Year", color="red")
+		plt.bar(x, report_df["Medium_return"], width, label=f"{self.buy_medium}-Year", color="blue")
+		plt.bar(x+width, report_df["Long_return"], width, label=f"{self.buy_long}-Year", color="green")
+		plt.xticks(x, report_df["Day"])
+
+		plt.axhline(0, color="gray", linestyle="--")  # 零報酬線
+
+		plt.title(f"{self.stock_no}", fontsize=14)
+		plt.xlabel("Day (1~31)")
+		plt.ylabel("Rate of return (%)")
+		plt.legend()
+		plt.grid(True)
+		plt.tight_layout()
+		plt.show()
+
 	def buy_return_display_on_screen(self):
 		if self.buy_return is None:
 			DBG_ER_LN(self, "stock_history is None !!!")
@@ -245,7 +315,7 @@ class stockx_ctx(pythonX9):
 		print("(stock_no: {}, final_price: {})".format( self.stock_no, self.final_price ))
 
 	def history_load_from_csv(self):
-		print("Found !!! ({}), Loading ...".format(self.history_filename))
+		DBG_IF_LN("Found !!! ({}), Loading ...".format(self.history_filename))
 		self.stock_history = pd.read_csv(self.history_filename, encoding="utf-8-sig")
 		self.stock_history["DATE"] = pd.to_datetime(self.stock_history["DATE"])
 		self.stock_history["CLOSEYEST"] = pd.to_numeric(self.stock_history["CLOSEYEST"], errors="coerce")

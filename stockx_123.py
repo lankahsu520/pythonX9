@@ -76,6 +76,12 @@ def app_start():
 
 	stockx_mgr.buy_return_display_on_screen()
 
+	if (app_quit_get()==0):
+		stockx_mgr.buy_return_plot_lines_on_screen()
+
+	if (app_quit_get()==0):
+		stockx_mgr.buy_return_plot_bars_on_screen()
+
 def app_watch(app_ctx):
 	global appX_list
 
