@@ -4,7 +4,11 @@
 
 # 2. Depend on
 
+- [ifaddr](https://pypi.org/project/ifaddr/)
+- [matplotlib](https://pypi.org/project/matplotlib/)
 - [netifaces (0.11.0)](https://pypi.org/project/netifaces/)
+- [pandas](https://pypi.org/project/pandas/)
+- [psutil](https://pypi.org/project/psutil/)
 - [streamlink](https://pypi.org/project/streamlink/)
 
 > This plugin does not support protected videos, try youtube-dl instead
