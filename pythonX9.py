@@ -194,6 +194,7 @@ def dump2hex(obj):
 	val_str = ' '.join( format(x, '02x') for x in valp)
 	print(val_str)
 
+
 #******************************************************************************
 # UTIL_EX_BASIC
 #******************************************************************************
@@ -246,6 +247,16 @@ def u8Str(txt):
 def uStr(txt):
 	return u"{}".format(txt)
 
+def dir_chk(dirname):
+	if not os.path.isdir(dirname):
+		return False
+	else:
+		return True
+
+def dir_mkdir(dirname):
+	if not dir_chk(dirname):
+		os.makedirs(dirname)
+
 def file_find(directory, pattern):
 	for root, dirs, files in os.walk(directory):
 		for basename in files:
@@ -262,6 +273,7 @@ def os_urandom_str(count):
 	rand_num = os_urandom()
 	rand_str = str(rand_num).zfill(count)
 	return rand_str
+
 
 #******************************************************************************
 # UTIL_EX_NETWORK
