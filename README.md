@@ -262,6 +262,8 @@ $ ./statex_123.py -d4
 > 			self.buy_long = 5
 
 ```bash
+$ make stockx_123.py
+or
 $ ./stockx_123.py -d3 -y 10 -s 0050
 [7045/140650796029760] stockx_123.py|argsX_dump:0053 - {'stock_no': '0050', 'date_range': [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025], 'year_ago': 10, 'renew': False, 'verbose': False}
 [7045/140650796029760] stockx_api.py|history_load_from_csv:0318 - Found !!! (./stock/0050_history.csv), Loading ...

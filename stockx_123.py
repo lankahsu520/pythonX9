@@ -28,7 +28,7 @@ stock_no = '0050'           # ªÑ²¼¥N½X
 #date_range = [2024, 2025]
 #date_range = [2022, 2023, 2024, 2025]
 date_range = [2024, 2025]
-year_ago = 1
+year_ago = 10
 
 appX_list = []
 is_quit = 0
@@ -36,7 +36,7 @@ is_release = 0
 argsX = {
 	"stock_no": stock_no
 	,"date_range": date_range
-	,"year_ago": 4
+	,"year_ago": year_ago
 	,"renew": False
 	,"verbose": False
 }
@@ -145,14 +145,15 @@ def parse_arg(argv):
 				argsX_set("stock_no", arg)
 			elif opt in ("-y", "--year"):
 				argsX_set("year_ago", int(arg))
-				NOW_YEAR = datetime.today().year
-				argsX_set("date_range", list(range(NOW_YEAR - argsX["year_ago"], NOW_YEAR + 1)) )
 			elif opt in ("-r", "--renew"):
 				argsX_set("renew", True)
 			elif opt in ("-v", "--verbose"):
 				argsX_set("verbose", True)
 			else:
 				print ("(opt: {})".format(opt))
+
+		NOW_YEAR = datetime.today().year
+		argsX_set("date_range", list(range(NOW_YEAR - argsX["year_ago"], NOW_YEAR + 1)) )
 	else:
 		show_usage(argv)
 

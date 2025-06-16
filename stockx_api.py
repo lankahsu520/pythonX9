@@ -380,6 +380,9 @@ class stockx_ctx(pythonX9):
 		self.buy_long = 5
 
 		self.history_folder = f"./stock"
+
+		dir_mkdir(self.history_folder)
+
 		self.history_filename = f"{self.history_folder}/{self.stock_no}_history.csv"
 
 	def start(self, args={}):
