@@ -165,7 +165,7 @@ class stockx_ctx(pythonX9):
 		long_years_ago = pd.Timestamp.today() - pd.DateOffset(years=self.buy_long)
 
 		def adjust_price(date, price):
-			for stock_no, split_date, factor in stock_splits:
+			for stock_no, split_date, factor in self.stock_splits:
 				if ( self.stock_no == stock_no ):
 					if date < split_date:
 						price *= factor
@@ -368,6 +368,8 @@ class stockx_ctx(pythonX9):
 		self.stock_history = None
 		self.buy_return = None
 		self.is_otc = False
+
+		self.stock_splits = sorted(stock_splits, key=lambda x: x[0], reverse=True)  # 自動由新到舊排序
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
