@@ -21,22 +21,23 @@
 #from time import sleep
 
 from stockx_api import *
-from datetime import datetime
 
 stock_no = '0050'           # ªÑ²¼¥N½X
 
-#date_range = [2024, 2025]
-#date_range = [2022, 2023, 2024, 2025]
-date_range = [2024, 2025]
 year_ago = 10
+delta_days = 5
 
 appX_list = []
 is_quit = 0
 is_release = 0
 argsX = {
 	"stock_no": stock_no
-	,"date_range": date_range
 	,"year_ago": year_ago
+	,"delta": delta_days
+	,"buy_short": 1
+	,"buy_medium": 3
+	,"buy_long": 5
+	,"history_folder": f"./stock"
 	,"renew": False
 	,"verbose": False
 }
@@ -128,7 +129,7 @@ def show_usage(argv):
 
 def parse_arg(argv):
 	try:
-		opts,args = getopt.getopt(argv[1:], "hd:s:y:rv", ["help", "debug", "stock", "year", "renew", "verbose"])
+		opts,args = getopt.getopt(argv[1:], "hd:s:y:t:rv", ["help", "debug", "stock", "year", "delta", "renew", "verbose"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -145,15 +146,14 @@ def parse_arg(argv):
 				argsX_set("stock_no", arg)
 			elif opt in ("-y", "--year"):
 				argsX_set("year_ago", int(arg))
+			elif opt in ("-t", "--delta"):
+				argsX_set("delta", int(arg))
 			elif opt in ("-r", "--renew"):
 				argsX_set("renew", True)
 			elif opt in ("-v", "--verbose"):
 				argsX_set("verbose", True)
 			else:
 				print ("(opt: {})".format(opt))
-
-		NOW_YEAR = datetime.today().year
-		argsX_set("date_range", list(range(NOW_YEAR - argsX["year_ago"], NOW_YEAR + 1)) )
 	else:
 		show_usage(argv)
 

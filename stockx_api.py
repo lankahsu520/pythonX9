@@ -24,14 +24,19 @@ from threadx_api import *
 import pandas as pd
 import numpy
 import requests, json
+
 from time import sleep
-import datetime
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 from pathlib import Path
 from calendar import monthrange
 
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
+
+stock_splits = [ ("0050", pd.Timestamp("2025-06-18"), 1/4) ]
 
 class stockx_ctx(pythonX9):
 
@@ -100,25 +105,39 @@ class stockx_ctx(pythonX9):
 		else:
 			return self.fetch_twse_monthly(stock_no, year, month)
 
-	def fetch_helper(self):
-		all_data = pd.DataFrame()
+	def fetch_helper(self, stock_history, stock_last_date):
 		print("[{}] ".format(self.stock_no), end="", flush=True)
 
-		self.is_otc_stock(self.stock_no, self.NOW_YEAR, self.NOW_MONTH)
+		if stock_history is None:
+			all_data = pd.DataFrame()
+		else:
+			all_data = stock_history
 
-		for y in self.date_range:
-			if ( self.is_quit == 1 ):
-				break
-			for m in range(1, 13):
-					if (y == self.NOW_YEAR and m > self.NOW_MONTH):  # 最多到 6 月
-							break
+		delta = self.NOW_t.date() - self.stock_last_date.date()
 
-					df = self.fetch_stock_auto(self.stock_no, y, m)
-					all_data = pd.concat([all_data, df])
-					print(".", end="", flush=True)
-					sleep(0.5)  # 避免被擋，放慢一點
-					if ( self.is_quit == 1 ):
-						break
+		print(f"(stock_last_date：{self.stock_last_date.date()}, delta.days: {delta.days}, stock_delta_days: {self.stock_delta_days}) ", end="", flush=True)
+		if ( delta.days >= self.stock_delta_days ):
+			self.is_otc_stock(self.stock_no, self.NOW_t.year, self.NOW_t.month)
+
+			current = (stock_last_date.replace(day=1)).date()
+			end = datetime(self.NOW_t.year, self.NOW_t.month, 1).date()
+
+			while current <= end:
+				y, m = current.year, current.month
+
+				if self.is_quit == 1:
+					break
+
+				if ( self.is_new == False ):
+					self.is_new= True
+
+				df = self.fetch_stock_auto(self.stock_no, y, m)
+				all_data = pd.concat([all_data, df]).drop_duplicates(subset="DATE").reset_index(drop=True)
+				print(".", end="", flush=True)
+
+				sleep(0.5)
+
+				current = (current + relativedelta(months=1))  # 下一個月
 
 		if hasattr(all_data, "DATE"):
 			all_data = all_data.sort_values(by='DATE').reset_index(drop=True)
@@ -145,27 +164,18 @@ class stockx_ctx(pythonX9):
 		medium_years_ago = pd.Timestamp.today() - pd.DateOffset(years=self.buy_medium)
 		long_years_ago = pd.Timestamp.today() - pd.DateOffset(years=self.buy_long)
 
+		def adjust_price(date, price):
+			for stock_no, split_date, factor in stock_splits:
+				if ( self.stock_no == stock_no ):
+					if date < split_date:
+						price *= factor
+			return price
+
 		for day in range(1, 32):  # 每月 1～31 日
 			buy_prices_short = []
 			buy_prices_medium = []
 			buy_prices_long = []
 
-			# --- short ---
-			if ( 0 == 1 ):
-				for date in pd.date_range(short_years_ago, end_date, freq="MS"):
-					year, month = date.year, date.month
-					max_day = monthrange(year, month)[1]
-					if day <= max_day:
-						try_day = pd.Timestamp(year=year, month=month, day=day)
-
-						# 找 try_day 之前的最後一筆記錄（前一筆）
-						past_day = df[df["DATE"] < try_day]
-						if not past_day.empty:
-							prev_record = past_day.iloc[-1]
-							DBG_IF_LN(self, "({}, day: {}, try_day: {}, prev_record: {}, {})".format(short_years_ago, day, try_day.strftime("%Y-%m-%d"), prev_record["DATE"].strftime("%Y-%m-%d"), prev_record["CLOSEYEST"]))
-							buy_prices_short.append(prev_record["CLOSEYEST"])
-
-			# --- long ---
 			for date in pd.date_range(long_years_ago, end_date, freq="MS"):
 				year, month = date.year, date.month
 				max_day = monthrange(year, month)[1]
@@ -176,21 +186,17 @@ class stockx_ctx(pythonX9):
 					past_day = df[df["DATE"] < try_day]
 					if not past_day.empty:
 						prev_record = past_day.iloc[-1]
-						#DBG_IF_LN(self, "(day: {}, try_day: {}, prev_record: {}, {})".format(day, try_day.strftime("%Y-%m-%d"), prev_record["DATE"].strftime("%Y-%m-%d"), prev_record["CLOSEYEST"]))
-						if not numpy.isnan( prev_record["CLOSEYEST"] ):
-							buy_prices_long.append(prev_record["CLOSEYEST"])
+						closeyest = prev_record["CLOSEYEST"]
+						record_date = prev_record["DATE"]
+						closeyest = adjust_price(record_date, closeyest)
 
-						# --- short ---
-						if (try_day>=short_years_ago):
-							#DBG_IF_LN(self, "(day: {}, try_day: {}, prev_record: {}, {})".format(day, try_day.strftime("%Y-%m-%d"), prev_record["DATE"].strftime("%Y-%m-%d"), prev_record["CLOSEYEST"]))
-							if not numpy.isnan( prev_record["CLOSEYEST"] ):
-								buy_prices_short.append(prev_record["CLOSEYEST"])
+						if not numpy.isnan(closeyest):
+							buy_prices_long.append(closeyest)
 
-						# --- medium ---
-						if (try_day>=medium_years_ago):
-							#DBG_IF_LN(self, "(day: {}, try_day: {}, prev_record: {}, {})".format(day, try_day.strftime("%Y-%m-%d"), prev_record["DATE"].strftime("%Y-%m-%d"), prev_record["CLOSEYEST"]))
-							if not numpy.isnan( prev_record["CLOSEYEST"] ):
-								buy_prices_medium.append(prev_record["CLOSEYEST"])
+							if try_day >= short_years_ago:
+								buy_prices_short.append(closeyest)
+							if try_day >= medium_years_ago:
+								buy_prices_medium.append(closeyest)
 
 			# --- 報酬率計算 ---
 			def calc_return(prices, final_price):
@@ -321,6 +327,11 @@ class stockx_ctx(pythonX9):
 		self.stock_history["CLOSEYEST"] = pd.to_numeric(self.stock_history["CLOSEYEST"], errors="coerce")
 		self.stock_history = self.stock_history.sort_values(by='DATE').reset_index(drop=True)
 
+		if not self.stock_history.empty and "DATE" in self.stock_history.columns:
+			self.stock_last_date = self.stock_history["DATE"].max()
+		else:
+			DBG_ER_LN(self, "stock_history is None !!!")
+
 	def history_exists(self):
 		return Path(self.history_filename).exists()
 
@@ -352,9 +363,8 @@ class stockx_ctx(pythonX9):
 	def ctx_init(self):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
 
-		self.NOW_t = datetime.date.today()
-		self.NOW_YEAR = self.NOW_t.year
-		self.NOW_MONTH = self.NOW_t.month
+		self.NOW_t = datetime.today()
+
 		self.stock_history = None
 		self.buy_return = None
 		self.is_otc = False
@@ -373,13 +383,17 @@ class stockx_ctx(pythonX9):
 		self._args = args
 
 		self.stock_no = args["stock_no"]
-		self.date_range = args["date_range"]
-		self.renew = args["renew"]
-		self.buy_short = 1
-		self.buy_medium = 3
-		self.buy_long = 5
+		self.year_ago = args["year_ago"]
+		self.stock_last_date = self.NOW_t - relativedelta(years=self.year_ago)
+		self.stock_delta_days = args["delta"]
 
-		self.history_folder = f"./stock"
+		self.renew = args["renew"]
+
+		self.buy_short = args["buy_short"]
+		self.buy_medium = args["buy_medium"]
+		self.buy_long = args["buy_long"]
+
+		self.history_folder = args["history_folder"]
 
 		dir_mkdir(self.history_folder)
 
@@ -390,10 +404,9 @@ class stockx_ctx(pythonX9):
 		self.parse_args(args)
 		if ( self.renew == False) and ( self.history_exists() ):
 			self.history_load_from_csv()
-			self.is_new = False
-		else:
-			self.stock_history = self.fetch_helper()
-			self.is_new = True
+
+		self.is_new = False
+		self.stock_history = self.fetch_helper(self.stock_history, self.stock_last_date)
 
 		#self.buy_prices_helper()
 
