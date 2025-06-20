@@ -247,6 +247,9 @@ def u8Str(txt):
 def uStr(txt):
 	return u"{}".format(txt)
 
+def fStr(txt):
+	return f"{txt}"
+
 def dir_chk(dirname):
 	if not os.path.isdir(dirname):
 		return False
