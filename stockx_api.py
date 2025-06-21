@@ -68,6 +68,8 @@ class stockx_ctx(pythonX9):
 			try:
 				# 日期轉換：113/01/02 → 2024-01-02
 				date_str = row[0]
+				# ['112/12/05*', '237,645', '3,669,097', '15.21', '15.65', '15.21', '15.65', '0.54', '44,683']: invalid literal for int() with base 10: '05*'
+				date_str.replace("*", "")
 				y, m, d = map(int, date_str.split("/"))
 				full_date = pd.Timestamp(year=y + 1911, month=m, day=d)
 
