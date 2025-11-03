@@ -42,8 +42,11 @@ class stockx_ctx(pythonX9):
 
 	def is_otc_stock(self, stock_no, year, month):
 		"""判斷股票是否是櫃買（OTC）"""
-		date = f"{year}{month:02d}01"
-		url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date={date}&stockNo={stock_no}'
+		#date = f"{year}{month:02d}01"
+		#url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20251101&stockNo=0050'
+		#url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date={date}&stockNo={stock_no}'
+		#url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&stockNo=0050'
+		url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&stockNo={stock_no}'
 		try:
 			r = requests.get(url, timeout=2)
 			data = r.json()

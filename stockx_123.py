@@ -39,6 +39,7 @@ argsX = {
 	,"buy_long": 5
 	,"history_folder": f"./stock"
 	,"renew": False
+	,"text": False
 	,"verbose": False
 }
 
@@ -77,10 +78,10 @@ def app_start():
 
 	stockx_mgr.buy_return_display_on_screen()
 
-	if (app_quit_get()==0):
+	if ( argsX_get("text") == False ) and (app_quit_get()==0):
 		stockx_mgr.buy_return_plot_lines_on_screen()
 
-	if (app_quit_get()==0):
+	if ( argsX_get("text") == False ) and (app_quit_get()==0):
 		stockx_mgr.buy_return_plot_bars_on_screen()
 
 def app_watch(app_ctx):
@@ -122,6 +123,9 @@ def show_usage(argv):
 	print("  -d, --debug level")
 	print("  -s, --stock Stock symbol")
 	print("  -y, --year N years ago")
+	print("  -l, --delta N days ago")
+	print("  -r, --renew")
+	print("  -t, --text")
 	print("  -v, --verbose")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
 	app_exit()
@@ -129,7 +133,7 @@ def show_usage(argv):
 
 def parse_arg(argv):
 	try:
-		opts,args = getopt.getopt(argv[1:], "hd:s:y:t:rv", ["help", "debug", "stock", "year", "delta", "renew", "verbose"])
+		opts,args = getopt.getopt(argv[1:], "hd:s:y:l:rtv", ["help", "debug", "stock", "year", "delta", "renew", "text", "verbose"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -146,10 +150,12 @@ def parse_arg(argv):
 				argsX_set("stock_no", arg)
 			elif opt in ("-y", "--year"):
 				argsX_set("year_ago", int(arg))
-			elif opt in ("-t", "--delta"):
+			elif opt in ("-l", "--delta"):
 				argsX_set("delta", int(arg))
 			elif opt in ("-r", "--renew"):
 				argsX_set("renew", True)
+			elif opt in ("-t", "--text"):
+				argsX_set("text", True)
 			elif opt in ("-v", "--verbose"):
 				argsX_set("verbose", True)
 			else:
