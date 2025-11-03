@@ -262,6 +262,20 @@ $ ./statex_123.py -d4
 > 			self.buy_long = 5
 
 ```bash
+$ ./stockx_123.py
+Usage: ./stockx_123.py <options...>
+  -h, --help
+  -d, --debug level
+  -s, --stock Stock symbol
+  -y, --year N years ago
+  -l, --delta N days ago
+  -r, --renew
+  -t, --text
+  -v, --verbose
+    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace
+```
+
+```bash
 $ make stockx_123.py
 or
 $ ./stockx_123.py -d4 -y 10 -s 0050
