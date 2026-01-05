@@ -253,13 +253,42 @@ $ ./statex_123.py -d4
 
 > 先從`臺灣證券交易所/證券櫃檯買賣中心`取得歷史收盤價，計算`日日存`的報酬率
 
+> 分割計算
+>
+> ```python
+> # stockx_api.py
+> 
+> stock_splits = [ ("0050", pd.Timestamp("2025-06-18"), 1/4) ]
+> ```
+
 > 短、中、長期報酬率設定
 >
-> 		def parse_args(self, args):
-> 			...
-> 			self.buy_short = 1
-> 			self.buy_medium = 3
-> 			self.buy_long = 5
+> ```python
+> # stockx_123.py
+> 
+> argsX = {
+> 	"stock_no": stock_no
+> 	,"year_ago": year_ago
+> 	,"delta": delta_days
+> 	,"buy_short": 1
+> 	,"buy_medium": 3
+> 	,"buy_long": 5
+> 	,"history_folder": f"./stock"
+> 	,"renew": False
+> 	,"text": False
+> 	,"verbose": False
+> }
+> ```
+>
+> ```python
+> # stockx_api.py
+> 
+> 	def parse_args(self, args):
+> 		...
+> 		self.buy_short = args["buy_short"]
+> 		self.buy_medium = args["buy_medium"]
+> 		self.buy_long = args["buy_long"]
+> ```
 
 ```bash
 $ ./stockx_123.py
