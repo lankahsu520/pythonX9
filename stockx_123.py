@@ -22,7 +22,7 @@
 
 from stockx_api import *
 
-stock_no = '0050'           # ªÑ²¼¥N½X
+stock_no = '0050'           # è‚¡ç¥¨ä»£ç¢¼
 
 year_ago = 10
 delta_days = 5
@@ -43,17 +43,6 @@ argsX = {
 	,"verbose": False
 }
 
-def argsX_set(name, val):
-	global argsX
-	argsX[name]=val
-
-def argsX_get(name):
-	return argsX[name]
-
-def argsX_dump():
-	#dbg_lvl_set(DBG_LVL_TRACE)
-	DBG_IF_LN("{}".format( argsX ) )
-
 def app_quit_get():
 	return is_quit
 
@@ -62,13 +51,13 @@ def app_quit_set(mode):
 	is_quit=mode
 
 def app_start():
-	argsX_dump()
+	argsX_dump(argsX)
 
 	stockx_mgr = stockx_ctx()
 	app_watch(stockx_mgr)
 
 	stockx_mgr.start( argsX )
-	if ( argsX_get("verbose") == True ) and (app_quit_get()==0):
+	if ( argsX_get(argsX, "verbose") == True ) and (app_quit_get()==0):
 		stockx_mgr.history_display_on_screen()
 
 	if (app_quit_get()==0):
@@ -78,10 +67,10 @@ def app_start():
 
 	stockx_mgr.buy_return_display_on_screen()
 
-	if ( argsX_get("text") == False ) and (app_quit_get()==0):
+	if ( argsX_get(argsX, "text") == False ) and (app_quit_get()==0):
 		stockx_mgr.buy_return_plot_lines_on_screen()
 
-	if ( argsX_get("text") == False ) and (app_quit_get()==0):
+	if ( argsX_get(argsX, "text") == False ) and (app_quit_get()==0):
 		stockx_mgr.buy_return_plot_bars_on_screen()
 
 def app_watch(app_ctx):
@@ -147,17 +136,17 @@ def parse_arg(argv):
 			elif opt in ("-d", "--debug"):
 				dbg_debug_helper( int(arg) )
 			elif opt in ("-s", "--stock"):
-				argsX_set("stock_no", arg)
+				argsX_set(argsX, "stock_no", arg)
 			elif opt in ("-y", "--year"):
-				argsX_set("year_ago", int(arg))
+				argsX_set(argsX, "year_ago", int(arg))
 			elif opt in ("-l", "--delta"):
-				argsX_set("delta", int(arg))
+				argsX_set(argsX, "delta", int(arg))
 			elif opt in ("-r", "--renew"):
-				argsX_set("renew", True)
+				argsX_set(argsX, "renew", True)
 			elif opt in ("-t", "--text"):
-				argsX_set("text", True)
+				argsX_set(argsX, "text", True)
 			elif opt in ("-v", "--verbose"):
-				argsX_set("verbose", True)
+				argsX_set(argsX, "verbose", True)
 			else:
 				print ("(opt: {})".format(opt))
 	else:

@@ -73,17 +73,6 @@ def queue_test_dict():
 		if ((idx%11==0)):
 			break
 
-def argsX_set(name, val):
-	global argsX
-	argsX[name]=val
-
-def argsX_get(name):
-	return argsX[name]
-
-def argsX_dump():
-	#dbg_lvl_set(DBG_LVL_TRACE)
-	DBG_IF_LN("{}".format( argsX ) )
-
 def app_quit_get():
 	return is_quit
 
@@ -92,7 +81,7 @@ def app_quit_set(mode):
 	is_quit=mode
 
 def app_start():
-	argsX_dump()
+	argsX_dump(argsX)
 
 	queue_test(is_stack=0)
 	queue_test(is_stack=1)

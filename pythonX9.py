@@ -44,6 +44,15 @@ def gettid():
 	return threading.get_ident()
 	#return threading.get_native_id()
 
+def argsX_set(argsX, name, val):
+	argsX[name]=val
+
+def argsX_get(argsX, name):
+	return argsX[name]
+
+def argsX_dump(argsX):
+	#dbg_lvl_set(DBG_LVL_TRACE)
+	DBG_IF_LN("{}".format( argsX ) )
 
 #******************************************************************************
 # UTIL_EX_DBG
@@ -68,22 +77,26 @@ def dbg_more(*args):
 def dbg_lvl_set(lvl= DBG_LVL_INFO):
 	return dbg_more(lvl)
 
-def dbg_debug_helper(lvl):
-	ret = lvl
+def dbg_lvl2logging(lvl):
 	if lvl == 0:
-		ret = dbg_lvl_set(DBG_LVL_CRITICAL)
+		ret = DBG_LVL_CRITICAL
 	elif lvl == 1:
-		ret = dbg_lvl_set(DBG_LVL_ERROR)
+		ret = DBG_LVL_ERROR
 	elif lvl == 2:
-		ret = dbg_lvl_set(DBG_LVL_WARN)
+		ret = DBG_LVL_WARN
 	elif lvl == 3:
-		ret = dbg_lvl_set(DBG_LVL_INFO)
+		ret = DBG_LVL_INFO
 	elif lvl == 4:
-		ret = dbg_lvl_set(DBG_LVL_DEBUG)
+		ret = DBG_LVL_DEBUG
 	elif lvl == 5:
-		ret = dbg_lvl_set(DBG_LVL_TRACE)
+		ret = DBG_LVL_TRACE
 	else:
-		ret = dbg_lvl_set(DBG_LVL_DEFAULT)
+		ret = DBG_LVL_DEFAULT
+	return ret
+
+def dbg_debug_helper(lvl):
+	lvl_set = dbg_lvl2logging(lvl)
+	ret = dbg_lvl_set(lvl_set)
 	return ret
 
 def DBG_00_LN(need_lvl, color, *args):
@@ -336,6 +349,15 @@ def get_hwaddr(netdev='eth0'):
 #STATIC_PORT = "9981"
 #(STATIC_IFACE, STATIC_IP) = get_ipaddr()
 
+
+#******************************************************************************
+# UTIL_EX_JSON
+#******************************************************************************
+import json
+
+def JSON_FORMAT(jroot):
+	msg = json.dumps(jroot, indent=2, ensure_ascii=False)
+	DBG_IF_LN("{}".format(msg))
 
 #******************************************************************************
 # pythonX9

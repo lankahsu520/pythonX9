@@ -67,17 +67,6 @@ StatexIdle ={
 	"name": "Idle", "priority": 999, "init_cb": None, "exec_cb": exec_cb_Idle, "leave_cb": leave_cb_Idle
 }
 
-def argsX_set(name, val):
-	global argsX
-	argsX[name]=val
-
-def argsX_get(name):
-	return argsX[name]
-
-def argsX_dump():
-	#dbg_lvl_set(DBG_LVL_TRACE)
-	DBG_IF_LN("{}".format( argsX ) )
-
 def app_quit_get():
 	return is_quit
 
@@ -86,7 +75,7 @@ def app_quit_set(mode):
 	is_quit=mode
 
 def app_start():
-	argsX_dump()
+	argsX_dump(argsX)
 
 	statex_mgr = statex_ctx(dbg_lvl=DBG_LVL_DEBUG, name="HelloStateX", state_size=20, is_hold=0)
 	app_watch(statex_mgr)

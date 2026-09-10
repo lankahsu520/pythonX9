@@ -34,17 +34,6 @@ port=3618
 def notify_cb(buffer):
 	DBG_IF_LN("buffer[{}] - {}".format( len(buffer), repr(buffer)) )
 
-def argsX_set(name, val):
-	global argsX
-	argsX[name]=val
-
-def argsX_get(name):
-	return argsX[name]
-
-def argsX_dump():
-	#dbg_lvl_set(DBG_LVL_TRACE)
-	DBG_IF_LN("{}".format( argsX ) )
-
 def app_quit_get():
 	return is_quit
 
@@ -53,7 +42,7 @@ def app_quit_set(mode):
 	is_quit=mode
 
 def app_start():
-	argsX_dump()
+	argsX_dump(argsX)
 
 	multicast_mgr = multicast_ctx(dbg_lvl=DBG_LVL_TRACE, url="239.255.255.250", port=3618, readcb=notify_cb)
 	app_watch(multicast_mgr)

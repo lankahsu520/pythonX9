@@ -93,17 +93,6 @@ class HTTPServer_ctx(http.server.SimpleHTTPRequestHandler):
 		self.send_response(200)
 		self.end_headers() # curl: (52) Empty reply from server
 
-def argsX_set(name, val):
-	global argsX
-	argsX[name]=val
-
-def argsX_get(name):
-	return argsX[name]
-
-def argsX_dump():
-	#dbg_lvl_set(DBG_LVL_TRACE)
-	DBG_IF_LN("{}".format( argsX ) )
-
 def app_quit_get():
 	return is_quit
 
@@ -112,7 +101,7 @@ def app_quit_set(mode):
 	is_quit=mode
 
 def app_start():
-	http.server.test(HandlerClass=HTTPServer_ctx, port=argsX_get("http_port"), bind=argsX_get("http_bind"))
+	http.server.test(HandlerClass=HTTPServer_ctx, port=argsX_get(argsX, "http_port"), bind=argsX_get(argsX, "http_bind"))
 
 def app_watch(app_ctx):
 	global appX_list
@@ -169,7 +158,7 @@ def parse_arg(argv):
 			elif opt in ("-d", "--debug"):
 				dbg_debug_helper( int(arg) )
 			elif opt in ("-p", "--port"):
-				argsX_set("http_port", int(arg))
+				argsX_set(argsX, "http_port", int(arg))
 			else:
 				print ("(opt: {})".format(opt))
 	else:
