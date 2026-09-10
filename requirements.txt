@@ -16,6 +16,7 @@ streamlink==6.7.4
 #launchpadlib
 #https://pypi.org/project/pandas/
 pandas
-#matplotlib
 #https://pypi.org/project/matplotlib/
 matplotlib
+#https://pypi.org/project/numpy/
+numpy

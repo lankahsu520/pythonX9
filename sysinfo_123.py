@@ -30,17 +30,6 @@ argsX = {
 	,"interval": 5
 }
 
-def argsX_set(name, val):
-	global argsX
-	argsX[name]=val
-
-def argsX_get(name):
-	return argsX[name]
-
-def argsX_dump():
-	#dbg_lvl_set(DBG_LVL_TRACE)
-	DBG_IF_LN("{}".format( argsX ) )
-
 def app_quit_get():
 	return is_quit
 
@@ -49,7 +38,7 @@ def app_quit_set(mode):
 	is_quit=mode
 
 def app_start():
-	argsX_dump()
+	argsX_dump(argsX)
 
 	sysinfo_mgr = sysinfo_ctx(dbg_lvl=DBG_LVL_TRACE)
 	app_watch(sysinfo_mgr)
@@ -115,7 +104,7 @@ def parse_arg(argv):
 			if opt in ("-h", "--help"):
 				show_usage(argv)
 			elif opt in ("-k", "--key"):
-				argsX_set("keyboard", 1)
+				argsX_set(argsX, "keyboard", 1)
 			elif opt in ("-d", "--debug"):
 				dbg_debug_helper( int(arg) )
 				#DBG_IF_LN("arg:{}".format(arg))
