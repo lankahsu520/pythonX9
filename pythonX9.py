@@ -26,6 +26,7 @@ import platform
 import fnmatch # file_find
 
 import random
+import inspect
 
 from pythonX9_def import *
 from pythonX9_tag import *
@@ -34,6 +35,7 @@ import threading
 import ctypes
 __NR_gettid = 186  # gettid syscall number
 libc = ctypes.CDLL('libc.so.6')
+
 
 #******************************************************************************
 # define
@@ -53,6 +55,7 @@ def argsX_get(argsX, name):
 def argsX_dump(argsX):
 	#dbg_lvl_set(DBG_LVL_TRACE)
 	DBG_IF_LN("{}".format( argsX ) )
+
 
 #******************************************************************************
 # UTIL_EX_DBG
@@ -150,45 +153,51 @@ def DBG_XX_LN(f_back, need_lvl, color, *args):
 		print("{}{} {}|{}:{:04} - {}{}\r".format(color, objname, filename, f_back.f_code.co_name, f_back.f_lineno, (msg), COLOR_NONE))
 
 def DBG_CR_LN(*args):
-	try:
-		raise Exception
-	except:
-		f_back = sys.exc_info()[2].tb_frame.f_back
+	#try:
+	#	raise Exception
+	#except:
+	#	f_back = sys.exc_info()[2].tb_frame.f_back
+	f_back = inspect.currentframe().f_back
 	DBG_XX_LN(f_back, DBG_LVL_CRITICAL, COLOR_LIGHT_RED, *args)
 
 def DBG_ER_LN(*args):
-	try:
-		raise Exception
-	except:
-		f_back = sys.exc_info()[2].tb_frame.f_back
+	#try:
+	#	raise Exception
+	#except:
+	#	f_back = sys.exc_info()[2].tb_frame.f_back
+	f_back = inspect.currentframe().f_back
 	DBG_XX_LN(f_back, DBG_LVL_ERROR, COLOR_RED, *args)
 
 def DBG_WN_LN(*args):
-	try:
-		raise Exception
-	except:
-		f_back = sys.exc_info()[2].tb_frame.f_back
+	#try:
+	#	raise Exception
+	#except:
+	#	f_back = sys.exc_info()[2].tb_frame.f_back
+	f_back = inspect.currentframe().f_back
 	DBG_XX_LN(f_back, DBG_LVL_WARN, COLOR_PURPLE, *args)
 
 def DBG_IF_LN(*args):
-	try:
-		raise Exception
-	except:
-		f_back = sys.exc_info()[2].tb_frame.f_back
+	#try:
+	#	raise Exception
+	#except:
+	#	f_back = sys.exc_info()[2].tb_frame.f_back
+	f_back = inspect.currentframe().f_back
 	DBG_XX_LN(f_back, DBG_LVL_INFO, COLOR_YELLOW, *args)
 
 def DBG_DB_LN(*args):
-	try:
-		raise Exception
-	except:
-		f_back = sys.exc_info()[2].tb_frame.f_back
+	#try:
+	#	raise Exception
+	#except:
+	#	f_back = sys.exc_info()[2].tb_frame.f_back
+	f_back = inspect.currentframe().f_back
 	DBG_XX_LN(f_back, DBG_LVL_DEBUG, COLOR_WHITE, *args)
 
 def DBG_TR_LN(*args):
-	try:
-		raise Exception
-	except:
-		f_back = sys.exc_info()[2].tb_frame.f_back
+	#try:
+	#	raise Exception
+	#except:
+	#	f_back = sys.exc_info()[2].tb_frame.f_back
+	f_back = inspect.currentframe().f_back
 	DBG_XX_LN(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, *args)
 
 def DBG_NAME(self):
@@ -357,7 +366,13 @@ import json
 
 def JSON_FORMAT(jroot):
 	msg = json.dumps(jroot, indent=2, ensure_ascii=False)
-	DBG_IF_LN("{}".format(msg))
+
+	f_back = inspect.currentframe().f_back
+	filename = os.path.basename(f_back.f_code.co_filename)
+	lineno = f_back.f_lineno
+	objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+	print("{}{} {}:{} - {}{}\r".format(COLOR_YELLOW, objname, filename, lineno, msg, COLOR_NONE))
+
 
 #******************************************************************************
 # pythonX9
