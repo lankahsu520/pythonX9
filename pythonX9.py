@@ -149,8 +149,10 @@ def DBG_XX_LN(f_back, need_lvl, color, *args):
 		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
 
 	filename = os.path.basename(f_back.f_code.co_filename)
+	lineno = f_back.f_lineno
+	funcname = f_back.f_code.co_name
 	if ( dbg_lvl <= need_lvl ):
-		print("{}{} {}|{}:{:04} - {}{}\r".format(color, objname, filename, f_back.f_code.co_name, f_back.f_lineno, (msg), COLOR_NONE))
+		print("{}{} {}|{}:{:04} - {}{}\r".format(color, objname, filename, funcname, lineno, (msg), COLOR_NONE))
 
 def DBG_CR_LN(*args):
 	#try:
@@ -369,9 +371,10 @@ def JSON_FORMAT(jroot):
 
 	f_back = inspect.currentframe().f_back
 	filename = os.path.basename(f_back.f_code.co_filename)
+	funcname = f_back.f_code.co_name
 	lineno = f_back.f_lineno
 	objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
-	print("{}{} {}:{} - {}{}\r".format(COLOR_YELLOW, objname, filename, lineno, msg, COLOR_NONE))
+	print("{}{} {}|{}:{:04} - {}{}\r".format(COLOR_YELLOW, objname, filename, funcname, lineno, msg, COLOR_NONE))
 
 
 #******************************************************************************
