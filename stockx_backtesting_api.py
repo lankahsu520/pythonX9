@@ -358,7 +358,12 @@ class stockx_backtesting_ctx(pythonX9):
 		# 自訂格式化輸出
 		print("{:<12} {:<14}".format( "DATE", "CLOSEYEST") )
 		for idx, row in df.iterrows():
-			print("{:<12} {:<14.2f}".format( row['DATE'].strftime('%Y-%m-%d'), row['CLOSEYEST']) )
+			#print("{:<12} {:<14.2f}".format( row['DATE'].strftime('%Y-%m-%d'), row['CLOSEYEST']) )
+			#print("{:<12}".format( row['DATE'].strftime('%Y-%m-%d') ) )
+			if pd.notna(row['CLOSEYEST']):
+				print("{:<12} {:<14.2f}".format( row['DATE'].strftime('%Y-%m-%d'), row['CLOSEYEST'] ))
+			else:
+				print("{:<12} {}".format( row['DATE'].strftime('%Y-%m-%d'), "" ))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
