@@ -38,7 +38,7 @@ import numpy as np
 
 stock_splits = [ ("0050", pd.Timestamp("2025-06-18"), 1/4) ]
 
-class stockx_ctx(pythonX9):
+class stockx_backtesting_ctx(pythonX9):
 
 	def is_otc_stock(self, stock_no, year, month):
 		"""判斷股票是否是櫃買（OTC）"""
@@ -380,7 +380,7 @@ class stockx_ctx(pythonX9):
 		if ( isPYTHON(PYTHON_V3) ):
 			super().__init__(**kwargs)
 		else:
-			super(stockx_ctx, self).__init__(**kwargs)
+			super(stockx_backtesting_ctx, self).__init__(**kwargs)
 
 		self._kwargs = kwargs
 		self.ctx_init()
@@ -417,8 +417,8 @@ class stockx_ctx(pythonX9):
 
 		#self.buy_prices_helper()
 
-#stockx_mgr = stockx_ctx("HelloStockX")
-#stockx_mgr.start()
-#stockx_mgr.display_on_screen()
-#stockx_mgr.save_to_csv()
+#stockx_backtesting_mgr = stockx_backtesting_ctx("HelloStockX")
+#stockx_backtesting_mgr.start()
+#stockx_backtesting_mgr.display_on_screen()
+#stockx_backtesting_mgr.save_to_csv()
 

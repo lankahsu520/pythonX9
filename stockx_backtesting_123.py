@@ -20,7 +20,7 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from stockx_api import *
+from stockx_backtesting_api import *
 
 stock_no = '0050'           # 股票代碼
 
@@ -53,25 +53,25 @@ def app_quit_set(mode):
 def app_start():
 	argsX_dump(argsX)
 
-	stockx_mgr = stockx_ctx()
-	app_watch(stockx_mgr)
+	stockx_backtesting_mgr = stockx_backtesting_ctx()
+	app_watch(stockx_backtesting_mgr)
 
-	stockx_mgr.start( argsX )
+	stockx_backtesting_mgr.start( argsX )
 	if ( argsX_get(argsX, "verbose") == True ) and (app_quit_get()==0):
-		stockx_mgr.history_display_on_screen()
+		stockx_backtesting_mgr.history_display_on_screen()
 
 	if (app_quit_get()==0):
-		stockx_mgr.history_save_to_csv()
+		stockx_backtesting_mgr.history_save_to_csv()
 
-	stockx_mgr.buy_prices_helper()
+	stockx_backtesting_mgr.buy_prices_helper()
 
-	stockx_mgr.buy_return_display_on_screen()
-
-	if ( argsX_get(argsX, "text") == False ) and (app_quit_get()==0):
-		stockx_mgr.buy_return_plot_lines_on_screen()
+	stockx_backtesting_mgr.buy_return_display_on_screen()
 
 	if ( argsX_get(argsX, "text") == False ) and (app_quit_get()==0):
-		stockx_mgr.buy_return_plot_bars_on_screen()
+		stockx_backtesting_mgr.buy_return_plot_lines_on_screen()
+
+	if ( argsX_get(argsX, "text") == False ) and (app_quit_get()==0):
+		stockx_backtesting_mgr.buy_return_plot_bars_on_screen()
 
 def app_watch(app_ctx):
 	global appX_list
