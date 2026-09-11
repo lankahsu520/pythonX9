@@ -19,12 +19,12 @@ GITHUB_LIBS = \
 
 #** PYTHON_FILES **
 PYTHON_FILES = \
+														stockx_backtesting_123.py \
 														youtube_123.py \
 														dummy_123.py \
 														multicast_123.py \
 														queuex_123.py \
 														statex_123.py \
-														stockx_123.py \
 														sysinfo_123.py
 
 DEBUG=4
