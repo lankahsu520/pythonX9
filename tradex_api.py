@@ -131,19 +131,19 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		return self.tradex_o_helper(stock_no, price, quantity, Action.Buy, APCode.Odd)
 
 	# 整張賣出
-	def tradex_o_buy(self, stock_no, price, quantity):
+	def tradex_o_sell(self, stock_no, price, quantity):
 		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.Common)
 
 	# 整張賣出-盤後
-	def tradex_o_buy_after(self, stock_no, price, quantity):
+	def tradex_o_sell_after(self, stock_no, price, quantity):
 		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.AfterMarket)
 
 	# 零股賣出
-	def tradex_o_buy_odd(self, stock_no, price, quantity):
+	def tradex_o_sell_odd(self, stock_no, price, quantity):
 		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.IntradayOdd)
 
 	# 零股賣出-盤後
-	def tradex_o_buy_odd_after(self, stock_no, price, quantity):
+	def tradex_o_buy_sell_after(self, stock_no, price, quantity):
 		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.Odd)
 
 
