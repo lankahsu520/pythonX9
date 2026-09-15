@@ -63,6 +63,9 @@ flowchart LR
 
 > 目前只針對 "玉山證劵交易 API" 進行交易和查詢。
 
+- [x] ####  玉山證劵
+- [ ] #### ~~國泰證劵（20260915 目前沒有提供）~~
+
 # 4. Build
 
 # 5. Example or Usage
@@ -73,19 +76,25 @@ flowchart LR
 
 ## - tradex-esun123.py - 玉山證劵交易範例
 
+> -t : 單純測式流程，不會下單 
+
 ```bash
-$ make tradex-esun123.py
-or
-$ ./tradex-esun123.py -d3
-[8473/139847469430592] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True}
-[8473/139847469430592] tradex_api.py|tradex_q_balance:0164 - {
-  "available_balance": 3330701,
+$ ./tradex-esun123.py  -d3 -t
+[3096/140007269668672] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True, 'test_only': True}
+[3096/140007269668672] tradex_api.py|ctx_init:0283 - Enter ...
+
+主選單-銀行餘額 [b]、庫存明細 [i]、交易額度 [l]、交易下單 [o]、委託紀錄 [r]、成交明細 [t]、離開 [q]： b
+[3096/140007269668672] tradex_api.py|tradex_q_balance:0234 - {
+  "available_balance": 3389949,
   "exchange_balance": 0,
   "stock_pre_save_amount": 0,
-  "is_latest_data": false,
-  "updated_at": 1789132515
+  "is_latest_data": true,
+  "updated_at": 1789425864
 }
-[8473/139847469430592] tradex-esun123.py|main:0181 - Bye-Bye !!! (app_quit_get: 1)
+
+主選單-銀行餘額 [b]、庫存明細 [i]、交易額度 [l]、交易下單 [o]、委託紀錄 [r]、成交明細 [t]、離開 [q]：q
+[3096/140007269668672] tradex-esun123.py|main:0280 - Bye-Bye !!! (app_quit_get: 1)
+
 ```
 
 # 6. Documentation

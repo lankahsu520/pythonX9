@@ -58,6 +58,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		return self.orders_history
 
 	# 成交明細
+	# query_range: 0d|3d|1m|3m
 	def tradex_q_transactions(self, query_range="0d"):
 		self.transactions = self.trade_sdk.get_transactions(query_range)
 		if ( self.verbose == True ):
@@ -90,9 +91,9 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 	# 交易訊息
 	def tradex_o_response(self):
-		if ( self.verbose == True ):
-			JSON_FORMAT( self.trade_sdk.last_order )
-		return self.trade_sdk.last_order
+		if ( self.verbose == True ) and ( self.last_order_response is not None ):
+			JSON_FORMAT( self.last_order_response )
+		return self.last_order_response
 
 	#Action
 	#  Buy	"B"	買
@@ -103,48 +104,117 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	#  Odd	"3"	盤後零股, 股, 1 ~ 999
 	#  Emg	"4"	興櫃, 股, 1 ~ 999, 1000 ~ 499000 (超過 1000 後，最小升降單位為 1000)
 	#  IntradayOdd	"5"	盤中零股, 股, 1 ~ 999
-	def tradex_o_helper(self, stock_no, price, quantity, buy_sell, ap_code):
-		self.trade_sdk.last_cmd = OrderObject(
-																																								stock_no = stock_no,
-																																								price = price,
-																																								quantity = quantity,
-																																								buy_sell = buy_sell,
-																																								ap_code = ap_code,
-																																								)
-		self.trade_sdk.last_order = self.trade_sdk.place_order( self.trade_sdk.last_cmd )
+	def tradex_o_helper(self, stock_no=None, price=None, quantity=0, buy_sell=Action.Buy, ap_code=APCode.Common):
+		if ( self.is_login == True ) and ( stock_no is not None ):
+			order_args = {
+				"stock_no": stock_no,
+				"quantity": quantity,
+				"buy_sell": buy_sell,
+				"ap_code": ap_code,
+			}
+
+			if not price is None:
+				order_args["price"] = price
+
+			DBG_DB_LN(self, "(order_args: {})".format(order_args))
+
+			self.last_order = OrderObject(**order_args)
+
+			if ( self.test_only == False ):
+				self.last_order_response = self.trade_sdk.place_order( self.last_order )
+		else:
+			DBG_ER_LN(self, "{}".format("請先登入 !!!"))
+
 		return self.tradex_o_response()
 
 	# 整張買進
 	def tradex_o_buy(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Buy, APCode.Common)
+		return self.tradex_o_helper(stock_no, price=price, quantity=quantity, buy_sell=Action.Buy, ap_code=APCode.Common)
 
 	# 整張買進-盤後
-	def tradex_o_buy_after(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Buy, APCode.AfterMarket)
+	def tradex_o_buy_after(self, stock_no, quantity):
+		return self.tradex_o_helper(stock_no, quantity=quantity, buy_sell=Action.Buy, ap_code=APCode.AfterMarket)
 
 	# 零股買進
 	def tradex_o_buy_odd(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Buy, APCode.IntradayOdd)
+		return self.tradex_o_helper(stock_no, price=price, quantity=quantity, buy_sell=Action.Buy, ap_code=APCode.IntradayOdd)
 
 	# 零股買進-盤後
 	def tradex_o_buy_odd_after(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Buy, APCode.Odd)
+		return self.tradex_o_helper(stock_no, price=price, quantity=quantity, buy_sell=Action.Buy, ap_code=APCode.Odd)
 
 	# 整張賣出
 	def tradex_o_sell(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.Common)
+		return self.tradex_o_helper(stock_no, price=price, quantity=quantity, buy_sell=Action.Sell, ap_code=APCode.Common)
 
 	# 整張賣出-盤後
-	def tradex_o_sell_after(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.AfterMarket)
+	def tradex_o_sell_after(self, stock_no, quantity):
+		return self.tradex_o_helper(stock_no, quantity=quantity, buy_sell=Action.Sell, ap_code=APCode.AfterMarket)
 
 	# 零股賣出
 	def tradex_o_sell_odd(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.IntradayOdd)
+		return self.tradex_o_helper(stock_no, price=price, quantity=quantity, buy_sell=Action.Sell, ap_code=APCode.IntradayOdd)
 
 	# 零股賣出-盤後
-	def tradex_o_buy_sell_after(self, stock_no, price, quantity):
-		return self.tradex_o_helper(stock_no, price, quantity, Action.Sell, APCode.Odd)
+	def tradex_o_buy_sell_after(self, stock_no, quantity):
+		return self.tradex_o_helper(stock_no, quantity=quantity, buy_sell=Action.Sell, ap_code=APCode.Odd)
+
+	def tradex_o_commit(self, action, stock_no, price, quantity, market):
+		quantity_lots, quantity_shares = divmod(int(quantity), 1000)
+
+		# 第 5 層
+		print("\n========== 交易內容 ==========")
+		print(f"買賣：{'買股' if action == 'b' else '賣股'}")
+		print(f"代碼：{stock_no}")
+		print(f"價格：{price}")
+		if quantity_lots > 0 and quantity_shares > 0:
+			print(f"股數：{quantity_lots} 張 {quantity_shares} 股")
+		elif quantity_lots > 0:
+			print(f"股數：{quantity_lots} 張")
+		else:
+			print(f"股數：{quantity_shares} 股")
+		print(f"時段：{'盤中' if market == 'i' else '盤後'}")
+		print("==============================")
+
+		# 是否繼續
+		answer = input("是否繼續執行？[y/n]：").strip().lower()
+
+		match answer:
+			case 'y':
+				order = {
+					"action": action,
+					"market": market
+				}
+				match order:
+					case {"action": 'b', "market": 'i'}:
+							if quantity_lots > 0:
+								self.tradex_o_buy(stock_no, price, quantity_lots)
+							if quantity_shares > 0:
+								self.tradex_o_buy_odd(stock_no, price, quantity_shares)
+
+					case {"action": 'b', "market": 'a'}:
+							if quantity_lots > 0:
+								self.tradex_o_buy_after(stock_no, quantity_lots)
+							if quantity_shares > 0:
+								self.tradex_o_buy_odd_after(stock_no, price, quantity_shares)
+
+					case {"action": 's', "market": 'i'}:
+							if quantity_lots > 0:
+								self.tradex_o_sell(stock_no, price, quantity_lots)
+							if quantity_shares > 0:
+								self.tradex_o_sell_odd(stock_no, price, quantity_shares)
+
+					case {"action": 's', "market": 'a'}:
+							if quantity_lots > 0:
+								self.tradex_o_sell_after(stock_no, quantity_lots)
+							if quantity_shares > 0:
+								self.tradex_o_sell_odd_after(stock_no, price, quantity_shares)
+
+					case _:
+						DBG_IF_LN(self, "輸入錯誤 !!!")
+
+			case _:
+				DBG_IF_LN(self, "取消交易 !")
 
 
 	#**************************************************
@@ -184,6 +254,8 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		self.trade_sdk = SDK(self.config)
 		self.trade_sdk.login()
 
+		self.is_login = True
+
 	# 重設密碼
 	def tradex_password(self):
 		self.trade_sdk.reset_password()
@@ -209,6 +281,9 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 	def ctx_init(self):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		self.is_login = False
+		self.last_order = None
+		self.last_order_response = None
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
@@ -224,6 +299,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		self._args = args
 		self.verbose = args["verbose"]
 		self.config_ini = args["config_ini"]
+		self.test_only = args["test_only"]
 
 	def start(self, args={}):
 		DBG_TR_LN(self, "{}".format(DBG_TXT_START))

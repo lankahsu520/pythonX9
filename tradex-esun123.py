@@ -28,6 +28,7 @@ is_release = 0
 argsX = {
 	"config_ini": '/work/esun/config.ini'
 	,"verbose": True
+	,"test_only": False
 }
 
 def app_quit_get():
@@ -37,12 +38,100 @@ def app_quit_set(mode):
 	global is_quit
 	is_quit=mode
 
-def app_start():
-	argsX_dump(argsX)
+def app_menu_order(tradex_mgr):
+	while True:
+		# 第 1 層
+		action = input("\n交易下單-買股 [b]、賣股 [s]、離開 [q]：").strip().lower()
 
-	tradex_mgr = tradex_ctx(dbg_lvl=DBG_LVL_INFO)
-	tradex_mgr.start(argsX)
+		if action == 'q':
+			#print("離開程式")
+			break
 
+		if action == '':
+			break
+
+		if action not in ('b', 's'):
+				print("輸入錯誤，請輸入 b、s 或 q !!!")
+				continue
+
+		# 第 2 層
+		stock_no = input("請輸入股票代碼：").strip()
+
+		if stock_no == '':
+			continue
+
+		# 第 3 層
+		price = input("請輸入價格：").strip()
+
+		if price == '':
+			continue
+
+		try:
+			price = float(price)
+		except ValueError:
+			print("價格格式錯誤，請重新輸入 !!!")
+			continue
+
+		# 第 4 層
+		quantity = input("請輸入股數：").strip()
+
+		if quantity == '':
+			continue
+
+		# 第 5 層
+		market = input("請選擇盤中 [i] 或盤後 [a]：").strip().lower()
+
+		if market == '':
+			continue
+
+		if market not in ('i', 'a'):
+			print("輸入錯誤，請輸入 i 或 a")
+			continue
+
+		tradex_mgr.tradex_o_commit(action, stock_no, price, quantity, market)
+
+def app_menu_main(tradex_mgr):
+	while True:
+		# 第 1 層
+		action = input("\n主選單-銀行餘額 [b]、庫存明細 [i]、交易額度 [l]、交易下單 [o]、委託紀錄 [r]、成交明細 [t]、離開 [q]：").strip().lower()
+
+		if action == 'q':
+			#print("離開程式")
+			break
+
+		if action == '':
+			continue
+
+		match action:
+			case 'b':
+				# 銀行餘額
+				tradex_mgr.tradex_q_balance()
+				#print("(tradex_mgr.balance: {})\r".format( tradex_mgr.balance ))
+
+			case 'i':
+				# 庫存明細
+				tradex_mgr.tradex_q_inventories()
+
+			case 'l':
+				# 交易額度及權限
+				tradex_mgr.tradex_q_tradelimit()
+
+			case 'o':
+				# 交易下單
+				app_menu_order(tradex_mgr)
+
+			case 'r':
+				# 委託紀錄
+				tradex_mgr.tradex_q_orders()
+
+			case 't':
+				# 成交明細
+				tradex_mgr.tradex_q_transactions(query_range="0d")
+
+			case _:
+				continue
+
+def app_demo(tradex_mgr):
 	#**************************************************
 	# 交易下單
 	#**************************************************
@@ -75,7 +164,6 @@ def app_start():
 	# 零股買進 00919, 32.32 元 * 837股
 	#tradex_mgr.tradex_o_buy_odd("00919", 32.32, 837)
 
-
 	#**************************************************
 	# 查詢
 	#**************************************************
@@ -101,6 +189,14 @@ def app_start():
 
 	# 金鑰資訊
 	#tradex_mgr.tradex_q_apiKey()
+
+def app_start():
+	argsX_dump(argsX)
+
+	tradex_mgr = tradex_ctx(dbg_lvl=DBG_LVL_DEBUG)
+	tradex_mgr.start(argsX)
+	#app_demo(tradex_mgr)
+	app_menu_main(tradex_mgr)
 
 def app_watch(app_ctx):
 	global appX_list
@@ -137,6 +233,7 @@ def app_exit():
 
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
+	print("  -t, --test")
 	print("  -h, --help")
 	print("  -d, --debug level")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
@@ -145,7 +242,7 @@ def show_usage(argv):
 
 def parse_arg(argv):
 	try:
-		opts,args = getopt.getopt(argv[1:], "hd:", ["help", "debug"])
+		opts,args = getopt.getopt(argv[1:], "thd:", ["test, help", "debug"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -158,6 +255,8 @@ def parse_arg(argv):
 				show_usage(argv)
 			elif opt in ("-d", "--debug"):
 				dbg_debug_helper( int(arg) )
+			elif opt in ("-t", "--test"):
+				argsX_set(argsX, "test_only", True)
 			else:
 				print ("(opt: {})".format(opt))
 	else:
