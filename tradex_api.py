@@ -37,7 +37,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_orders(self):
 		self.orders = self.trade_sdk.get_order_results()
 		if ( self.verbose == True ):
-			JSON_FORMAT( self.orders )
+			JSON_IF_FORMAT(self, self.orders, jstyle=JSTYLE.ARRAY)
 		return self.orders
 
 	# 委託歷史紀錄
@@ -54,7 +54,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 		self.orders_history = self.trade_sdk.get_order_results_by_date(start_date_str, end_date_str)
 		if ( self.verbose == True ):
-			JSON_FORMAT( self.orders_history )
+			JSON_IF_FORMAT(self, self.orders_history)
 		return self.orders_history
 
 	# 成交明細
@@ -62,7 +62,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_transactions(self, query_range="0d"):
 		self.transactions = self.trade_sdk.get_transactions(query_range)
 		if ( self.verbose == True ):
-			JSON_FORMAT( self.transactions )
+			JSON_IF_FORMAT(self, self.transactions)
 		return self.transactions
 
 	# 成交明細（依指定日期）
@@ -79,20 +79,20 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 		self.transactions_history = self.trade_sdk.get_transactions_by_date(start_date_str, end_date_str)
 		if ( self.verbose == True ):
-			JSON_FORMAT( self.transactions_history )
+			JSON_IF_FORMAT(self.transactions_history)
 		return self.transactions_history
 
 	# 交割款
 	def tradex_q_settlements(self):
 		self.settlements = self.trade_sdk.get_settlements()
 		if ( self.verbose == True ):
-			JSON_FORMAT( self.settlements )
+			JSON_IF_FORMAT(self, self.settlements)
 		return self.settlements
 
 	# 交易訊息
 	def tradex_o_response(self):
 		if ( self.verbose == True ) and ( self.last_order_response is not None ):
-			JSON_FORMAT( self.last_order_response )
+			JSON_IF_FORMAT(self, self.last_order_response)
 		return self.last_order_response
 
 	#Action
@@ -224,21 +224,21 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_tradelimit(self):
 		self.tradelimit = self.trade_sdk.get_trade_status()
 		if ( self.verbose == True ):
-			JSON_FORMAT(self.tradelimit)
+			JSON_IF_FORMAT(self, self.tradelimit)
 		return self.tradelimit
 
 	# 銀行餘額
 	def tradex_q_balance(self):
 		self.balance = self.trade_sdk.get_balance()
 		if ( self.verbose == True ):
-			JSON_FORMAT(self.balance)
+			JSON_IF_FORMAT(self, self.balance)
 		return self.balance
 
 	# 庫存明細
 	def tradex_q_inventories(self):
 		self.inventories = self.trade_sdk.get_inventories()
 		if ( self.verbose == True ):
-			JSON_FORMAT(self.inventories)
+			JSON_IF_FORMAT(self, self.inventories)
 		return self.inventories
 
 
@@ -264,14 +264,14 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_certinfo(self):
 		self.certinfo = self.trade_sdk.certinfo()
 		if ( self.verbose == True ):
-			JSON_FORMAT( self.certinfo )
+			JSON_IF_FORMAT(self, self.certinfo )
 		return self.certinfo
 
 	# 金鑰資訊
 	def tradex_q_apiKey(self):
 		self.apiKey = self.trade_sdk.get_key_info()
 		if ( self.verbose == True ):
-			JSON_FORMAT( self.apiKey )
+			JSON_IF_FORMAT(self, self.apiKey)
 		return self.apiKey
 
 
@@ -354,3 +354,4 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		self.parse_args(args)
 		self.tradex_login()
 		self.threadx_init()
+

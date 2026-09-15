@@ -366,16 +366,73 @@ def get_hwaddr(netdev='eth0'):
 #******************************************************************************
 import json
 
-def JSON_FORMAT(jroot):
-	msg = json.dumps(jroot, indent=2, ensure_ascii=False)
+def JSON_XX_FORMAT(f_back, need_lvl, color, *args, **kwargs):
+	dbg_lvl = dbg_more()
 
-	f_back = inspect.currentframe().f_back
+	if ( len(args) >= 2 ):
+		obj = args[0]
+		jroot = args[1]
+		#objname = "[{:04}/{:04}/{}]".format(os.getppid(), os.getpid(), obj.__class__.__name__)
+		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+		if hasattr(obj, "_dbg_lvl"):
+			dbg_lvl = obj._dbg_lvl
+	else:
+		obj = None
+		jroot = args[0]
+		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+
+	if "jstyle" in kwargs:
+		jstyle = kwargs["jstyle"]
+	else:
+		jstyle = JSTYLE.NORMAL
+
+	# https://docs.python.org/zh-tw/3/library/json.html
+	match jstyle:
+		case JSTYLE.INDENT:
+			msg = json.dumps(jroot, indent=2, ensure_ascii=False)
+
+		case JSTYLE.ARRAY:
+			msg = "[\n"
+			for i, item in enumerate(jroot):
+				comma = ",\n" if i < len(jroot) - 1 else ""
+				msg += f"{i} - {json.dumps(item, ensure_ascii=False)}{comma}\n"
+			msg += "]"
+
+		case JSTYLE.NORMAL:
+			msg = json.dumps(jroot, ensure_ascii=False)
+
+		case _:
+			msg = json.dumps(jroot, ensure_ascii=False)
+
 	filename = os.path.basename(f_back.f_code.co_filename)
-	funcname = f_back.f_code.co_name
 	lineno = f_back.f_lineno
-	objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
-	print("{}{} {}|{}:{:04} - {}{}\r".format(COLOR_YELLOW, objname, filename, funcname, lineno, msg, COLOR_NONE))
+	funcname = f_back.f_code.co_name
+	if ( dbg_lvl <= need_lvl ):
+		print("{}{} {}|{}:{:04} - {}{}\r".format(color, objname, filename, funcname, lineno, (msg), COLOR_NONE))
 
+def JSON_CR_FORMAT(*args, **kwargs):
+	f_back = inspect.currentframe().f_back
+	JSON_XX_FORMAT(f_back, DBG_LVL_CRITICAL, COLOR_LIGHT_RED, *args)
+
+def JSON_ER_FORMAT(*args, **kwargs):
+	f_back = inspect.currentframe().f_back
+	JSON_XX_FORMAT(f_back, DBG_LVL_ERROR, COLOR_RED, *args)
+
+def JSON_WN_FORMAT(*args, **kwargs):
+	f_back = inspect.currentframe().f_back
+	JSON_XX_FORMAT(f_back, DBG_LVL_WARN, COLOR_PURPLE, *args)
+
+def JSON_IF_FORMAT(*args, **kwargs):
+	f_back = inspect.currentframe().f_back
+	JSON_XX_FORMAT(f_back, DBG_LVL_INFO, COLOR_YELLOW, *args, **kwargs)
+
+def JSON_DB_FORMAT(*args, **kwargs):
+	f_back = inspect.currentframe().f_back
+	JSON_XX_FORMAT(f_back, DBG_LVL_DEBUG, COLOR_WHITE, *args)
+
+def JSON_TR_FORMAT(*args, **kwargs):
+	f_back = inspect.currentframe().f_back
+	JSON_XX_FORMAT(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, *args)
 
 #******************************************************************************
 # pythonX9

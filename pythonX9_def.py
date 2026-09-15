@@ -83,3 +83,11 @@ DBG_LVL_TRACE = logging.TRACE # 5
 
 DBG_LVL_DEFAULT=DBG_LVL_INFO
 #DBG_LVL_DEFAULT=DBG_LVL_TRACE
+
+
+from enum import Enum
+
+class JSTYLE(Enum):
+	NORMAL = 1
+	INDENT = 2
+	ARRAY = 3
