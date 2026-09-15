@@ -400,7 +400,12 @@ class pythonX9(object):
 	def release(self):
 		self.is_quit = 1
 
-	def __init__(self, dbg_lvl=DBG_LVL_DEFAULT, dbg_logging=0, dbg_path="", func_cb=None, usrdata=None):
+	def __init__(self, dbg_lvl=DBG_LVL_DEFAULT, dbg_logging=0, dbg_path="", func_cb=None, usrdata=None, **kwargs):
+		if ( isPYTHON(PYTHON_V3) ):
+			super().__init__(**kwargs)
+		else:
+			super(pythonX9, self).__init__(**kwargs)
+
 		self.is_quit = 0
 		self._dbg_lvl = dbg_lvl
 		self._dbg_logging = dbg_logging
