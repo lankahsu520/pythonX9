@@ -26,28 +26,35 @@ import threading
 class threadx_ctx(object):
 
 	def threadx_set_inloop(self, inloop):
-		self._inloop = inloop
+		if (self._inloop is not None):
+			self._inloop = inloop
 
 	def threadx_inloop(self):
-		return self._inloop
+		if (self._inloop is not None):
+			return self._inloop
 
 	def threadx_lock(self):
-		self._cond.acquire()
+		if (self._cond is not None):
+			self._cond.acquire()
 
 	def threadx_unlock(self):
-		self._cond.release()
+		if (self._cond is not None):
+			self._cond.release()
 
 	def threadx_notify(self):
-		self._cond.notify()
+		if (self._cond is not None):
+			self._cond.notify()
 
 	def threadx_join(self):
-		self._threading.join()
+		if (self._threading is not None):
+			self._threading.join()
 
 	def threadx_wait(self, timeout=1):
-		if ( timeout >0 ):
-			self._cond.wait(timeout=timeout)
-		else:
-			self._cond.wait()
+		if (self._cond is not None):
+			if ( timeout >0 ):
+				self._cond.wait(timeout=timeout)
+			else:
+				self._cond.wait()
 
 	def threadx_wakeup(self):
 		self.threadx_lock()
@@ -86,4 +93,5 @@ class threadx_ctx(object):
 		self._inloop = 0
 		self._threading = None
 		self._cond = None
+
 

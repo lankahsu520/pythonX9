@@ -105,7 +105,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	#  Emg	"4"	興櫃, 股, 1 ~ 999, 1000 ~ 499000 (超過 1000 後，最小升降單位為 1000)
 	#  IntradayOdd	"5"	盤中零股, 股, 1 ~ 999
 	def tradex_o_helper(self, stock_no=None, price=None, quantity=0, buy_sell=Action.Buy, ap_code=APCode.Common):
-		if ( self.is_login == True ) and ( stock_no is not None ):
+		if ( self._is_login == True ) and ( stock_no is not None ):
 			order_args = {
 				"stock_no": stock_no,
 				"quantity": quantity,
@@ -254,7 +254,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		self.trade_sdk = SDK(self.config)
 		self.trade_sdk.login()
 
-		self.is_login = True
+		self._is_login = True
 
 	# 重設密碼
 	def tradex_password(self):
@@ -274,16 +274,63 @@ class tradex_ctx(pythonX9, threadx_ctx):
 			JSON_FORMAT( self.apiKey )
 		return self.apiKey
 
+
+	#**************************************************
+	# websocket
+	#**************************************************
+	def threadx_websocket(self):
+		# 註冊當 websocket 發生錯誤時的 callback
+		@self.trade_sdk.on('error')
+		def on_error(err):
+			DBG_ER_LN(self, "{}".format( err ))
+
+		# 註冊接收委託回報的 callback
+		@self.trade_sdk.on('order')
+		def on_order(data):
+			DBG_IF_LN(self, "{}".format( data ))
+
+		# 註冊接收成交回報的 callback
+		@self.trade_sdk.on('dealt')
+		def on_dealt(data):
+			DBG_WN_LN(self, "{}".format( data ))
+
+		# 註冊關閉回報的 callback
+		@self.trade_sdk.on('close')
+		def on_close(ws, close_status_code, close_msg):
+			DBG_WN_LN(self, "(close_status_code: {}, close_msg: {})".format( close_status_code, close_msg ))
+
+		self.trade_sdk.connect_websocket()
+
+	#**************************************************
+	# thread
+	#**************************************************
+	def threadx_handler(self):
+		#DBG_IF_LN(self, "enter")
+		self.threadx_set_inloop(1)
+		self.threadx_websocket()
+		while ( self.is_quit == 0 ):
+			self.threadx_sleep(1)
+		self.threadx_set_inloop(0)
+		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
+			if ( self.threadx_inloop() == 1 ):
+				self.threadx_wakeup()
+			self.trade_sdk.close_websocket()
+			#self.trade_sdk.logout()
+			self.threadx_join()
 			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self):
 		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
-		self.is_login = False
+
 		self.last_order = None
 		self.last_order_response = None
+
+		self.trade_sdk = None
+		self._is_login = False
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):
@@ -291,6 +338,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		else:
 			super(tradex_ctx, self).__init__(**kwargs)
 
+		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
 		self.ctx_init()
 
@@ -304,5 +352,5 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def start(self, args={}):
 		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
 		self.parse_args(args)
-
 		self.tradex_login()
+		self.threadx_init()

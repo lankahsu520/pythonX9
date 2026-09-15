@@ -195,6 +195,9 @@ def app_start():
 
 	tradex_mgr = tradex_ctx(dbg_lvl=DBG_LVL_DEBUG)
 	tradex_mgr.start(argsX)
+
+	app_watch(tradex_mgr)
+
 	#app_demo(tradex_mgr)
 	app_menu_main(tradex_mgr)
 

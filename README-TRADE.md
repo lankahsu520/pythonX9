@@ -64,6 +64,19 @@ flowchart LR
 > 目前只針對 "玉山證劵交易 API" 進行交易和查詢。
 
 - [x] ####  玉山證劵
+
+```bash
+# 新增 close_websocket
+$ vi ~/.local/lib/python3.12/site-packages/esun_trade/websocket.py
+    def close_websocket(self):
+        self.__ws.close()
+        self.__ws = None
+# 新增 close_websocket
+$ vi ~/.local/lib/python3.12/site-packages/esun_trade/sdk.py
+    def close_websocket(self):
+        self.__wsHandler.close_websocket()
+```
+
 - [ ] #### ~~國泰證劵（20260915 目前沒有提供）~~
 
 # 4. Build
