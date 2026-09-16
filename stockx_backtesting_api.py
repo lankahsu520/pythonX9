@@ -148,7 +148,7 @@ class stockx_backtesting_ctx(pythonX9):
 			all_data = all_data.sort_values(by='DATE').reset_index(drop=True)
 		else:
 			all_data = None
-			DBG_ER_LN(self, "all_data is None !!!")
+			DBG_ER_LN("all_data is None !!!")
 
 		if ( self.is_quit == 1 ):
 			print(" Quit !!!", flush=True)
@@ -158,7 +158,7 @@ class stockx_backtesting_ctx(pythonX9):
 
 	def buy_prices_helper(self):
 		if self.stock_history is None:
-			DBG_ER_LN(self, "stock_history is None !!!")
+			DBG_ER_LN("stock_history is None !!!")
 			return
 
 		self.buy_return = []
@@ -238,7 +238,7 @@ class stockx_backtesting_ctx(pythonX9):
 
 	def buy_return_plot_lines_on_screen(self):
 		if self.buy_return is None:
-			DBG_ER_LN(self, "stock_history is None !!!")
+			DBG_ER_LN("stock_history is None !!!")
 			return
 
 		DBG_IF_LN("Plotting lines ...")
@@ -269,7 +269,7 @@ class stockx_backtesting_ctx(pythonX9):
 
 	def buy_return_plot_bars_on_screen(self):
 		if self.buy_return is None:
-			DBG_ER_LN(self, "stock_history is None !!!")
+			DBG_ER_LN("stock_history is None !!!")
 			return
 
 		DBG_IF_LN("Plotting ...")
@@ -304,7 +304,7 @@ class stockx_backtesting_ctx(pythonX9):
 
 	def buy_return_display_on_screen(self):
 		if self.buy_return is None:
-			DBG_ER_LN(self, "stock_history is None !!!")
+			DBG_ER_LN("stock_history is None !!!")
 			return
 
 		# --- 匯出結果 ---
@@ -335,14 +335,14 @@ class stockx_backtesting_ctx(pythonX9):
 		if not self.stock_history.empty and "DATE" in self.stock_history.columns:
 			self.stock_last_date = self.stock_history["DATE"].max()
 		else:
-			DBG_ER_LN(self, "stock_history is None !!!")
+			DBG_ER_LN("stock_history is None !!!")
 
 	def history_exists(self):
 		return Path(self.history_filename).exists()
 
 	def history_save_to_csv(self):
 		if self.stock_history is None:
-			DBG_ER_LN(self, "stock_history is None !!!")
+			DBG_ER_LN("stock_history is None !!!")
 			return
 
 		# 儲存 CSV（可選）
@@ -351,7 +351,7 @@ class stockx_backtesting_ctx(pythonX9):
 
 	def history_display_on_screen(self):
 		if self.stock_history is None:
-			DBG_ER_LN(self, "stock_history is None !!!")
+			DBG_ER_LN("stock_history is None !!!")
 			return
 
 		df = self.stock_history
@@ -368,10 +368,10 @@ class stockx_backtesting_ctx(pythonX9):
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
 		self.NOW_t = datetime.today()
 
@@ -391,7 +391,7 @@ class stockx_backtesting_ctx(pythonX9):
 		self.ctx_init()
 
 	def parse_args(self, args):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._args = args
 
 		self.stock_no = args["stock_no"]
@@ -412,7 +412,7 @@ class stockx_backtesting_ctx(pythonX9):
 		self.history_filename = f"{self.history_folder}/{self.stock_no}_history.csv"
 
 	def start(self, args={}):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
+		DBG_TR_LN("{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		if ( self.renew == False) and ( self.history_exists() ):
 			self.history_load_from_csv()

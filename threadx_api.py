@@ -58,13 +58,13 @@ class threadx_ctx(object):
 
 	def threadx_wakeup(self):
 		self.threadx_lock()
-		DBG_TR_LN(self, "call notify ...")
+		DBG_TR_LN("call notify ...")
 		self.threadx_notify()
 		self.threadx_unlock()
 
 	def threadx_sleep(self, timeout=1):
 		self.threadx_lock()
-		DBG_TR_LN(self, "call wait ... (timeout: {})".format(timeout))
+		DBG_TR_LN("call wait ... (timeout: {})".format(timeout))
 		#self._cond.wait()
 		self.threadx_wait(timeout)
 		self.threadx_unlock()
@@ -78,11 +78,11 @@ class threadx_ctx(object):
 			sleep(1)
 
 	def threadx_handler(self):
-		#DBG_IF_LN(self, "enter")
+		#DBG_IF_LN("{}".format(DBG_TXT_ENTER))
 		self.threadx_set_inloop(1)
-		DBG_WN_LN(self, "Please override this function !!!")
+		DBG_WN_LN("Please override this function !!!")
 		self.threadx_set_inloop(0)
-		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def __init__(self, **kwargs):
 		if ( isPYTHON(PYTHON_V3) ):

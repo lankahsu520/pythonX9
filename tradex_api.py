@@ -37,7 +37,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_orders(self):
 		self.orders = self.trade_sdk.get_order_results()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.orders, jstyle=JSTYLE.ARRAY)
+			JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY)
 		return self.orders
 
 	# 委託歷史紀錄
@@ -54,7 +54,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 		self.orders_history = self.trade_sdk.get_order_results_by_date(start_date_str, end_date_str)
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.orders_history)
+			JSON_IF_FORMAT(self.orders_history)
 		return self.orders_history
 
 	# 成交明細
@@ -62,7 +62,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_transactions(self, query_range="0d"):
 		self.transactions = self.trade_sdk.get_transactions(query_range)
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.transactions)
+			JSON_IF_FORMAT(self.transactions, jstyle=JSTYLE.ARRAY)
 		return self.transactions
 
 	# 成交明細（依指定日期）
@@ -79,20 +79,20 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 		self.transactions_history = self.trade_sdk.get_transactions_by_date(start_date_str, end_date_str)
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self.transactions_history)
+			JSON_IF_FORMAT(self.transactions_history, jstyle=JSTYLE.ARRAY)
 		return self.transactions_history
 
 	# 交割款
 	def tradex_q_settlements(self):
 		self.settlements = self.trade_sdk.get_settlements()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.settlements)
+			JSON_IF_FORMAT(self.settlements)
 		return self.settlements
 
 	# 交易訊息
 	def tradex_o_response(self):
 		if ( self.verbose == True ) and ( self.last_order_response is not None ):
-			JSON_IF_FORMAT(self, self.last_order_response)
+			JSON_IF_FORMAT(self.last_order_response)
 		return self.last_order_response
 
 	#Action
@@ -116,14 +116,14 @@ class tradex_ctx(pythonX9, threadx_ctx):
 			if not price is None:
 				order_args["price"] = price
 
-			DBG_DB_LN(self, "(order_args: {})".format(order_args))
+			DBG_DB_LN("(order_args: {})".format(order_args))
 
 			self.last_order = OrderObject(**order_args)
 
 			if ( self.test_only == False ):
 				self.last_order_response = self.trade_sdk.place_order( self.last_order )
 		else:
-			DBG_ER_LN(self, "{}".format("請先登入 !!!"))
+			DBG_ER_LN("{}".format("請先登入 !!!"))
 
 		return self.tradex_o_response()
 
@@ -211,10 +211,10 @@ class tradex_ctx(pythonX9, threadx_ctx):
 								self.tradex_o_sell_odd_after(stock_no, price, quantity_shares)
 
 					case _:
-						DBG_IF_LN(self, "輸入錯誤 !!!")
+						DBG_IF_LN("輸入錯誤 !!!")
 
 			case _:
-				DBG_IF_LN(self, "取消交易 !")
+				DBG_IF_LN("取消交易 !")
 
 
 	#**************************************************
@@ -224,21 +224,21 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_tradelimit(self):
 		self.tradelimit = self.trade_sdk.get_trade_status()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.tradelimit)
+			JSON_IF_FORMAT(self.tradelimit)
 		return self.tradelimit
 
 	# 銀行餘額
 	def tradex_q_balance(self):
 		self.balance = self.trade_sdk.get_balance()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.balance)
+			JSON_IF_FORMAT(self.balance)
 		return self.balance
 
 	# 庫存明細
 	def tradex_q_inventories(self):
 		self.inventories = self.trade_sdk.get_inventories()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.inventories)
+			JSON_IF_FORMAT(self.inventories, jstyle=JSTYLE.ARRAY)
 		return self.inventories
 
 
@@ -264,14 +264,14 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_certinfo(self):
 		self.certinfo = self.trade_sdk.certinfo()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.certinfo )
+			JSON_IF_FORMAT(self.certinfo)
 		return self.certinfo
 
 	# 金鑰資訊
 	def tradex_q_apiKey(self):
 		self.apiKey = self.trade_sdk.get_key_info()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self, self.apiKey)
+			JSON_IF_FORMAT(self.apiKey)
 		return self.apiKey
 
 
@@ -282,22 +282,22 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		# 註冊當 websocket 發生錯誤時的 callback
 		@self.trade_sdk.on('error')
 		def on_error(err):
-			DBG_ER_LN(self, "{}".format( err ))
+			DBG_ER_LN("{}".format( err ))
 
 		# 註冊接收委託回報的 callback
 		@self.trade_sdk.on('order')
 		def on_order(data):
-			DBG_IF_LN(self, "{}".format( data ))
+			DBG_IF_LN("{}".format( data ))
 
 		# 註冊接收成交回報的 callback
 		@self.trade_sdk.on('dealt')
 		def on_dealt(data):
-			DBG_WN_LN(self, "{}".format( data ))
+			DBG_WN_LN("{}".format( data ))
 
 		# 註冊關閉回報的 callback
 		@self.trade_sdk.on('close')
 		def on_close(ws, close_status_code, close_msg):
-			DBG_WN_LN(self, "(close_status_code: {}, close_msg: {})".format( close_status_code, close_msg ))
+			DBG_WN_LN("(close_status_code: {}, close_msg: {})".format( close_status_code, close_msg ))
 
 		self.trade_sdk.connect_websocket()
 
@@ -305,13 +305,13 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	# thread
 	#**************************************************
 	def threadx_handler(self):
-		#DBG_IF_LN(self, "enter")
+		#DBG_IF_LN("{}".format(DBG_TXT_ENTER))
 		self.threadx_set_inloop(1)
 		self.threadx_websocket()
 		while ( self.is_quit == 0 ):
 			self.threadx_sleep(1)
 		self.threadx_set_inloop(0)
-		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
@@ -321,10 +321,10 @@ class tradex_ctx(pythonX9, threadx_ctx):
 			self.trade_sdk.close_websocket()
 			#self.trade_sdk.logout()
 			self.threadx_join()
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
 		self.last_order = None
 		self.last_order_response = None
@@ -338,19 +338,19 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		else:
 			super(tradex_ctx, self).__init__(**kwargs)
 
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
 		self.ctx_init()
 
 	def parse_args(self, args):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._args = args
 		self.verbose = args["verbose"]
 		self.config_ini = args["config_ini"]
 		self.test_only = args["test_only"]
 
 	def start(self, args={}):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
+		DBG_TR_LN("{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		self.tradex_login()
 		self.threadx_init()

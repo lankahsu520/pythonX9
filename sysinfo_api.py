@@ -80,7 +80,7 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 		adapters = ifaddr.get_adapters()
 		for adapter in adapters:
 			for ip in adapter.ips:
-				DBG_DB_LN(self, "{} - {}/{}".format(adapter.nice_name, ip.ip, ip.network_prefix))
+				DBG_DB_LN("{} - {}/{}".format(adapter.nice_name, ip.ip, ip.network_prefix))
 
 	def os_net_info(self):
 		net_in = psutil.net_io_counters().bytes_recv/1024/1024
@@ -109,76 +109,76 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 
 	def sysinfo_show_watch(self):
 		DBG_DB0_LN("--------------------------------------------------------------------------------")
-		#DBG_DB_LN(self, "(cpu_temperature: {})".format(self.cpu_temperature()) )
-		#DBG_DB_LN(self, "(os_gpu_temperature: {})".format(self.os_gpu_temperature()) )
-		DBG_DB_LN(self, "(cpu_usage: {})".format(self.cpu_usage()) )
-		DBG_DB_LN(self, "(cpu_loadavg: {})".format(self.cpu_loadavg()) )
-		DBG_DB_LN(self, "(cpu_count: {})".format(self.cpu_count()) )
-		DBG_DB_LN(self, "(cpu_num: {})".format(self.cpu_num()) )
+		#DBG_DB_LN("(cpu_temperature: {})".format(self.cpu_temperature()))
+		#DBG_DB_LN("(os_gpu_temperature: {})".format(self.os_gpu_temperature()))
+		DBG_DB_LN("(cpu_usage: {})".format(self.cpu_usage()))
+		DBG_DB_LN("(cpu_loadavg: {})".format(self.cpu_loadavg()))
+		DBG_DB_LN("(cpu_count: {})".format(self.cpu_count()))
+		DBG_DB_LN("(cpu_num: {})".format(self.cpu_num()))
 		scpufreq = self.cpu_freq()
-		DBG_DB_LN(self, "(cpu_freq: {}, min: {}, max: {})".format(scpufreq.current, scpufreq.min, scpufreq.max ) )
-		#DBG_DB_LN(self, "(cpu_temperature: {})".format( psutil.sensors_temperatures() ) )
+		DBG_DB_LN("(cpu_freq: {}, min: {}, max: {})".format(scpufreq.current, scpufreq.min, scpufreq.max ))
+		#DBG_DB_LN("(cpu_temperature: {})".format( psutil.sensors_temperatures() ))
 		if hasattr(psutil, "sensors_temperatures"):
 			temps = psutil.sensors_temperatures()
 			for name, entries in temps.items():
 				for entry in entries:
-					DBG_DB_LN(self, "({}: {} °C, high: {} °C, critical: {} °C)".format( entry.label or name, entry.current, entry.high, entry.critical ) )
+					DBG_DB_LN("({}: {} °C, high: {} °C, critical: {} °C)".format( entry.label or name, entry.current, entry.high, entry.critical ))
 		else:
-			DBG_DB_LN(self, "(temperatures: None)" )
-		DBG_DB_LN(self, "(disk_usage: {} %)".format(self.disk_usage()) )
+			DBG_DB_LN("(temperatures: None)")
+		DBG_DB_LN("(disk_usage: {} %)".format(self.disk_usage()))
 		vmem = psutil.virtual_memory()
-		DBG_DB_LN(self, "(mem_total: {} bytes, mem_usage: {} %)".format(vmem.total, vmem.percent) )
+		DBG_DB_LN("(mem_total: {} bytes, mem_usage: {} %)".format(vmem.total, vmem.percent))
 		if hasattr(psutil, "sensors_battery"):
 			sbattery = psutil.sensors_battery()
 			if hasattr(sbattery, "percent"):
-				DBG_DB_LN(self, "(battery: {} %, secsleft: {}, AC: {})".format( sbattery.percent, self.secs2hours(sbattery), sbattery.power_plugged) )
+				DBG_DB_LN("(battery: {} %, secsleft: {}, AC: {})".format( sbattery.percent, self.secs2hours(sbattery), sbattery.power_plugged))
 			else:
-				DBG_DB_LN(self, "(battery: None)" )
+				DBG_DB_LN("(battery: None)")
 		else:
-			DBG_DB_LN(self, "(battery: None)" )
+			DBG_DB_LN("(battery: None)")
 		if hasattr(psutil, "sensors_fans"):
 			fans = psutil.sensors_fans()
-			DBG_DB_LN(self, "(fans: {})".format( fans ) )
+			DBG_DB_LN("(fans: {})".format( fans ))
 		else:
-			DBG_DB_LN(self, "(fans: None)" )
+			DBG_DB_LN("(fans: None)")
 
 	def syinfo_show_uname(self):
 		# 3.8 not support dist
-		#DBG_IF_LN(self, "(os_dist: {})".format( platform.dist() ) )
-		#DBG_IF_LN(self, "(linux_distribution: {})".format( platform.linux_distribution() ) )
-		DBG_IF_LN(self, "(os_platform: {})".format( platform.platform() ) )
-		DBG_IF_LN(self, "(os_system: {})".format( platform.system() ) )
-		DBG_IF_LN(self, "(os_node: {})".format( platform.node() ) )
-		DBG_IF_LN(self, "(os_release: {})".format( platform.release() ) )
-		DBG_IF_LN(self, "(os_version: {})".format( platform.version() ) )
-		DBG_IF_LN(self, "(os_machine: {})".format( platform.machine() ) )
-		DBG_IF_LN(self, "(os_processor: {})".format( platform.processor() ) )
+		#DBG_IF_LN("(os_dist: {})".format( platform.dist() ))
+		#DBG_IF_LN("(linux_distribution: {})".format( platform.linux_distribution() ))
+		DBG_IF_LN("(os_platform: {})".format( platform.platform() ))
+		DBG_IF_LN("(os_system: {})".format( platform.system() ))
+		DBG_IF_LN("(os_node: {})".format( platform.node() ) )
+		DBG_IF_LN("(os_release: {})".format( platform.release() ))
+		DBG_IF_LN("(os_version: {})".format( platform.version() ))
+		DBG_IF_LN("(os_machine: {})".format( platform.machine() ))
+		DBG_IF_LN("(os_processor: {})".format( platform.processor() ))
 		uname_result = platform.uname()
-		DBG_IF_LN(self, "(uname_result: {})".format( uname_result ) )
-		#DBG_IF_LN(self, "(mac_ver: {})".format( platform.mac_ver() ) )
+		DBG_IF_LN("(uname_result: {})".format( uname_result ))
+		#DBG_IF_LN("(mac_ver: {})".format( platform.mac_ver() ))
 
 	def sysinfo_show(self):
-		DBG_IF_LN(self, "(Python version: {})".format( sys.version.split('\n')[0] ) )
+		DBG_IF_LN("(Python version: {})".format( sys.version.split('\n')[0] ))
 		self.syinfo_show_uname()
-		#DBG_IF_LN(self, "(os_net_info: {})".format(self.os_net_info()) )
-		#DBG_IF_LN(self, "(os_net_speed: {})".format(self.os_net_speed()) )
+		#DBG_IF_LN("(os_net_info: {})".format(self.os_net_info()))
+		#DBG_IF_LN("(os_net_speed: {})".format(self.os_net_speed()))
 
 	def keyboard_recv(self):
-		DBG_IF_LN(self, "press q to quit the loop ...")
+		DBG_IF_LN("press q to quit the loop ...")
 
 		k='\x00'
 		while ( self.is_quit == 0 ):
 			k = self.inkey()
-			#DBG_IF_LN(self, "(k:{})".format(k))
+			#DBG_IF_LN("(k:{})".format(k))
 			if k=='\x0d': # enter
 				self.sysinfo_show()
 			elif k=='\x71': # q
 				self.release()
 				break;
-			DBG_IF_LN(self, "press q to quit the loop ...")
+			DBG_IF_LN("press q to quit the loop ...")
 
 	def threadx_handler(self):
-		#DBG_IF_LN(self, "enter")
+		#DBG_IF_LN("{}".format(DBG_TXT_ENTER))
 		self.threadx_set_inloop(1)
 		self.os_net_ipaddrs()
 		sleep(1)
@@ -186,7 +186,7 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 			self.sysinfo_show_watch()
 			self.threadx_sleep(self.interval)
 		self.threadx_set_inloop(0)
-		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
@@ -194,10 +194,10 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 			if ( self.threadx_inloop() == 1 ):
 				self.threadx_wakeup()
 			self.threadx_join()
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
 		self.interval = 30
 
@@ -207,18 +207,18 @@ class sysinfo_ctx(pythonX9, threadx_ctx):
 		else:
 			super(sysinfo_ctx, self).__init__(**kwargs)
 
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
 		self.ctx_init()
 
 	def parse_args(self, args):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._args = args
 		self.interval = args["interval"]
 		self.keyboard = args["keyboard"]
 
 	def start(self, args={"keyboard": 0, "interval": 10}):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
+		DBG_TR_LN("{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		if (self.keyboard==1):
 			self.threadx_init()

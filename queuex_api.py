@@ -34,7 +34,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 	def queuex_isfull(self):
 		ret = 0
 		if ( self.queuex_length() >= self.max_data ):
-			#DBG_WN_LN(self, "{} is full.".format( self.name ))
+			#DBG_WN_LN("{} is full.".format( self.name ))
 			ret = 1;
 		return ret
 
@@ -73,7 +73,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 					self.threadx_notify()
 				self.threadx_unlock()
 			else:
-				DBG_WN_LN(self, "Skip ! (data: {})".format( data ))
+				DBG_WN_LN("Skip ! (data: {})".format( data ))
 
 	def queuex_pop(self):
 		data_pop = None
@@ -90,7 +90,7 @@ class queuex_ctx(pythonX9, threadx_ctx):
 					if not self.exec_cb is None:
 						self.exec_cb(data_pop)
 					#else:
-					#	DBG_IF_LN(self, "(data_pop: {} / {})".format( data_pop, self.items ) )
+					#	DBG_IF_LN("(data_pop: {} / {})".format( data_pop, self.items ))
 					if not self.free_cb is None:
 						self.free_cb(data_pop)
 					#sleep(3/1000)
@@ -98,12 +98,12 @@ class queuex_ctx(pythonX9, threadx_ctx):
 				self.threadx_sleep(3)
 
 	def threadx_handler(self):
-		#DBG_IF_LN(self, "enter")
+		#DBG_IF_LN("{}".format(DBG_TXT_ENTER))
 		self.threadx_set_inloop(1)
 		while ( self.is_quit == 0 ):
 			self.queuex_pop()
 		self.threadx_set_inloop(0)
-		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
@@ -111,10 +111,10 @@ class queuex_ctx(pythonX9, threadx_ctx):
 			if ( self.threadx_inloop() == 1 ):
 				self.threadx_wakeup()
 			self.threadx_join()
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self, name, queue_size, exec_cb, free_cb, is_hold=0, is_stack=0, is_sort=0, dict_key=""):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
 		self.items = []
 
@@ -133,16 +133,16 @@ class queuex_ctx(pythonX9, threadx_ctx):
 		else:
 			super(queuex_ctx, self).__init__(**kwargs)
 
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
 		self.ctx_init(name, queue_size, exec_cb, free_cb, is_hold, is_stack, is_sort, dict_key)
 
 	def parse_args(self, args):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._args = args
 
 	def start(self, args={}):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
+		DBG_TR_LN("{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		self.threadx_init()
 

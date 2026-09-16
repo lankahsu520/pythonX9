@@ -41,7 +41,7 @@ def app_quit_set(mode):
 def app_menu_order(tradex_mgr):
 	while True:
 		# 第 1 層
-		action = input("\n交易下單-買股 [b]、賣股 [s]、離開 [q]：").strip().lower()
+		action = input("\n交易下單-買股 [b], 賣股 [s], 離開 [q]：").strip().lower()
 
 		if action == 'q':
 			#print("離開程式")
@@ -93,7 +93,7 @@ def app_menu_order(tradex_mgr):
 def app_menu_main(tradex_mgr):
 	while True:
 		# 第 1 層
-		action = input("\n主選單-銀行餘額 [b]、庫存明細 [i]、交易額度 [l]、交易下單 [o]、委託紀錄 [r]、成交明細 [t]、離開 [q]：").strip().lower()
+		action = input("\n主選單-銀行餘額 [b], 庫存明細 [i], 交易額度 [l], 交易下單 [o], 委託紀錄 [r], 成交明細 [t], 離開 [q]：").strip().lower()
 
 		if action == 'q':
 			#print("離開程式")

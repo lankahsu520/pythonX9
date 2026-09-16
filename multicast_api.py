@@ -35,17 +35,17 @@ class multicast_ctx(pythonX9, threadx_ctx):
 		if not self.sockfd is None:
 			self.sockfd.close()
 			self.sockfd = None
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE) )
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def serverx(self):
 		mreq = struct.pack("4sl", socket.inet_aton(self.addr), socket.INADDR_ANY)
 		self.sockfd.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
-		DBG_IF_LN(self, "bind ... ({}:{})".format(self.addr, self.port) )
+		DBG_IF_LN("bind ... ({}:{})".format(self.addr, self.port))
 		self.sockfd.bind((self.addr, self.port))
 
 	def writex(self, buf):
-		DBG_DB_LN(self, "send {}:{} - {}".format(self.addr, self.port, buf) )
+		DBG_DB_LN("send {}:{} - {}".format(self.addr, self.port, buf))
 
 		if ( self.is_quit == 0 ):
 			try:
@@ -59,7 +59,7 @@ class multicast_ctx(pythonX9, threadx_ctx):
 		rlist = [self.sockfd]
 		wlist, xlist  = [], []
 
-		DBG_WN_LN(self, "{}".format( DBG_TXT_RUN_LOOP ) )
+		DBG_WN_LN("{}".format(DBG_TXT_RUN_LOOP))
 		while ( self.is_quit == 0 ):
 			readable, writeable, exceptional = select.select(rlist, wlist, xlist, 1)
 
@@ -72,7 +72,7 @@ class multicast_ctx(pythonX9, threadx_ctx):
 						if not self.readcb is None:
 							self.readcb(buffer)
 						else:
-							DBG_DB_LN(self, "buffer[{}] - {}".format( len(buffer), repr(buffer)) )
+							DBG_DB_LN("buffer[{}] - {}".format( len(buffer), repr(buffer)))
 				except KeyboardInterrupt:
 					self.is_quit = 1
 				except (IOError, OSError) as exc:
@@ -89,11 +89,11 @@ class multicast_ctx(pythonX9, threadx_ctx):
 		self.closex()
 
 	def threadx_handler(self):
-		#DBG_IF_LN(self, "enter")
+		#DBG_IF_LN("{}".format(DBG_TXT_ENTER))
 		self.threadx_set_inloop(1)
 		self.readx()
 		self.threadx_set_inloop(0)
-		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
@@ -102,10 +102,10 @@ class multicast_ctx(pythonX9, threadx_ctx):
 				self.threadx_wakeup()
 			self.threadx_join()
 			self.closex()
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self, url, port, readcb):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
 		self.sockfd = None
 		self.addr = url
@@ -124,16 +124,16 @@ class multicast_ctx(pythonX9, threadx_ctx):
 		else:
 			super(multicast_ctx, self).__init__(**kwargs)
 
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
 		self.ctx_init(url, port, readcb)
 
 	def parse_args(self, args):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._args = args
 
 	def start(self, args={}):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
+		DBG_TR_LN("{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		self.threadx_init()
 

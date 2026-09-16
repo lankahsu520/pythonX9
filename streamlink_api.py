@@ -28,8 +28,8 @@ from urllib.parse import unquote as urlunquote
 class streamlink_ctx(pythonX9):
 	def streams_urlparse(self):
 		self.urlparse = urlparse.urlparse( urlunquote(self.stream_url) )
-		DBG_IF_LN(self, "(stream_url: {})".format(self.stream_url) )
-		DBG_IF_LN(self, "(urlparse: {})".format(self.urlparse))
+		DBG_IF_LN("(stream_url: {})".format(self.stream_url))
+		DBG_IF_LN("(urlparse: {})".format(self.urlparse))
 
 	def streams_fetch(self):
 		self.session = Streamlink()
@@ -37,7 +37,7 @@ class streamlink_ctx(pythonX9):
 		try:
 			self.streams = self.session.streams(self.stream_url)
 		except PluginError as err:
-			DBG_ER_LN(self, "streamlink.streams error !!! ({})".format(err) )
+			DBG_ER_LN("streamlink.streams error !!! ({})".format(err))
 			self.streams = None
 
 	def streams_choice(self, quality="best"):
@@ -48,7 +48,7 @@ class streamlink_ctx(pythonX9):
 			else:
 				self.quality = list(self.streams.keys())[0]
 
-			DBG_IF_LN(self, "(quality: {} / {})".format(self.quality, self.streams.keys()) )
+			DBG_IF_LN("(quality: {} / {})".format(self.quality, self.streams.keys()))
 			self.stream = self.streams[self.quality]
 		else:
 			self.stream = None
@@ -66,7 +66,7 @@ class streamlink_ctx(pythonX9):
 				print(f'\r{self.filename}: {self.length:,} bytes', end='', flush=True)
 				tmpbuff = self.stream_fd.read(self.chunksize)
 			print("\n")
-			DBG_IF_LN(self, "Download complete !!!")
+			DBG_IF_LN("Download complete !!!")
 		except IOError as err:
 			pass
 
@@ -77,20 +77,20 @@ class streamlink_ctx(pythonX9):
 		if self.stream:
 			try:
 				self.filename = filename
-				DBG_IF_LN(self, "(filename: {}, chunksize:{})".format(self.filename, self.chunksize) )
+				DBG_IF_LN("(filename: {}, chunksize:{})".format(self.filename, self.chunksize))
 
 				self.stream_fd = self.stream.open()
 				self.streams_streaming()
 			except StreamError as err:
-				DBG_ER_LN(self, "stream.open error !!! ({})".format(err) )
+				DBG_ER_LN("stream.open error !!! ({})".format(err))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self, url):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
 		self.stream_url = url
 		self.chunksize = 1024
@@ -102,16 +102,16 @@ class streamlink_ctx(pythonX9):
 		else:
 			super(streamlink_ctx, self).__init__(**kwargs)
 
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
 		self.ctx_init(url)
 
 	def parse_args(self, args):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._args = args
 
 	def start(self, args={}):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
+		DBG_TR_LN("{}".format(DBG_TXT_START))
 		self.parse_args(args)
 
 		self.streams_urlparse()
