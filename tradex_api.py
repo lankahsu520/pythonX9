@@ -36,8 +36,31 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	# 委託紀錄
 	def tradex_q_orders(self):
 		self.orders = self.trade_sdk.get_order_results()
+
+		def filter_cb(jroot):
+			#DBG_DB_LN("{}".format(DBG_TXT_ENTER))
+			msg = "[\n\n"
+			for i, item in enumerate(jroot):
+				comma = ",\n" if i < len(jroot) - 1 else ""
+				stk_no_str = f"{item['stock_no']},"
+
+				qty_sign = "+" if item['buy_sell'] == "B" else "-" if item['buy_sell'] == "S" else ""
+				qty_str = f"{qty_sign}{item['org_qty_share']}"
+
+				mat_qty_str = f"{qty_sign}{item['mat_qty_share']}"
+
+				cel_qty_str = f"{item['cel_qty_share']}"
+
+				od_price_str = f"{item['od_price']}"
+
+				avg_price_str = f"{item['avg_price']}"
+
+				msg += f"{i} - {stk_no_str:<6} ({qty_str:<8}, {mat_qty_str:<8}, {cel_qty_str:<8}), ({od_price_str:>10}, {avg_price_str:>10}){comma}"
+			msg += "\n\n]"
+			return msg
+
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY)
+			JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY, filter_cb=filter_cb)
 		return self.orders
 
 	# 委託歷史紀錄
@@ -61,8 +84,27 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	# query_range: 0d|3d|1m|3m
 	def tradex_q_transactions(self, query_range="0d"):
 		self.transactions = self.trade_sdk.get_transactions(query_range)
+
+		def filter_cb(jroot):
+			#DBG_DB_LN("{}".format(DBG_TXT_ENTER))
+			msg = "[\n\n"
+			for i, item in enumerate(jroot):
+				comma = ",\n" if i < len(jroot) - 1 else ""
+				stk_no_str = f"{item['stk_no']},"
+
+				qty_sign = "+" if item['buy_sell'] == "B" else "-" if item['buy_sell'] == "S" else ""
+				qty_str = f"{qty_sign}{item['qty']},"
+
+				price_str = f"{item['price_avg']},"
+
+				stk_name_str = f"{item['stk_na']}"
+
+				msg += f"{i} - {stk_no_str:<6} {qty_str:>10} {price_str:>10} {stk_name_str}{comma}"
+			msg += "\n\n]"
+			return msg
+
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self.transactions, jstyle=JSTYLE.ARRAY)
+			JSON_IF_FORMAT(self.transactions, jstyle=JSTYLE.ARRAY, filter_cb=filter_cb)
 		return self.transactions
 
 	# 成交明細（依指定日期）

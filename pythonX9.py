@@ -357,28 +357,36 @@ def JSON_XX_FORMAT(f_back, need_lvl, color, jroot, **kwargs):
 	#objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
 	objname = "[{:04}/{:04}]".format( os.getpid(), threading.get_native_id() )
 
+	if "filter_cb" in kwargs:
+		filter_cb = kwargs["filter_cb"]
+	else:
+		filter_cb = None
+
 	if "jstyle" in kwargs:
 		jstyle = kwargs["jstyle"]
 	else:
 		jstyle = JSTYLE.NORMAL
 
-	# https://docs.python.org/zh-tw/3/library/json.html
-	match jstyle:
-		case JSTYLE.INDENT:
-			msg = json.dumps(jroot, indent=2, ensure_ascii=False)
+	if filter_cb is not None:
+		msg = filter_cb(jroot)
+	else:
+		# https://docs.python.org/zh-tw/3/library/json.html
+		match jstyle:
+			case JSTYLE.INDENT:
+				msg = json.dumps(jroot, indent=2, ensure_ascii=False)
 
-		case JSTYLE.ARRAY:
-			msg = "[\n"
-			for i, item in enumerate(jroot):
-				comma = ",\n" if i < len(jroot) - 1 else ""
-				msg += f"\n{i} - {json.dumps(item, ensure_ascii=False)}{comma}\n"
-			msg += "\n]"
+			case JSTYLE.ARRAY:
+				msg = "[\n"
+				for i, item in enumerate(jroot):
+					comma = ",\n" if i < len(jroot) - 1 else ""
+					msg += f"\n{i} - {json.dumps(item, ensure_ascii=False)}{comma}\n"
+				msg += "\n]"
 
-		case JSTYLE.NORMAL:
-			msg = json.dumps(jroot, ensure_ascii=False)
+			case JSTYLE.NORMAL:
+				msg = json.dumps(jroot, ensure_ascii=False)
 
-		case _:
-			msg = json.dumps(jroot, ensure_ascii=False)
+			case _:
+				msg = json.dumps(jroot, ensure_ascii=False)
 
 	filename = os.path.basename(f_back.f_code.co_filename)
 	lineno = f_back.f_lineno
