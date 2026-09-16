@@ -34,7 +34,7 @@ class statex_ctx(pythonX9, threadx_ctx):
 	def statex_isfull(self):
 		ret = 0
 		if ( self.statex_length() >= self.max_data ):
-			#DBG_WN_LN(self, "{} is full.".format( self.name ))
+			#DBG_WN_LN("{} is full.".format( self.name ))
 			ret = 1;
 		return ret
 
@@ -69,7 +69,7 @@ class statex_ctx(pythonX9, threadx_ctx):
 				self.threadx_lock()
 				#item={ "name": name, "priority": priority, "exec_cb": exec_cb, "free_cb": free_cb }
 				item=data
-				DBG_DB_LN(self, "(name: {})".format( item["name"] ))
+				DBG_DB_LN("(name: {})".format( item["name"] ))
 				if (not item["init_cb"] is None):
 					item["init_cb"](item)
 				self.items.append(item)
@@ -89,7 +89,7 @@ class statex_ctx(pythonX9, threadx_ctx):
 				data_pop = self.items.pop(idx)
 				self.threadx_unlock()
 
-				DBG_DB_LN(self, "(name: {})".format( data_pop["name"] ))
+				DBG_DB_LN("(name: {})".format( data_pop["name"] ))
 				item = data_pop
 				if ( self._last_data == item ):
 					self._last_data = None
@@ -106,7 +106,7 @@ class statex_ctx(pythonX9, threadx_ctx):
 			if ( self.statex_isempty() == 0 ):
 				change = 0
 
-				DBG_DB_LN(self, "(name: {})".format( data["name"] ))
+				DBG_DB_LN("(name: {})".format( data["name"] ))
 				self.threadx_lock()
 				for item in self.items:
 					if (item["name"] == data["name"]):
@@ -159,12 +159,12 @@ class statex_ctx(pythonX9, threadx_ctx):
 				self.threadx_sleep(3)
 
 	def threadx_handler(self):
-		#DBG_IF_LN(self, "enter")
+		#DBG_IF_LN("{}".format(DBG_TXT_ENTER))
 		self.threadx_set_inloop(1)
 		while ( self.is_quit == 0 ):
 			self.statex_exec_cb()
 		self.threadx_set_inloop(0)
-		DBG_WN_LN(self, "{}".format(DBG_TXT_BYE_BYE))
+		DBG_WN_LN("{}".format(DBG_TXT_BYE_BYE))
 
 	def release(self):
 		if ( self.is_quit == 0 ):
@@ -172,10 +172,10 @@ class statex_ctx(pythonX9, threadx_ctx):
 			if ( self.threadx_inloop() == 1 ):
 				self.threadx_wakeup()
 			self.threadx_join()
-			DBG_DB_LN(self, "{}".format(DBG_TXT_DONE))
+			DBG_DB_LN("{}".format(DBG_TXT_DONE))
 
 	def ctx_init(self, name, state_size, is_hold=0):
-		DBG_DB_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 
 		self.items = []
 
@@ -190,16 +190,16 @@ class statex_ctx(pythonX9, threadx_ctx):
 		else:
 			super(statex_ctx, self).__init__(**kwargs)
 
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._kwargs = kwargs
 		self.ctx_init(name, state_size, is_hold)
 
 	def parse_args(self, args):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_ENTER))
+		DBG_TR_LN("{}".format(DBG_TXT_ENTER))
 		self._args = args
 
 	def start(self, args={}):
-		DBG_TR_LN(self, "{}".format(DBG_TXT_START))
+		DBG_TR_LN("{}".format(DBG_TXT_START))
 		self.parse_args(args)
 		self.threadx_init()
 

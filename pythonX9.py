@@ -102,51 +102,45 @@ def dbg_debug_helper(lvl):
 	ret = dbg_lvl_set(lvl_set)
 	return ret
 
-def DBG_00_LN(need_lvl, color, *args):
+def DBG_00_LN(need_lvl, color, msg, **kwargs):
 	dbg_lvl = dbg_more()
-	if ( len(args) == 2 ):
-		obj = args[0]
-		msg = args[1]
+
+	obj = f_back.f_locals.get("self")
+	if "obj" is not None:
 		if hasattr(obj, "_dbg_lvl"):
 			dbg_lvl = obj._dbg_lvl
-	else:
-		obj = None
-		msg = args[0]
 
 	if ( dbg_lvl <= need_lvl ):
 		print("{}{}{}\r".format(color, (msg), COLOR_NONE))
 
-def DBG_CR0_LN(*args):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_LIGHT_RED, *args)
+def DBG_CR0_LN(msg, **kwargs):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_LIGHT_RED, msg, **kwargs)
 
-def DBG_ER0_LN(*args):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_RED, *args)
+def DBG_ER0_LN(msg, **kwargs):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_RED, msg, **kwargs)
 
-def DBG_WN0_LN(*args):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_PURPLE, *args)
+def DBG_WN0_LN(msg, **kwargs):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_PURPLE, msg, **kwargs)
 
-def DBG_IF0_LN(*args):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_YELLOW, *args)
+def DBG_IF0_LN(msg, **kwargs):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_YELLOW, msg, **kwargs)
 
-def DBG_DB0_LN(*args):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_WHITE, *args)
+def DBG_DB0_LN(msg, **kwargs):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_WHITE, msg, **kwargs)
 
-def DBG_TR0_LN(*args):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_DARY_GRAY, *args)
+def DBG_TR0_LN(msg, **kwargs):
+	DBG_00_LN(DBG_LVL_DEBUG, COLOR_DARY_GRAY, msg, **kwargs)
 
-def DBG_XX_LN(f_back, need_lvl, color, *args):
+def DBG_XX_LN(f_back, need_lvl, color, msg, **kwargs):
 	dbg_lvl = dbg_more()
-	if ( len(args) == 2 ):
-		obj = args[0]
-		msg = args[1]
-		#objname = "[{:04}/{:04}/{}]".format(os.getppid(), os.getpid(), obj.__class__.__name__)
-		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+
+	obj = f_back.f_locals.get("self")
+	if "obj" is not None:
 		if hasattr(obj, "_dbg_lvl"):
 			dbg_lvl = obj._dbg_lvl
-	else:
-		obj = None
-		msg = args[0]
-		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+
+	#objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+	objname = "[{:04}/{:04}]".format( os.getpid(), threading.get_native_id() )
 
 	filename = os.path.basename(f_back.f_code.co_filename)
 	lineno = f_back.f_lineno
@@ -154,53 +148,33 @@ def DBG_XX_LN(f_back, need_lvl, color, *args):
 	if ( dbg_lvl <= need_lvl ):
 		print("{}{} {}|{}:{:04} - {}{}\r".format(color, objname, filename, funcname, lineno, (msg), COLOR_NONE))
 
-def DBG_CR_LN(*args):
+def DBG_CR_LN(msg, **kwargs):
 	#try:
 	#	raise Exception
 	#except:
 	#	f_back = sys.exc_info()[2].tb_frame.f_back
 	f_back = inspect.currentframe().f_back
-	DBG_XX_LN(f_back, DBG_LVL_CRITICAL, COLOR_LIGHT_RED, *args)
+	DBG_XX_LN(f_back, DBG_LVL_CRITICAL, COLOR_LIGHT_RED, msg, **kwargs)
 
-def DBG_ER_LN(*args):
-	#try:
-	#	raise Exception
-	#except:
-	#	f_back = sys.exc_info()[2].tb_frame.f_back
+def DBG_ER_LN(msg, **kwargs):
 	f_back = inspect.currentframe().f_back
-	DBG_XX_LN(f_back, DBG_LVL_ERROR, COLOR_RED, *args)
+	DBG_XX_LN(f_back, DBG_LVL_ERROR, COLOR_RED, msg, **kwargs)
 
-def DBG_WN_LN(*args):
-	#try:
-	#	raise Exception
-	#except:
-	#	f_back = sys.exc_info()[2].tb_frame.f_back
+def DBG_WN_LN(msg, **kwargs):
 	f_back = inspect.currentframe().f_back
-	DBG_XX_LN(f_back, DBG_LVL_WARN, COLOR_PURPLE, *args)
+	DBG_XX_LN(f_back, DBG_LVL_WARN, COLOR_PURPLE, msg, **kwargs)
 
-def DBG_IF_LN(*args):
-	#try:
-	#	raise Exception
-	#except:
-	#	f_back = sys.exc_info()[2].tb_frame.f_back
+def DBG_IF_LN(msg, **kwargs):
 	f_back = inspect.currentframe().f_back
-	DBG_XX_LN(f_back, DBG_LVL_INFO, COLOR_YELLOW, *args)
+	DBG_XX_LN(f_back, DBG_LVL_INFO, COLOR_YELLOW, msg, **kwargs)
 
-def DBG_DB_LN(*args):
-	#try:
-	#	raise Exception
-	#except:
-	#	f_back = sys.exc_info()[2].tb_frame.f_back
+def DBG_DB_LN(msg, **kwargs):
 	f_back = inspect.currentframe().f_back
-	DBG_XX_LN(f_back, DBG_LVL_DEBUG, COLOR_WHITE, *args)
+	DBG_XX_LN(f_back, DBG_LVL_DEBUG, COLOR_WHITE, msg, **kwargs)
 
-def DBG_TR_LN(*args):
-	#try:
-	#	raise Exception
-	#except:
-	#	f_back = sys.exc_info()[2].tb_frame.f_back
+def DBG_TR_LN(msg, **kwargs):
 	f_back = inspect.currentframe().f_back
-	DBG_XX_LN(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, *args)
+	DBG_XX_LN(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, msg, **kwargs)
 
 def DBG_NAME(self):
 	return self.__class__.__name__
@@ -366,20 +340,22 @@ def get_hwaddr(netdev='eth0'):
 #******************************************************************************
 import json
 
-def JSON_XX_FORMAT(f_back, need_lvl, color, *args, **kwargs):
+def JSON_XX_FORMAT(f_back, need_lvl, color, jroot, **kwargs):
 	dbg_lvl = dbg_more()
 
-	if ( len(args) >= 2 ):
-		obj = args[0]
-		jroot = args[1]
-		#objname = "[{:04}/{:04}/{}]".format(os.getppid(), os.getpid(), obj.__class__.__name__)
-		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+	obj = f_back.f_locals.get("self")
+	if "obj" is not None:
 		if hasattr(obj, "_dbg_lvl"):
 			dbg_lvl = obj._dbg_lvl
-	else:
-		obj = None
-		jroot = args[0]
-		objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+	#if "obj" in kwargs:
+	#	obj = kwargs["obj"]
+	#	if hasattr(obj, "_dbg_lvl"):
+	#		dbg_lvl = obj._dbg_lvl
+	#else:
+	#	obj = None
+
+	#objname = "[{:04}/{:04}]".format( os.getpid(), gettid() )
+	objname = "[{:04}/{:04}]".format( os.getpid(), threading.get_native_id() )
 
 	if "jstyle" in kwargs:
 		jstyle = kwargs["jstyle"]
@@ -395,8 +371,8 @@ def JSON_XX_FORMAT(f_back, need_lvl, color, *args, **kwargs):
 			msg = "[\n"
 			for i, item in enumerate(jroot):
 				comma = ",\n" if i < len(jroot) - 1 else ""
-				msg += f"{i} - {json.dumps(item, ensure_ascii=False)}{comma}\n"
-			msg += "]"
+				msg += f"\n{i} - {json.dumps(item, ensure_ascii=False)}{comma}\n"
+			msg += "\n]"
 
 		case JSTYLE.NORMAL:
 			msg = json.dumps(jroot, ensure_ascii=False)
@@ -410,29 +386,29 @@ def JSON_XX_FORMAT(f_back, need_lvl, color, *args, **kwargs):
 	if ( dbg_lvl <= need_lvl ):
 		print("{}{} {}|{}:{:04} - {}{}\r".format(color, objname, filename, funcname, lineno, (msg), COLOR_NONE))
 
-def JSON_CR_FORMAT(*args, **kwargs):
+def JSON_CR_FORMAT(jroot, **kwargs):
 	f_back = inspect.currentframe().f_back
-	JSON_XX_FORMAT(f_back, DBG_LVL_CRITICAL, COLOR_LIGHT_RED, *args)
+	JSON_XX_FORMAT(f_back, DBG_LVL_CRITICAL, COLOR_LIGHT_RED, jroot, **kwargs)
 
-def JSON_ER_FORMAT(*args, **kwargs):
+def JSON_ER_FORMAT(jroot, **kwargs):
 	f_back = inspect.currentframe().f_back
-	JSON_XX_FORMAT(f_back, DBG_LVL_ERROR, COLOR_RED, *args)
+	JSON_XX_FORMAT(f_back, DBG_LVL_ERROR, COLOR_RED, jroot, **kwargs)
 
-def JSON_WN_FORMAT(*args, **kwargs):
+def JSON_WN_FORMAT(jroot, **kwargs):
 	f_back = inspect.currentframe().f_back
-	JSON_XX_FORMAT(f_back, DBG_LVL_WARN, COLOR_PURPLE, *args)
+	JSON_XX_FORMAT(f_back, DBG_LVL_WARN, COLOR_PURPLE, jroot, **kwargs)
 
-def JSON_IF_FORMAT(*args, **kwargs):
+def JSON_IF_FORMAT(jroot, **kwargs):
 	f_back = inspect.currentframe().f_back
-	JSON_XX_FORMAT(f_back, DBG_LVL_INFO, COLOR_YELLOW, *args, **kwargs)
+	JSON_XX_FORMAT(f_back, DBG_LVL_INFO, COLOR_YELLOW, jroot, **kwargs)
 
-def JSON_DB_FORMAT(*args, **kwargs):
+def JSON_DB_FORMAT(jroot, **kwargs):
 	f_back = inspect.currentframe().f_back
-	JSON_XX_FORMAT(f_back, DBG_LVL_DEBUG, COLOR_WHITE, *args)
+	JSON_XX_FORMAT(f_back, DBG_LVL_DEBUG, COLOR_WHITE, jroot, **kwargs)
 
-def JSON_TR_FORMAT(*args, **kwargs):
+def JSON_TR_FORMAT(jroot, **kwargs):
 	f_back = inspect.currentframe().f_back
-	JSON_XX_FORMAT(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, *args)
+	JSON_XX_FORMAT(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, jroot, **kwargs)
 
 #******************************************************************************
 # pythonX9
