@@ -47,7 +47,7 @@ def app_menu_delete(tradex_mgr):
 		total = len(tradex_mgr.orders)
 
 		if (total > 0):
-			msg = f"\n委託刪單-請輸入編號 [0]~[{total-1}], 離開 [q]："
+			msg = f"\n委託刪單-c 離開 [q]："
 			# 第 1 層
 			action = input(msg).strip().lower()
 
@@ -150,8 +150,14 @@ def app_menu_order(tradex_mgr):
 
 def app_menu_main(tradex_mgr):
 	while True:
+		msg = f"\n主選單-\n"
+		msg+= f"  [1] 銀行餘額, [2] 庫存明細, [3] 交易額度,\n"
+		msg+= f"  [4] 交易下單,\n"
+		msg+= f"  [5] 委託紀錄, [6] 成交明細, [7] 委託刪單,\n"
+		msg+= f"請輸入編號 [1]~[7], 離開 [q]："
+
 		# 第 1 層
-		action = input("\n主選單-\n  銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],\n  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：").strip().lower()
+		action = input(msg).strip().lower()
 
 		if action == 'q':
 			#print("離開程式")

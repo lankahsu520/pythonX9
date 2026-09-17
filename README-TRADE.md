@@ -99,21 +99,24 @@ Usage: ./tradex-esun123.py <options...>
   -h, --help
   -d, --debug level
     0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace
-
-$ ./tradex-esun123.py -d3 -t
-[6993/6993] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True, 'test_only': True, 'intact_json': False}
-
-主選單-
-  銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],
-  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：3
-[6993/6993] tradex_api.py|tradex_q_tradelimit:0318 - {"trade_limit": 1000000, "margin_limit": 0, "short_limit": 0, "day_trade_code": "X", "margin_code": "9", "short_code": "9"}
+lanka@lenovo-vbx:/work/codebase/lankahsu520/pythonX9$ ./tradex-esun123.py -d3 -t
+[8330/8330] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True, 'test_only': True, 'intact_json': False}
 
 主選單-
-  銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],
-  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：q
-[6993/6996] tradex_api.py|on_close:0435 - (close_status_code: None, close_msg: None)
-[6993/6996] tradex_api.py|threadx_handler:0449 - Bye-Bye !!!
-[6993/6993] tradex-esun123.py|main:0348 - Bye-Bye !!! (app_quit_get: 1)
+  [1] 銀行餘額, [2] 庫存明細, [3] 交易額度,
+  [4] 交易下單,
+  [5] 委託紀錄, [6] 成交明細, [7] 委託刪單,
+請輸入編號 [1]~[7], 離開 [q]：3
+[8330/8330] tradex_api.py|tradex_q_tradelimit:0318 - {"trade_limit": 1000000, "margin_limit": 0, "short_limit": 0, "day_trade_code": "X", "margin_code": "9", "short_code": "9"}
+
+主選單-
+  [1] 銀行餘額, [2] 庫存明細, [3] 交易額度,
+  [4] 交易下單,
+  [5] 委託紀錄, [6] 成交明細, [7] 委託刪單,
+請輸入編號 [1]~[7], 離開 [q]：q
+[8330/8333] tradex_api.py|on_close:0435 - (close_status_code: None, close_msg: None)
+[8330/8333] tradex_api.py|threadx_handler:0449 - Bye-Bye !!!
+[8330/8330] tradex-esun123.py|main:0354 - Bye-Bye !!! (app_quit_get: 1)
 ```
 
 # 6. Documentation
