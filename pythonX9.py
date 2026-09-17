@@ -102,7 +102,7 @@ def dbg_debug_helper(lvl):
 	ret = dbg_lvl_set(lvl_set)
 	return ret
 
-def DBG_00_LN(need_lvl, color, msg, **kwargs):
+def DBG_00_LN(f_back, need_lvl, color, msg, **kwargs):
 	dbg_lvl = dbg_more()
 
 	obj = f_back.f_locals.get("self")
@@ -114,22 +114,28 @@ def DBG_00_LN(need_lvl, color, msg, **kwargs):
 		print("{}{}{}\r".format(color, (msg), COLOR_NONE))
 
 def DBG_CR0_LN(msg, **kwargs):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_LIGHT_RED, msg, **kwargs)
+	f_back = inspect.currentframe().f_back
+	DBG_00_LN(f_back, DBG_LVL_DEBUG, COLOR_LIGHT_RED, msg, **kwargs)
 
 def DBG_ER0_LN(msg, **kwargs):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_RED, msg, **kwargs)
+	f_back = inspect.currentframe().f_back
+	DBG_00_LN(f_back, DBG_LVL_DEBUG, COLOR_RED, msg, **kwargs)
 
 def DBG_WN0_LN(msg, **kwargs):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_PURPLE, msg, **kwargs)
+	f_back = inspect.currentframe().f_back
+	DBG_00_LN(f_back, DBG_LVL_DEBUG, COLOR_PURPLE, msg, **kwargs)
 
 def DBG_IF0_LN(msg, **kwargs):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_YELLOW, msg, **kwargs)
+	f_back = inspect.currentframe().f_back
+	DBG_00_LN(f_back, DBG_LVL_DEBUG, COLOR_YELLOW, msg, **kwargs)
 
 def DBG_DB0_LN(msg, **kwargs):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_WHITE, msg, **kwargs)
+	f_back = inspect.currentframe().f_back
+	DBG_00_LN(f_back, DBG_LVL_DEBUG, COLOR_WHITE, msg, **kwargs)
 
 def DBG_TR0_LN(msg, **kwargs):
-	DBG_00_LN(DBG_LVL_DEBUG, COLOR_DARY_GRAY, msg, **kwargs)
+	f_back = inspect.currentframe().f_back
+	DBG_00_LN(f_back, DBG_LVL_DEBUG, COLOR_DARY_GRAY, msg, **kwargs)
 
 def DBG_XX_LN(f_back, need_lvl, color, msg, **kwargs):
 	dbg_lvl = dbg_more()
