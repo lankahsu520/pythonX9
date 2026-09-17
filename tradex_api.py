@@ -40,14 +40,26 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		def filter_cb(jroot):
 			#DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 			msg = "[\n\n"
+			msg += f"{'idx':>3} - {'可取消狀態':<7} {'委託書編號':<7} {'預約狀態':<7} {'買/賣':<5} {'股票代碼':<6} {'委託股數':<6} {'成交股數':<6} {'取消股數':<6} {'委託價格':<6} {'成交均價':<6}\n"
 			for i, item in enumerate(jroot):
-				comma = ",\n" if i < len(jroot) - 1 else ""
-				stk_no_str = f"{item['stock_no']},"
+				#comma = ",\n" if i < len(jroot) - 1 else ""
+				comma = "\n" if i < len(jroot) - 1 else ""
 
-				qty_sign = "+" if item['buy_sell'] == "B" else "-" if item['buy_sell'] == "S" else ""
-				qty_str = f"{qty_sign}{item['org_qty_share']}"
+				celable_str = "yes" if item['celable'] == "1" else "no"
 
-				mat_qty_str = f"{qty_sign}{item['mat_qty_share']}"
+				ord_no_str = f"{item['ord_no']}" if item['ord_no'] != "" else f"{item['pre_ord_no']}"
+
+				ord_status_str = "預約單" if item['ord_status'] == "1" else "盤中單"
+
+				buy_sell_str = "買" if item['buy_sell'] == "B" else "賣"
+
+				stk_no_str = f"{item['stock_no']}"
+
+				#qty_sign = "+" if item['buy_sell'] == "B" else "-" if item['buy_sell'] == "S" else ""
+				qty_str = f"{item['org_qty_share']}"
+
+				#mat_qty_str = f"{qty_sign}{item['mat_qty_share']}"
+				mat_qty_str = f"{item['mat_qty_share']}"
 
 				cel_qty_str = f"{item['cel_qty_share']}"
 
@@ -55,12 +67,13 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 				avg_price_str = f"{item['avg_price']}"
 
-				msg += f"{i} - {stk_no_str:<6} ({qty_str:<8}, {mat_qty_str:<8}, {cel_qty_str:<8}), ({od_price_str:>10}, {avg_price_str:>10}){comma}"
+				msg += f"{i:>3} - {celable_str:<12} {ord_no_str:<12} {ord_status_str:<8} {buy_sell_str:<6} {stk_no_str:<10} {qty_str:<10} {mat_qty_str:<10} {cel_qty_str:<10} {od_price_str:<10} {avg_price_str:<10}{comma}"
 			msg += "\n\n]"
 			return msg
 
 		if ( self.verbose == True ):
 			JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY, filter_cb=filter_cb)
+			#JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY)
 		return self.orders
 
 	# 委託歷史紀錄
@@ -88,18 +101,23 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		def filter_cb(jroot):
 			#DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 			msg = "[\n\n"
+			msg += f"{'idx':>3} - {'買/賣':<5} {'股票代碼':<6} {'成交股數':<6} {'成交均價 ':<6} {'股票名稱'}\n"
 			for i, item in enumerate(jroot):
-				comma = ",\n" if i < len(jroot) - 1 else ""
-				stk_no_str = f"{item['stk_no']},"
+				#comma = ",\n" if i < len(jroot) - 1 else ""
+				comma = "\n" if i < len(jroot) - 1 else ""
+
+				buy_sell_str = "買" if item['buy_sell'] == "B" else "賣"
+
+				stk_no_str = f"{item['stk_no']}"
 
 				qty_sign = "+" if item['buy_sell'] == "B" else "-" if item['buy_sell'] == "S" else ""
-				qty_str = f"{qty_sign}{item['qty']},"
+				qty_str = f"{qty_sign}{item['qty']}"
 
-				price_str = f"{item['price_avg']},"
+				price_str = f"{item['price_avg']}"
 
 				stk_name_str = f"{item['stk_na']}"
 
-				msg += f"{i} - {stk_no_str:<6} {qty_str:>10} {price_str:>10} {stk_name_str}{comma}"
+				msg += f"{i:>3} - {buy_sell_str:<6} {stk_no_str:<10} {qty_str:<10} {price_str:<10} {stk_name_str}{comma}"
 			msg += "\n\n]"
 			return msg
 
@@ -130,6 +148,18 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		if ( self.verbose == True ):
 			JSON_IF_FORMAT(self.settlements)
 		return self.settlements
+
+	def tradex_o_delete_qty(self, order_result, qty_share):
+		self.last_delete_response = self.trade_sdk.cancel_order(order_result, qty_share)
+		if ( self.verbose == True ):
+			JSON_IF_FORMAT(self.last_delete_response)
+		return self.last_delete_response
+
+	def tradex_o_delete(self, order_result):
+		self.last_delete_response = self.trade_sdk.cancel_order(order_result)
+		if ( self.verbose == True ):
+			JSON_IF_FORMAT(self.last_delete_response)
+		return self.last_delete_response
 
 	# 交易訊息
 	def tradex_o_response(self):

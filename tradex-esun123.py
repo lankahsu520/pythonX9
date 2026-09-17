@@ -38,6 +38,63 @@ def app_quit_set(mode):
 	global is_quit
 	is_quit=mode
 
+def app_menu_delete(tradex_mgr):
+	while True:
+		# 委託紀錄
+		tradex_mgr.tradex_q_orders()
+
+		total = len(tradex_mgr.orders)
+
+		if (total > 0):
+			msg = f"\n委託刪單-請輸入編號 [0]~[{total-1}], 離開 [q]："
+			# 第 1 層
+			action = input(msg).strip().lower()
+
+			if action == 'q':
+				#print("離開程式")
+				break
+
+			if action == '':
+				break
+
+			try:
+				idx = int(action)
+			except ValueError:
+				print("編號格式錯誤，請重新輸入 !!!")
+				continue
+
+			if (idx <= (total-1)):
+				order_result = tradex_mgr.orders[idx]
+
+				ord_no = f"{order_result['ord_no']}" if order_result['ord_no'] != "" else f"{order_result['pre_ord_no']}"
+				qty = order_result['org_qty_share']
+				mat_qty = order_result['mat_qty_share']
+				cel_qty = order_result['cel_qty_share']
+
+				left_qty = qty - mat_qty - cel_qty
+				if (order_result['celable']==2) or (left_qty > 0):
+					#print(f"{order_result}")
+					#print(f"{type(tradex_mgr.orders)}")
+
+					# 是否繼續
+					msg = f"委託單 [{idx}] {ord_no} 將被刪除，是否繼續執行？[y/n]："
+					answer = input(msg).strip().lower()
+					
+					match answer:
+						case 'y':
+							tradex_mgr.tradex_o_delete(order_result)
+						case _:
+							print("取消交易 !")
+
+					break
+				else:
+					print(f"委託單 [{idx}] {ord_no} 無法刪除，請重新輸入 !!!")
+			else:
+				print("編號格式錯誤，請重新輸入 !!!")
+		else:
+			print("查無委託單 !!!")
+			break
+
 def app_menu_order(tradex_mgr):
 	while True:
 		# 第 1 層
@@ -93,7 +150,7 @@ def app_menu_order(tradex_mgr):
 def app_menu_main(tradex_mgr):
 	while True:
 		# 第 1 層
-		action = input("\n主選單-銀行餘額 [b], 庫存明細 [i], 交易額度 [l], 交易下單 [o], 委託紀錄 [r], 成交明細 [t], 離開 [q]：").strip().lower()
+		action = input("\n主選單-\n  銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],\n  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：").strip().lower()
 
 		if action == 'q':
 			#print("離開程式")
@@ -103,30 +160,34 @@ def app_menu_main(tradex_mgr):
 			continue
 
 		match action:
-			case 'b':
+			case '1':
 				# 銀行餘額
 				tradex_mgr.tradex_q_balance()
 				#print("(tradex_mgr.balance: {})\r".format( tradex_mgr.balance ))
 
-			case 'i':
+			case '2':
 				# 庫存明細
 				tradex_mgr.tradex_q_inventories()
 
-			case 'l':
+			case '3':
 				# 交易額度及權限
 				tradex_mgr.tradex_q_tradelimit()
 
-			case 'o':
+			case '4':
 				# 交易下單
 				app_menu_order(tradex_mgr)
 
-			case 'r':
+			case '5':
 				# 委託紀錄
 				tradex_mgr.tradex_q_orders()
 
-			case 't':
+			case '6':
 				# 成交明細
 				tradex_mgr.tradex_q_transactions(query_range="0d")
+
+			case '7':
+				# 委託刪單
+				app_menu_delete(tradex_mgr)
 
 			case _:
 				continue
@@ -193,7 +254,7 @@ def app_demo(tradex_mgr):
 def app_start():
 	argsX_dump(argsX)
 
-	tradex_mgr = tradex_ctx(dbg_lvl=DBG_LVL_DEBUG)
+	tradex_mgr = tradex_ctx(dbg_lvl=DBG_LVL_INFO)
 	tradex_mgr.start(argsX)
 
 	app_watch(tradex_mgr)

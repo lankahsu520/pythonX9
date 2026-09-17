@@ -92,22 +92,20 @@ $ vi ~/.local/lib/python3.12/site-packages/esun_trade/sdk.py
 > -t : 單純測式流程，不會下單 
 
 ```bash
-$ ./tradex-esun123.py  -d3 -t
-[3096/140007269668672] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True, 'test_only': True}
-[3096/140007269668672] tradex_api.py|ctx_init:0283 - Enter ...
+$ ./tradex-esun123.py -d3 -t
+[5868/5868] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True, 'test_only': True}
 
-主選單-銀行餘額 [b]、庫存明細 [i]、交易額度 [l]、交易下單 [o]、委託紀錄 [r]、成交明細 [t]、離開 [q]： b
-[3096/140007269668672] tradex_api.py|tradex_q_balance:0234 - {
-  "available_balance": 3389949,
-  "exchange_balance": 0,
-  "stock_pre_save_amount": 0,
-  "is_latest_data": true,
-  "updated_at": 1789425864
-}
+主選單-
+  銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],
+  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：1
+[5868/5868] tradex_api.py|tradex_q_balance:0300 - {"available_balance": 3139045, "exchange_balance": 0, "stock_pre_save_amount": 0, "is_latest_data": false, "updated_at": 1789604495}
 
-主選單-銀行餘額 [b]、庫存明細 [i]、交易額度 [l]、交易下單 [o]、委託紀錄 [r]、成交明細 [t]、離開 [q]：q
-[3096/140007269668672] tradex-esun123.py|main:0280 - Bye-Bye !!! (app_quit_get: 1)
-
+主選單-
+  銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],
+  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：q
+[5868/5871] tradex_api.py|on_close:0366 - (close_status_code: None, close_msg: None)
+[5868/5871] tradex_api.py|threadx_handler:0380 - Bye-Bye !!!
+[5868/5868] tradex-esun123.py|main:0329 - Bye-Bye !!! (app_quit_get: 1)
 ```
 
 # 6. Documentation
@@ -367,13 +365,14 @@ $ ./tradex-esun123.py  -d3 -t
 
 > 請見  [modify_price(order_result, target_price, price_flag)](https://www.esunsec.com.tw/trading-platforms/api-trading/docs/trading/reference/python#改價-modify_priceorder_result-target_price-price_flag)
 
-### ~~6.3.6. 委託刪單~~
+### 6.3.6. 委託刪單
 
-> 因為限制過多，暫不包裝此功能。
+> 只能刪除單筆委託
 
-| 名稱 | 描述 |
-| ---- | ---- |
-|      |      |
+| 名稱                                         | 描述         |
+| -------------------------------------------- | ------------ |
+| tradex_o_delete(order_result)                | 刪除單筆委託 |
+| tradex_o_delete_qty(order_result, qty_share) | 減少委託單量 |
 
 | 證劵商 | API                                                          | 描述                           |
 | ------ | ------------------------------------------------------------ | ------------------------------ |
@@ -382,9 +381,10 @@ $ ./tradex-esun123.py  -d3 -t
 
 - ##### Input
 
-| 名稱 | 型態 | 描述 |
-| ---- | ---- | ---- |
-|      |      |      |
+| 名稱         | 型態                                                         | 描述                |
+| ------------ | ------------------------------------------------------------ | ------------------- |
+| order_result | [OrderResult](https://www.esunsec.com.tw/trading-platforms/api-trading/docs/trading/reference/python/#orderresult) | 委託單資料          |
+| qty_share    | int                                                          | 取消股數 (optional) |
 
 - #### Response
 
