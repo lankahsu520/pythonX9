@@ -194,6 +194,8 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 			if ( self.test_only == False ):
 				self.last_order_response = self.trade_sdk.place_order( self.last_order )
+			else:
+				print("測試模式，未執行交易 !")
 		else:
 			DBG_ER_LN("{}".format("請先登入 !!!"))
 

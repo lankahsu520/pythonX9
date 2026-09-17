@@ -82,7 +82,10 @@ def app_menu_delete(tradex_mgr):
 					
 					match answer:
 						case 'y':
-							tradex_mgr.tradex_o_delete(order_result)
+							if ( tradex_mgr.test_only == False ):
+								tradex_mgr.tradex_o_delete(order_result)
+							else:
+								print("測試模式，未執行交易 !")
 						case _:
 							print("取消交易 !")
 
