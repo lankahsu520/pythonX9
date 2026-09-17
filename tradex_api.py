@@ -149,17 +149,27 @@ class tradex_ctx(pythonX9, threadx_ctx):
 			JSON_IF_FORMAT(self.settlements)
 		return self.settlements
 
-	def tradex_o_delete_qty(self, order_result, qty_share):
-		self.last_delete_response = self.trade_sdk.cancel_order(order_result, qty_share)
-		if ( self.verbose == True ):
+	# 刷單訊息
+	def tradex_o_delete_response(self):
+		if ( self.verbose == True ) and ( self.last_delete_response is not None ):
 			JSON_IF_FORMAT(self.last_delete_response)
 		return self.last_delete_response
 
+	def tradex_o_delete_qty(self, order_result, qty_share):
+		if ( self.test_only == False ):
+			self.last_delete_response = self.trade_sdk.cancel_order(order_result, qty_share)
+		else:
+			DBG_WN_LN("測試模式，未執行交易 !")
+
+		return self.tradex_o_delete_response()
+
 	def tradex_o_delete(self, order_result):
-		self.last_delete_response = self.trade_sdk.cancel_order(order_result)
-		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self.last_delete_response)
-		return self.last_delete_response
+		if ( self.test_only == False ):
+			self.last_delete_response = self.trade_sdk.cancel_order(order_result)
+		else:
+			DBG_WN_LN("測試模式，未執行交易 !")
+
+		return self.tradex_o_delete_response()
 
 	# 交易訊息
 	def tradex_o_response(self):
@@ -195,7 +205,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 			if ( self.test_only == False ):
 				self.last_order_response = self.trade_sdk.place_order( self.last_order )
 			else:
-				print("測試模式，未執行交易 !")
+				DBG_WN_LN("測試模式，未執行交易 !")
 		else:
 			DBG_ER_LN("{}".format("請先登入 !!!"))
 
@@ -402,6 +412,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 		self.last_order = None
 		self.last_order_response = None
+		self.last_delete_response = None
 
 		self.trade_sdk = None
 		self._is_login = False
