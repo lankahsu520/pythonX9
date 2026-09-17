@@ -305,7 +305,9 @@ def app_exit():
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
 	print("  -t, --test")
+	print("         test only")
 	print("  -i, --intact")
+	print("         print full json")
 	print("  -h, --help")
 	print("  -d, --debug level")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
