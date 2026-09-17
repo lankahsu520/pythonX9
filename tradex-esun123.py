@@ -29,6 +29,7 @@ argsX = {
 	"config_ini": '/work/esun/config.ini'
 	,"verbose": True
 	,"test_only": False
+	,"intact_json":False
 }
 
 def app_quit_get():
@@ -79,7 +80,7 @@ def app_menu_delete(tradex_mgr):
 					# 是否繼續
 					msg = f"委託單 [{idx}] {ord_no} 將被刪除，是否繼續執行？[y/n]："
 					answer = input(msg).strip().lower()
-					
+
 					match answer:
 						case 'y':
 							tradex_mgr.tradex_o_delete(order_result)
@@ -298,6 +299,7 @@ def app_exit():
 def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
 	print("  -t, --test")
+	print("  -i, --intact")
 	print("  -h, --help")
 	print("  -d, --debug level")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
@@ -306,7 +308,7 @@ def show_usage(argv):
 
 def parse_arg(argv):
 	try:
-		opts,args = getopt.getopt(argv[1:], "thd:", ["test, help", "debug"])
+		opts,args = getopt.getopt(argv[1:], "tihd:", ["test", "intact", "help", "debug"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -321,6 +323,8 @@ def parse_arg(argv):
 				dbg_debug_helper( int(arg) )
 			elif opt in ("-t", "--test"):
 				argsX_set(argsX, "test_only", True)
+			elif opt in ("-i", "--intact"):
+				argsX_set(argsX, "intact_json", True)
 			else:
 				print ("(opt: {})".format(opt))
 	else:

@@ -37,7 +37,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_orders(self):
 		self.orders = self.trade_sdk.get_order_results()
 
-		def filter_cb(jroot):
+		def orders_filter_cb(jroot):
 			#DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 			msg = "[\n\n"
 			msg += f"{'idx':>3} - {'可取消狀態':<7} {'委託書編號':<7} {'預約狀態':<7} {'買/賣':<5} {'股票代碼':<6} {'委託股數':<6} {'成交股數':<6} {'取消股數':<6} {'委託價格':<6} {'成交均價':<6}\n"
@@ -72,8 +72,11 @@ class tradex_ctx(pythonX9, threadx_ctx):
 			return msg
 
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY, filter_cb=filter_cb)
-			#JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY)
+			if ( self.intact_json == True ):
+				JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY)
+			else:
+				JSON_IF_FORMAT(self.orders, jstyle=JSTYLE.ARRAY, filter_cb=orders_filter_cb)
+
 		return self.orders
 
 	# 委託歷史紀錄
@@ -98,7 +101,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 	def tradex_q_transactions(self, query_range="0d"):
 		self.transactions = self.trade_sdk.get_transactions(query_range)
 
-		def filter_cb(jroot):
+		def transactions_filter_cb(jroot):
 			#DBG_DB_LN("{}".format(DBG_TXT_ENTER))
 			msg = "[\n\n"
 			msg += f"{'idx':>3} - {'買/賣':<5} {'股票代碼':<6} {'成交股數':<6} {'成交均價 ':<6} {'股票名稱'}\n"
@@ -122,7 +125,11 @@ class tradex_ctx(pythonX9, threadx_ctx):
 			return msg
 
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self.transactions, jstyle=JSTYLE.ARRAY, filter_cb=filter_cb)
+			if ( self.intact_json == True ):
+				JSON_IF_FORMAT(self.transactions, jstyle=JSTYLE.ARRAY)
+			else:
+				JSON_IF_FORMAT(self.transactions, jstyle=JSTYLE.ARRAY, filter_cb=transactions_filter_cb)
+
 		return self.transactions
 
 	# 成交明細（依指定日期）
@@ -320,9 +327,53 @@ class tradex_ctx(pythonX9, threadx_ctx):
 
 	# 庫存明細
 	def tradex_q_inventories(self):
+		def inventories_filter_cb(jroot):
+			#DBG_DB_LN("{}".format(DBG_TXT_ENTER))
+			msg = "[\n\n"
+			msg += f"{'idx':>3} - {'股票代碼':<6} {'昨餘額股數':<7} {'今買股數':<6} {'今賣股數':<6} {'成交均價':<6} {'即時價格':<6} {'市場別':<6} {'股票名稱'}\n"
+			for i, item in enumerate(jroot):
+				#comma = ",\n" if i < len(jroot) - 1 else ""
+				comma = "\n" if i < len(jroot) - 1 else ""
+
+				stk_no_str = f"{item['stk_no']}"
+
+				#qty_sign = "+" if item['buy_sell'] == "B" else "-" if item['buy_sell'] == "S" else ""
+				qty_l_str = f"{item['qty_l']}"
+
+				qty_bm_str = f"+{item['qty_bm']}"
+
+				qty_sm_str = f"-{item['qty_sm']}"
+
+				price_avg_str = f"{item['price_avg']}"
+
+				price_now_str = f"{item['price_now']}"
+
+				match item['s_type']:
+					case 'H':
+						s_type_str = f"上市"
+
+					case 'O':
+						s_type_str = f"上櫃"
+
+					case 'R':
+						s_type_str = f"興櫃"
+
+					case _:
+						s_type_str = f"上市"
+
+				stk_name_str = f"{item['stk_na']}"
+
+				msg += f"{i:>3} - {stk_no_str:<10} {qty_l_str:<12} {qty_bm_str:<10} {qty_sm_str:<10} {price_avg_str:<10} {price_now_str:<10} {s_type_str:<7} {stk_name_str}{comma}"
+			msg += "\n\n]"
+			return msg
+
 		self.inventories = self.trade_sdk.get_inventories()
 		if ( self.verbose == True ):
-			JSON_IF_FORMAT(self.inventories, jstyle=JSTYLE.ARRAY)
+			if ( self.intact_json == True ):
+				JSON_IF_FORMAT(self.inventories, jstyle=JSTYLE.ARRAY)
+			else:
+				JSON_IF_FORMAT(self.inventories, jstyle=JSTYLE.ARRAY, filter_cb=inventories_filter_cb)
+
 		return self.inventories
 
 
@@ -433,6 +484,7 @@ class tradex_ctx(pythonX9, threadx_ctx):
 		self.verbose = args["verbose"]
 		self.config_ini = args["config_ini"]
 		self.test_only = args["test_only"]
+		self.intact_json = args["intact_json"]
 
 	def start(self, args={}):
 		DBG_TR_LN("{}".format(DBG_TXT_START))

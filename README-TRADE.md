@@ -92,20 +92,28 @@ $ vi ~/.local/lib/python3.12/site-packages/esun_trade/sdk.py
 > -t : 單純測式流程，不會下單 
 
 ```bash
+$ ./tradex-esun123.py
+Usage: ./tradex-esun123.py <options...>
+  -t, --test
+  -i, --intact
+  -h, --help
+  -d, --debug level
+    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace
+
 $ ./tradex-esun123.py -d3 -t
-[5868/5868] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True, 'test_only': True}
+[6993/6993] pythonX9.py|argsX_dump:0057 - {'config_ini': '/work/esun/config.ini', 'verbose': True, 'test_only': True, 'intact_json': False}
 
 主選單-
   銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],
-  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：1
-[5868/5868] tradex_api.py|tradex_q_balance:0300 - {"available_balance": 3139045, "exchange_balance": 0, "stock_pre_save_amount": 0, "is_latest_data": false, "updated_at": 1789604495}
+  委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：3
+[6993/6993] tradex_api.py|tradex_q_tradelimit:0318 - {"trade_limit": 1000000, "margin_limit": 0, "short_limit": 0, "day_trade_code": "X", "margin_code": "9", "short_code": "9"}
 
 主選單-
   銀行餘額 [1], 庫存明細 [2], 交易額度 [3], 交易下單 [4],
   委託紀錄 [5], 成交明細 [6], 委託刪單 [7], 離開 [q]：q
-[5868/5871] tradex_api.py|on_close:0366 - (close_status_code: None, close_msg: None)
-[5868/5871] tradex_api.py|threadx_handler:0380 - Bye-Bye !!!
-[5868/5868] tradex-esun123.py|main:0329 - Bye-Bye !!! (app_quit_get: 1)
+[6993/6996] tradex_api.py|on_close:0435 - (close_status_code: None, close_msg: None)
+[6993/6996] tradex_api.py|threadx_handler:0449 - Bye-Bye !!!
+[6993/6993] tradex-esun123.py|main:0348 - Bye-Bye !!! (app_quit_get: 1)
 ```
 
 # 6. Documentation
