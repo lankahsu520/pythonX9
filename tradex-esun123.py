@@ -47,7 +47,7 @@ def app_menu_delete(tradex_mgr):
 		total = len(tradex_mgr.orders)
 
 		if (total > 0):
-			msg = f"\n委託刪單-c 離開 [q]："
+			msg = f"\n委託刪單- 請輸入編號 [0]~[{total-1}], [q] 離開："
 			# 第 1 層
 			action = input(msg).strip().lower()
 
@@ -68,12 +68,12 @@ def app_menu_delete(tradex_mgr):
 				order_result = tradex_mgr.orders[idx]
 
 				ord_no = f"{order_result['ord_no']}" if order_result['ord_no'] != "" else f"{order_result['pre_ord_no']}"
-				qty = order_result['org_qty_share']
-				mat_qty = order_result['mat_qty_share']
-				cel_qty = order_result['cel_qty_share']
+				#qty = order_result['org_qty_share']
+				#mat_qty = order_result['mat_qty_share']
+				#cel_qty = order_result['cel_qty_share']
 
-				left_qty = qty - mat_qty - cel_qty
-				if (order_result['celable']==2) or (left_qty > 0):
+				#left_qty = qty - mat_qty - cel_qty
+				if (order_result['celable']==1):
 					#print(f"{order_result}")
 					#print(f"{type(tradex_mgr.orders)}")
 
@@ -98,8 +98,13 @@ def app_menu_delete(tradex_mgr):
 
 def app_menu_order(tradex_mgr):
 	while True:
+		msg = f"\n交易下單-\n"
+		msg+= f"  [b] 買股,\n"
+		msg+= f"  [s] 賣股,\n"
+		msg+= f"請輸入 [b] or [s], [q] 離開："
+
 		# 第 1 層
-		action = input("\n交易下單-買股 [b], 賣股 [s], 離開 [q]：").strip().lower()
+		action = input(msg).strip().lower()
 
 		if action == 'q':
 			#print("離開程式")
@@ -109,8 +114,8 @@ def app_menu_order(tradex_mgr):
 			break
 
 		if action not in ('b', 's'):
-				print("輸入錯誤，請輸入 b、s 或 q !!!")
-				continue
+			print("輸入錯誤，請輸入 b 或 s !!!")
+			continue
 
 		# 第 2 層
 		stock_no = input("請輸入股票代碼：").strip()
@@ -137,7 +142,7 @@ def app_menu_order(tradex_mgr):
 			continue
 
 		# 第 5 層
-		market = input("請選擇盤中 [i] 或盤後 [a]：").strip().lower()
+		market = input("請選擇 [i] 盤中 或 [a] 盤後：").strip().lower()
 
 		if market == '':
 			continue
@@ -154,7 +159,7 @@ def app_menu_main(tradex_mgr):
 		msg+= f"  [1] 銀行餘額, [2] 庫存明細, [3] 交易額度,\n"
 		msg+= f"  [4] 交易下單,\n"
 		msg+= f"  [5] 委託紀錄, [6] 成交明細, [7] 委託刪單,\n"
-		msg+= f"請輸入編號 [1]~[7], 離開 [q]："
+		msg+= f"請輸入編號 [1]~[7], [q] 離開："
 
 		# 第 1 層
 		action = input(msg).strip().lower()
