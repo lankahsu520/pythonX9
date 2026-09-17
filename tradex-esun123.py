@@ -340,8 +340,8 @@ def parse_arg(argv):
 				argsX_set(argsX, "intact_json", True)
 			else:
 				print ("(opt: {})".format(opt))
-	else:
-		show_usage(argv)
+	#else:
+	#	show_usage(argv)
 
 def signal_handler(sig, frame):
 	if sig in (signal.SIGINT, signal.SIGTERM):
