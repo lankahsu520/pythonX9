@@ -73,7 +73,7 @@ def app_menu_delete(tradex_mgr):
 				#cel_qty = order_result['cel_qty_share']
 
 				#left_qty = qty - mat_qty - cel_qty
-				if (order_result['celable']==1):
+				if ( order_result['celable'] == '1' ):
 					#print(f"{order_result}")
 					#print(f"{type(tradex_mgr.orders)}")
 
