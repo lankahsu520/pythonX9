@@ -106,7 +106,7 @@ def DBG_00_LN(f_back, need_lvl, color, msg, **kwargs):
 	dbg_lvl = dbg_more()
 
 	obj = f_back.f_locals.get("self")
-	if "obj" is not None:
+	if obj is not None:
 		if hasattr(obj, "_dbg_lvl"):
 			dbg_lvl = obj._dbg_lvl
 
@@ -141,7 +141,7 @@ def DBG_XX_LN(f_back, need_lvl, color, msg, **kwargs):
 	dbg_lvl = dbg_more()
 
 	obj = f_back.f_locals.get("self")
-	if "obj" is not None:
+	if obj is not None:
 		if hasattr(obj, "_dbg_lvl"):
 			dbg_lvl = obj._dbg_lvl
 
@@ -350,7 +350,7 @@ def JSON_XX_FORMAT(f_back, need_lvl, color, jroot, **kwargs):
 	dbg_lvl = dbg_more()
 
 	obj = f_back.f_locals.get("self")
-	if "obj" is not None:
+	if obj is not None:
 		if hasattr(obj, "_dbg_lvl"):
 			dbg_lvl = obj._dbg_lvl
 	#if "obj" in kwargs:
