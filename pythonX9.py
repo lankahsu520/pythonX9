@@ -251,8 +251,60 @@ def u8Str(txt):
 def uStr(txt):
 	return u"{}".format(txt)
 
-def fStr(txt):
-	return f"{txt}"
+def fStr(txt, **kwargs):
+	if "color" not in kwargs:
+		color_txt = ""
+		color_none = ""
+	else:
+		color_txt = kwargs["color"]
+		color_none = COLOR_NONE
+
+	return f"{color_txt}{txt}{color_none}"
+
+def fStrRED(txt):
+	return fStr(txt, color=COLOR_RED)
+
+def fStrLRED(txt):
+	return fStr(txt, color=COLOR_LIGHT_RED)
+
+def fStrGREEN(txt):
+	return fStr(txt, color=COLOR_GREEN)
+
+def fStrLGREEN(txt):
+	return fStr(txt, color=COLOR_LIGHT_GREEN)
+
+def fStrBLUE(txt):
+	return fStr(txt, color=COLOR_BLUE)
+
+def fStrLBLUE(txt):
+	return fStr(txt, color=COLOR_LIGHT_BLUE)
+
+def fStrDGRAY(txt):
+	return fStr(txt, color=COLOR_DARY_GRAY)
+
+def fStrCYAN(txt):
+	return fStr(txt, color=COLOR_CYAN)
+
+def fStrLCYAN(txt):
+	return fStr(txt, color=COLOR_LIGHT_CYAN)
+
+def fStrPURPLE(txt):
+	return fStr(txt, color=COLOR_PURPLE)
+
+def fStrLPURPLE(txt):
+	return fStr(txt, color=COLOR_LIGHT_PURPLE)
+
+def fStrBROWN(txt):
+	return fStr(txt, color=COLOR_BROWN)
+
+def fStrYELLOW(txt):
+	return fStr(txt, color=COLOR_YELLOW)
+
+def fStrLGRAY(txt):
+	return fStr(txt, color=COLOR_LIGHT_GRAY)
+
+def fStrWHITE(txt):
+	return fStr(txt, color=COLOR_WHITE)
 
 def dir_chk(dirname):
 	if not os.path.isdir(dirname):
