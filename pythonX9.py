@@ -248,10 +248,16 @@ def byte2little(size, data):
 def u8Str(txt):
 	return txt.encode('utf-8')
 
-def uStr(txt):
-	return u"{}".format(txt)
+def ustr(fmt, **kwargs):
+	return fmt.format(**kwargs)
 
-def fStr(txt, **kwargs):
+def pstr(fmt, **kwargs):
+	print(fmt.format(**kwargs))
+
+#def fStr(txt, **kwargs):
+#	return f"{txt}"
+
+def ctxt(txt, **kwargs):
 	if "color" not in kwargs:
 		color_txt = ""
 		color_none = ""
@@ -261,50 +267,50 @@ def fStr(txt, **kwargs):
 
 	return f"{color_txt}{txt}{color_none}"
 
-def fStrRED(txt):
-	return fStr(txt, color=COLOR_RED)
+def ctxtRED(txt):
+	return ctxt(txt, color=COLOR_RED)
 
-def fStrLRED(txt):
-	return fStr(txt, color=COLOR_LIGHT_RED)
+def ctxtLRED(txt):
+	return ctxt(txt, color=COLOR_LIGHT_RED)
 
-def fStrGREEN(txt):
-	return fStr(txt, color=COLOR_GREEN)
+def ctxtGREEN(txt):
+	return ctxt(txt, color=COLOR_GREEN)
 
-def fStrLGREEN(txt):
-	return fStr(txt, color=COLOR_LIGHT_GREEN)
+def ctxtLGREEN(txt):
+	return ctxt(txt, color=COLOR_LIGHT_GREEN)
 
-def fStrBLUE(txt):
-	return fStr(txt, color=COLOR_BLUE)
+def ctxtBLUE(txt):
+	return ctxt(txt, color=COLOR_BLUE)
 
-def fStrLBLUE(txt):
-	return fStr(txt, color=COLOR_LIGHT_BLUE)
+def ctxtLBLUE(txt):
+	return ctxt(txt, color=COLOR_LIGHT_BLUE)
 
-def fStrDGRAY(txt):
-	return fStr(txt, color=COLOR_DARY_GRAY)
+def ctxtDGRAY(txt):
+	return ctxt(txt, color=COLOR_DARY_GRAY)
 
-def fStrCYAN(txt):
-	return fStr(txt, color=COLOR_CYAN)
+def ctxtCYAN(txt):
+	return ctxt(txt, color=COLOR_CYAN)
 
-def fStrLCYAN(txt):
-	return fStr(txt, color=COLOR_LIGHT_CYAN)
+def ctxtLCYAN(txt):
+	return ctxt(txt, color=COLOR_LIGHT_CYAN)
 
-def fStrPURPLE(txt):
-	return fStr(txt, color=COLOR_PURPLE)
+def ctxtPURPLE(txt):
+	return ctxt(txt, color=COLOR_PURPLE)
 
-def fStrLPURPLE(txt):
-	return fStr(txt, color=COLOR_LIGHT_PURPLE)
+def ctxtLPURPLE(txt):
+	return ctxt(txt, color=COLOR_LIGHT_PURPLE)
 
-def fStrBROWN(txt):
-	return fStr(txt, color=COLOR_BROWN)
+def ctxtBROWN(txt):
+	return ctxt(txt, color=COLOR_BROWN)
 
-def fStrYELLOW(txt):
-	return fStr(txt, color=COLOR_YELLOW)
+def ctxtYELLOW(txt):
+	return ctxt(txt, color=COLOR_YELLOW)
 
-def fStrLGRAY(txt):
-	return fStr(txt, color=COLOR_LIGHT_GRAY)
+def ctxtLGRAY(txt):
+	return ctxt(txt, color=COLOR_LIGHT_GRAY)
 
-def fStrWHITE(txt):
-	return fStr(txt, color=COLOR_WHITE)
+def ctxtWHITE(txt):
+	return ctxt(txt, color=COLOR_WHITE)
 
 def dir_chk(dirname):
 	if not os.path.isdir(dirname):
