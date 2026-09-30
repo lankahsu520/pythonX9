@@ -19,8 +19,6 @@ GITHUB_LIBS = \
 
 #** PYTHON_FILES **
 PYTHON_FILES = \
-														tradex-esun123.py \
-														stockx_backtesting_123.py \
 														youtube_123.py \
 														dummy_123.py \
 														multicast_123.py \
