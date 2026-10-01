@@ -20,7 +20,7 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from pythonX9.sysinfo_api import *
+from pythonP9.sysinfo_api import *
 
 appX_list = []
 is_quit = 0

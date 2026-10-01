@@ -1,7 +1,7 @@
 PWD=$(shell pwd)
 -include $(SDK_CONFIG_CONFIG)
 
-MY_NAME = pythonX9
+MY_NAME = pythonP9
 
 #** include *.mk **
 -include define.mk
@@ -17,7 +17,7 @@ LIBNAME_MOD =
 
 #** GITHUB_LIBS **
 GITHUB_LIBS = \
-#														https://github.com/lankahsu520/pythonX9.git
+#														https://github.com/lankahsu520/pythonP9.git
 
 #** PYTHON_FILES **
 PYTHON_FILES = \

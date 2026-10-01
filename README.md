@@ -1,6 +1,6 @@
 # 1. Overview
 
-> pythonX9 把常用的工具集合在一起，並且將呼叫簡單化。
+> pythonP9 把常用的工具集合在一起，並且將呼叫簡單化。
 
 # 2. Depend on
 
@@ -56,7 +56,7 @@ flowchart LR
 ```
 
 ```bash
-$ make dummy_123.py
+$ make dummy_123
 or
 $ ./dummy_123.py -d4
 [8465/8465] dummy_123.py|app_start:0015 - (Python version: 3.8.10, chkPYTHONge(3,7,0): True, chkPYTHONle(3,7,0): False)
@@ -121,7 +121,7 @@ $ gimp /tmp/HTTPServer_ctx-3272277516
 ## - multicast_123.py - a multicast example.
 
 ```bash
-$ make multicast_123.py
+$ make multicast_123
 or
 $ ./multicast_123.py -d4
 [4977/4977] multicast_api.py|__init__:0110 - Enter ...
@@ -157,7 +157,7 @@ $ ./multicast_123.py -d4
 >網路都只會介紹什麼是 queue，但是實際操作經驗零。這邊給你一個很好範例，特別是當你要操作TTY或是一些序列設備時，就會發現這有多好用。
 
 ```bash
-$ make queuex_123.py
+$ make queuex_123
 or
 $ ./queuex_123.py -d4
 [6822/6822] queuex_api.py|ctx_init:0094 - Enter ...
@@ -220,7 +220,7 @@ $ ./queuex_123.py -d4
 ## - statex_123.py - state machine example.
 
 ```bash
-$ make statex_123.py
+$ make statex_123
 or
 $ ./statex_123.py -d4
 [7221/7221] statex_api.py|ctx_init:0178 - Enter ...
@@ -252,7 +252,7 @@ $ ./statex_123.py -d4
 ## - sysinfo_123.py - 查找主機系統資訊，每5秒刷新畫面
 
 ```bash
-$ make sysinfo_123.py
+$ make sysinfo_123
 or 
 $ ./sysinfo_123.py -d 4
 [8510/8510] sysinfo_api.py|__init__:0201 - Enter ...
@@ -302,12 +302,12 @@ q[8510/8511] sysinfo_api.py|threadx_handler:0173 - Bye-Bye !!!
 >使用 streamlink  api 方式下載 youtube 影片
 
 ```bash
-$ make youtube_123.py
-==> python 3.12 - layer_python: /work/codebase/lankahsu520/pythonX9/python
+$ make youtube_123
+==> python 3.12 - layer_python: /work/codebase/lankahsu520/pythonP9/python
 
 
 ==> python 3.12 - run: youtube_123.py
-PYTHONPATH=/work/codebase/lankahsu520/pythonX9/python ./youtube_123.py -d 4
+PYTHONPATH=/work/codebase/lankahsu520/pythonP9/python ./youtube_123.py -d 4
 [10130/139874243954496] youtube_123.py|app_start:0033 - (Python version: 3.12.3, chkPYTHONge(3,8,0): True, chkPYTHONle(3,8,0): False)
 [10130/139874243954496] streamlink_api.py|streams_urlparse:0031 - (stream_url: https://www.youtube.com/watch?v=a_9_38JpdYU)
 [10130/139874243954496] streamlink_api.py|streams_urlparse:0032 - (urlparse: ParseResult(scheme='https', netloc='www.youtube.com', path='/watch', params='', query='v=a_9_38JpdYU', fragment=''))
@@ -367,4 +367,4 @@ $ sudo apt install -y eric
 
 # License
 
-> [pythonX9](https://github.com/lankahsu520/pythonX9) is under the New BSD License (BSD-3-Clause).
+> [pythonP9](https://github.com/lankahsu520/pythonP9) is under the New BSD License (BSD-3-Clause).

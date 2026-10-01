@@ -20,7 +20,7 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from pythonX9.queuex_api import *
+from pythonP9.queuex_api import *
 
 appX_list = []
 is_quit = 0

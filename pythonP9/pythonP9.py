@@ -28,8 +28,8 @@ import fnmatch # file_find
 import random
 import inspect
 
-from .pythonX9_def import *
-from .pythonX9_tag import *
+from .pythonP9_def import *
+from .pythonP9_tag import *
 
 import threading
 import ctypes
@@ -483,9 +483,9 @@ def JSON_TR_FORMAT(jroot, **kwargs):
 	JSON_XX_FORMAT(f_back, DBG_LVL_TRACE, COLOR_DARY_GRAY, jroot, **kwargs)
 
 #******************************************************************************
-# pythonX9
+# pythonP9
 #******************************************************************************
-class pythonX9(object):
+class pythonP9(object):
 	def inkey(self):
 		if ( isOS(OS_WINDOWS) ):
 			import keyboard
@@ -509,7 +509,7 @@ class pythonX9(object):
 		if ( isPYTHON(PYTHON_V3) ):
 			super().__init__(**kwargs)
 		else:
-			super(pythonX9, self).__init__(**kwargs)
+			super(pythonP9, self).__init__(**kwargs)
 
 		self.is_quit = 0
 		self._dbg_lvl = dbg_lvl
