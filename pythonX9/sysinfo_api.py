@@ -19,8 +19,8 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from pythonX9 import *
-from threadx_api import *
+from .pythonX9 import *
+from .threadx_api import *
 
 #import platform
 import subprocess # os_gpu_temperature

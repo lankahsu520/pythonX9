@@ -18,8 +18,8 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from pythonX9 import *
-from threadx_api import *
+from .pythonX9 import *
+from .threadx_api import *
 
 class queuex_ctx(pythonX9, threadx_ctx):
 

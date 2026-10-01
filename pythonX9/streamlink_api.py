@@ -18,7 +18,7 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from pythonX9 import *
+from .pythonX9 import *
 
 #https://streamlink.github.io/api.html
 from streamlink import Streamlink, StreamError, PluginError, NoPluginError

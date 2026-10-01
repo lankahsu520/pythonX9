@@ -24,10 +24,11 @@
 import os, sys, errno, getopt, signal, time, io
 from time import sleep
 
-from pythonX9 import *
 #import SimpleHTTPServer
 import http.server
 #import BaseHTTPServer
+
+from pythonX9.pythonX9 import *
 
 appX_list = []
 is_quit = 0

@@ -18,7 +18,7 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from pythonX9 import *
+from .pythonX9 import *
 
 #from _thread import start_new_thread
 import threading

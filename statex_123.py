@@ -20,14 +20,51 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from sysinfo_api import *
+from pythonX9.statex_api import *
 
 appX_list = []
 is_quit = 0
 is_release = 0
 argsX = {
-	"keyboard": 1
-	,"interval": 5
+}
+def exec_cb_CloudConnected(data):
+	DBG_IF_LN("(name: {})".format( data["name"] ))
+
+def leave_cb_CloudConnected(data):
+	DBG_WN_LN("(name: {})".format( data["name"] ))
+
+StatexCloudConnected ={
+"name":"CloudConnected", "priority":300, "init_cb": None, "exec_cb":exec_cb_CloudConnected, "leave_cb": leave_cb_CloudConnected
+}
+
+def exec_cb_NetworkOn(data):
+	DBG_IF_LN("(name: {})".format( data["name"] ))
+
+def leave_cb_NetworkOn(data):
+	DBG_WN_LN("(name: {})".format( data["name"] ))
+
+StatexNetworkOn ={
+"name":"NetworkOn", "priority":600, "init_cb": None, "exec_cb":exec_cb_NetworkOn, "leave_cb": leave_cb_NetworkOn
+}
+
+def exec_cb_CableLinked(data):
+	DBG_IF_LN("(name: {})".format( data["name"] ))
+
+def leave_cb_CableLinked(data):
+	DBG_WN_LN("(name: {})".format( data["name"] ))
+
+StatexCableLinked ={
+	"name": "CableLinked", "priority": 800, "init_cb": None, "exec_cb": exec_cb_CableLinked, "leave_cb": leave_cb_CableLinked
+}
+
+def exec_cb_Idle(data):
+	DBG_IF_LN("(name: {})".format( data["name"] ))
+
+def leave_cb_Idle(data):
+	DBG_WN_LN("(name: {})".format( data["name"] ))
+
+StatexIdle ={
+	"name": "Idle", "priority": 999, "init_cb": None, "exec_cb": exec_cb_Idle, "leave_cb": leave_cb_Idle
 }
 
 def app_quit_get():
@@ -40,12 +77,30 @@ def app_quit_set(mode):
 def app_start():
 	argsX_dump(argsX)
 
-	sysinfo_mgr = sysinfo_ctx(dbg_lvl=DBG_LVL_TRACE)
-	app_watch(sysinfo_mgr)
+	statex_mgr = statex_ctx(dbg_lvl=DBG_LVL_DEBUG, name="HelloStateX", state_size=20, is_hold=0)
+	app_watch(statex_mgr)
 
-	sysinfo_mgr.start(args=argsX)
-	#sysinfo_mgr.keyboard_recv()
-	sysinfo_mgr.release()
+	statex_mgr.start( argsX )
+	statex_mgr.statex_gosleep()
+	#statex_mgr.statex_push(name="Idle", priority=999, exec_cb=exec_cb_Idle, free_cb=free_cb_Idle)
+	statex_mgr.statex_wakeup()
+
+	# Idle->CableLinked->NetworkOn->CloudConnected
+	statex_mgr.statex_push(StatexIdle)
+	sleep(1)
+	statex_mgr.statex_push(StatexCableLinked)
+	sleep(1)
+	statex_mgr.statex_push(StatexNetworkOn)
+	sleep(1)
+	statex_mgr.statex_push(StatexCloudConnected)
+	sleep(1)
+
+	# Idle->CableLinked->CloudConnected
+	statex_mgr.statex_remove(StatexNetworkOn)
+	sleep(1)
+
+	# Idle->CableLinked
+	statex_mgr.statex_pop()
 
 def app_watch(app_ctx):
 	global appX_list
@@ -84,14 +139,15 @@ def show_usage(argv):
 	print("Usage: {} <options...>".format(argv[0]) )
 	print("  -h, --help")
 	print("  -d, --debug level")
-	print("  -k, --key")
 	print("    0: critical, 1: errror, 2: warning, 3: info, 4: debug, 5: trace")
 	app_exit()
 	sys.exit(0)
 
 def parse_arg(argv):
+	global argsX
+
 	try:
-		opts,args = getopt.getopt(argv[1:], "hkd:", ["help", "key", "debug"])
+		opts,args = getopt.getopt(argv[1:], "hd:", ["help", "debug"])
 	except getopt.GetoptError:
 		show_usage(argv)
 
@@ -100,14 +156,10 @@ def parse_arg(argv):
 
 	if (len(opts) > 0):
 		for opt, arg in opts:
-			#DBG_IF_LN("opt:{}, arg:{}".format(opt, arg))
 			if opt in ("-h", "--help"):
 				show_usage(argv)
-			elif opt in ("-k", "--key"):
-				argsX_set(argsX, "keyboard", 1)
 			elif opt in ("-d", "--debug"):
 				dbg_debug_helper( int(arg) )
-				#DBG_IF_LN("arg:{}".format(arg))
 			else:
 				print ("(opt: {})".format(opt))
 	else:

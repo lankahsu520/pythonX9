@@ -28,8 +28,8 @@ import fnmatch # file_find
 import random
 import inspect
 
-from pythonX9_def import *
-from pythonX9_tag import *
+from .pythonX9_def import *
+from .pythonX9_tag import *
 
 import threading
 import ctypes

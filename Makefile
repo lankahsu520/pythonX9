@@ -1,6 +1,8 @@
 PWD=$(shell pwd)
 -include $(SDK_CONFIG_CONFIG)
 
+MY_NAME = pythonX9
+
 #** include *.mk **
 -include define.mk
 
@@ -42,10 +44,10 @@ export MAKE_DBG='==\> python $(PJ_PYTHON_VER) -'
 all: $(PYTHON_FILES)
 
 clean:
-	$(PJ_SH_RM) export.log
+	$(PJ_SH_RM) export.log .layer_python
 	$(PJ_SH_RM) .configured
-	$(PJ_SH_RMDIR) __pycache__/ ./python/ github_libs/
-	$(PJ_SH_RM) $(PJ_NAME)/version.txt
+	$(PJ_SH_RMDIR) __pycache__/ $(MY_NAME)/__pycache__/ ./python/ github_libs/
+	$(PJ_SH_RM) $(MY_NAME)/version.txt
 	@for subdir in $(CONFS_yes); do \
 		[ -d "$$subdir" ] && (make -C $$subdir $@;) || echo "skip !!! ($$subdir)"; \
 	done
@@ -55,15 +57,19 @@ distclean: clean
 layer_python_reqen:
 	pip3 install --upgrade --force-reinstall --target $(PWD)/python -r requirements.txt
 
-layer_python:
-	@echo '$(MAKE_DBG) $@: $(PWD)/python'
-	@if [ ! -d "$(PWD)/python" ]; then \
-		(pip3 install --upgrade --force-reinstall --target $(PWD)/python -r requirements.txt); \
-		for libs in $(GITHUB_LIBS); do (git clone $$libs github_libs && $(PJ_SH_CP) github_libs/*.py $(PWD)/python && rm -rf github_libs); done \
-	fi
+.layer_python:
+	#@echo '$(MAKE_DBG) $@: $(PWD)/python'
+	#@if [ ! -d "$(PWD)/python" ]; then \
+	#	(pip3 install --upgrade --force-reinstall --target $(PWD)/python -r $(MY_NAME)/requirements.txt); \
+	#	for libs in $(GITHUB_LIBS); do (git clone $$libs github_libs && $(PJ_SH_CP) github_libs/*.py $(PWD)/python && rm -rf github_libs); done \
+	#fi
+	@echo '----->> $@ - pip install -r $(MY_NAME)/requirements.txt'
+	(pip install -r $(MY_NAME)/requirements.txt)
 	@echo
+	touch $@
 
-$(PYTHON_FILES): layer_python
+$(PYTHON_FILES): .layer_python
 	@echo
 	@echo '$(MAKE_DBG) run: $@'
-	PYTHONPATH=$(PWD)/python ./$@ $(DEBUG_ARG)
+	#PYTHONPATH=$(PWD)/python python -m $(MY_NAME).$@ $(DEBUG_ARG)
+	./$@ $(DEBUG_ARG)

@@ -18,7 +18,7 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from pythonX9 import *
+from .pythonX9 import *
 
 class dummy_ctx(pythonX9):
 	def release(self):
