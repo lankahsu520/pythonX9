@@ -21,12 +21,12 @@ GITHUB_LIBS = \
 
 #** PYTHON_FILES **
 PYTHON_FILES = \
-														youtube_123.py \
-														dummy_123.py \
-														multicast_123.py \
-														queuex_123.py \
-														statex_123.py \
-														sysinfo_123.py
+														youtube_123 \
+														dummy_123 \
+														multicast_123 \
+														queuex_123 \
+														statex_123 \
+														sysinfo_123
 
 DEBUG=4
 DEBUG_ARG=-d $(DEBUG)
@@ -72,4 +72,4 @@ $(PYTHON_FILES): .layer_python
 	@echo
 	@echo '$(MAKE_DBG) run: $@'
 	#PYTHONPATH=$(PWD)/python python -m $(MY_NAME).$@ $(DEBUG_ARG)
-	./$@ $(DEBUG_ARG)
+	./$@.py $(DEBUG_ARG)
