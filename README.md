@@ -59,19 +59,22 @@ flowchart LR
 $ make dummy_123
 or
 $ ./dummy_123.py -d4
-[8465/8465] dummy_123.py|app_start:0015 - (Python version: 3.8.10, chkPYTHONge(3,7,0): True, chkPYTHONle(3,7,0): False)
-[8465/8465] dummy_123.py|app_start:0019 - (IFACE: enp0s3, IFACE_MAC: 08:00:27:33:73:52, IFACE_IPv4: 10.0.2.15)
-[8465/8465] dummy_api.py|__init__:0020 - Enter ...
-[8465/8465] dummy_api.py|ctx_init:0012 - Enter ...
-[8465/8465] dummy_api.py|start:0029 - Start !!!
-[8465/8465] dummy_api.py|parse_args:0025 - Enter ...
-[8465/8465] dummy_123.py|app_release:0033 - Enter ...
-[8465/8465] dummy_123.py|app_release:0038 - call dummy_ctx.release ...
-[8465/8465] dummy_api.py|release:0009 - Done.
-[8465/8465] dummy_123.py|app_release:0042 - Done.
-[8465/8465] dummy_123.py|app_stop:0051 - Done.
-[8465/8465] dummy_123.py|main:0103 - Bye-Bye !!! (is_quit: 1)
-
+[14087/14087] pythonP9.py|argsX_dump:0057 - {}
+[14087/14087] dummy_123.py|app_start:0041 - (Python version: 3.12.11, chkPYTHONge(3,7,0): True, chkPYTHONle(3,7,0): False)
+[14087/14087] dummy_123.py|app_start:0047 - (IFACE: lo, IFACE_MAC: 00:00:00:00:00:00, IFACE_IPv4: 127.0.0.1)
+[14087/14087] dummy_123.py|app_start:0047 - (IFACE: docker0, IFACE_MAC: 02:42:7e:67:48:22, IFACE_IPv4: 172.17.0.1)
+[14087/14087] dummy_123.py|app_start:0047 - (IFACE: enp0s8, IFACE_MAC: 08:00:27:1a:c3:a3, IFACE_IPv4: 192.168.56.101)
+[14087/14087] dummy_123.py|app_start:0047 - (IFACE: enp0s3, IFACE_MAC: 08:00:27:a1:f8:36, IFACE_IPv4: 192.168.31.17)
+[14087/14087] dummy_api.py|__init__:0038 - Enter ...
+[14087/14087] dummy_api.py|ctx_init:0030 - Enter ...
+[14087/14087] dummy_api.py|start:0047 - Start !!!
+[14087/14087] dummy_api.py|parse_args:0043 - Enter ...
+[14087/14087] dummy_123.py|app_release:0065 - Enter ...
+[14087/14087] dummy_123.py|app_release:0070 - call dummy_ctx.release ...
+[14087/14087] dummy_api.py|release:0027 - Done.
+[14087/14087] dummy_123.py|app_release:0074 - Done.
+[14087/14087] dummy_123.py|app_exit:0085 - Done.
+[14087/14087] dummy_123.py|main:0130 - Bye-Bye !!! (app_quit_get: 1)
 ```
 ## - httpd_123.py - a simple Web Server
 
@@ -122,34 +125,34 @@ $ gimp /tmp/HTTPServer_ctx-3272277516
 
 ```bash
 $ make multicast_123
-or
+# or
 $ ./multicast_123.py -d4
-[4977/4977] multicast_api.py|__init__:0110 - Enter ...
-[4977/4977] multicast_api.py|ctx_init:0091 - Enter ...
-[4977/4977] multicast_api.py|start:0119 - Start !!!
-[4977/4977] multicast_api.py|parse_args:0115 - Enter ...
-[4977/4978] multicast_api.py|serverx:0027 - bind ... (239.255.255.250:3618)
-[4977/4978] multicast_api.py|readx:0045 - Run loop ...
-[4977/4977] multicast_123.py|app_start:0025 - Send a packet every 2 seconds 239.255.255.250:3618.
-[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'1'
-[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'1'
-[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'2'
-[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'2'
-[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'3'
-[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'3'
-[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'4'
-[4977/4978] multicast_123.py|notify_cb:0017 - buffer[1] - b'4'
-^C[4977/4977] multicast_123.py|app_release:0042 - Enter ...
-[4977/4977] multicast_123.py|app_release:0047 - call multicast_ctx.release ...
-[4977/4977] threadx_api.py|threadx_wakeup:0033 - call notify ...
-[4977/4978] multicast_api.py|closex:0021 - Done.
-[4977/4978] multicast_api.py|threadx_handler:0079 - Bye-Bye !!!
-[4977/4977] multicast_api.py|release:0088 - Done.
-[4977/4977] multicast_123.py|app_release:0051 - Done.
-[4977/4977] multicast_123.py|app_stop:0060 - Done.
-[4977/4977] multicast_api.py|writex:0031 - send 239.255.255.250:3618 - b'5'
-[4977/4977] multicast_123.py|main:0112 - Bye-Bye !!! (is_quit: 1)
-
+[12879/12879] pythonP9.py|argsX_dump:0057 - {}
+[12879/12879] multicast_api.py|__init__:0127 - Enter ...
+[12879/12879] multicast_api.py|ctx_init:0108 - Enter ...
+[12879/12879] multicast_api.py|start:0136 - Start !!!
+[12879/12879] multicast_api.py|parse_args:0132 - Enter ...
+[12879/12880] multicast_api.py|serverx:0044 - bind ... (239.255.255.250:3618)
+[12879/12880] multicast_api.py|readx:0062 - Run loop ...
+[12879/12879] multicast_123.py|app_start:0052 - Send a packet every 2 seconds 239.255.255.250:3618.
+[12879/12879] multicast_api.py|writex:0048 - send 239.255.255.250:3618 - b'1'
+[12879/12880] multicast_123.py|notify_cb:0035 - buffer[1] - b'1'
+[12879/12879] multicast_api.py|writex:0048 - send 239.255.255.250:3618 - b'2'
+[12879/12880] multicast_123.py|notify_cb:0035 - buffer[1] - b'2'
+[12879/12879] multicast_api.py|writex:0048 - send 239.255.255.250:3618 - b'3'
+[12879/12880] multicast_123.py|notify_cb:0035 - buffer[1] - b'3'
+[12879/12879] multicast_api.py|writex:0048 - send 239.255.255.250:3618 - b'4'
+[12879/12880] multicast_123.py|notify_cb:0035 - buffer[1] - b'4'
+^C[12879/12879] multicast_123.py|app_release:0072 - Enter ...
+[12879/12879] multicast_123.py|app_release:0077 - call multicast_ctx.release ...
+[12879/12879] threadx_api.py|threadx_wakeup:0061 - call notify ...
+[12879/12880] multicast_api.py|closex:0038 - Done.
+[12879/12880] multicast_api.py|threadx_handler:0096 - Bye-Bye !!!
+[12879/12879] multicast_api.py|release:0105 - Done.
+[12879/12879] multicast_123.py|app_release:0081 - Done.
+[12879/12879] multicast_api.py|writex:0048 - send 239.255.255.250:3618 - b'5'
+[12879/12879] multicast_123.py|app_exit:0092 - Done.
+[12879/12879] multicast_123.py|main:0137 - Bye-Bye !!! (app_quit_get: 1)
 ```
 
 ## - queuex_123.py - a queue and stack example.
@@ -160,142 +163,167 @@ $ ./multicast_123.py -d4
 $ make queuex_123
 or
 $ ./queuex_123.py -d4
-[6822/6822] queuex_api.py|ctx_init:0094 - Enter ...
-[6822/6822] queuex_123.py|queue_test:0024 - Push an integer every 10/1000 seconds. (is_stack: 0)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 1)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 2)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 3)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 4)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 5)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 1)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 2)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 3)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 4)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 5)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 6)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 6)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 7)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 7)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 8)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 8)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 9)
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 9)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 10)
-[6822/6822] queuex_api.py|ctx_init:0094 - Enter ...
-[6822/6823] queuex_123.py|exec_cb:0014 - (data: 10)
-[6822/6822] queuex_123.py|queue_test:0024 - Push an integer every 10/1000 seconds. (is_stack: 1)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 1)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 2)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 3)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 4)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 5)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 5)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 4)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 3)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 2)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 1)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 6)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 6)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 7)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 7)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 8)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 8)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 9)
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 9)
-[6822/6822] queuex_123.py|queue_test:0028 - call queuex_push ... (idx: 10)
-[6822/6822] queuex_123.py|app_release:0049 - Enter ...
-[6822/6824] queuex_123.py|exec_cb:0014 - (data: 10)
-[6822/6822] queuex_123.py|app_release:0054 - call queuex_ctx.release ...
-[6822/6823] queuex_api.py|threadx_handler:0083 - Bye-Bye !!!
-[6822/6822] queuex_api.py|release:0091 - Done.
-[6822/6822] queuex_123.py|app_release:0054 - call queuex_ctx.release ...
-[6822/6824] queuex_api.py|threadx_handler:0083 - Bye-Bye !!!
-[6822/6822] queuex_api.py|release:0091 - Done.
-[6822/6822] queuex_123.py|app_release:0058 - Done.
-[6822/6822] queuex_123.py|app_exit:0070 - Done.
-[6822/6822] queuex_123.py|main:0120 - Bye-Bye !!! (is_quit: 1)
-
+[12862/12862] pythonP9.py|argsX_dump:0057 - {}
+[12862/12862] queuex_api.py|ctx_init:0117 - Enter ...
+[12862/12862] queuex_123.py|queue_test:0042 - Push an integer every 10/1000 seconds. (is_stack: 0)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 1)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 2)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 3)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 4)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 5)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 1)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 2)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 3)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 4)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 5)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 6)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 6)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 7)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 7)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 8)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 8)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 9)
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 9)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 10)
+[12862/12862] queuex_api.py|ctx_init:0117 - Enter ...
+[12862/12863] queuex_123.py|exec_cb:0032 - (data: 10)
+[12862/12862] queuex_123.py|queue_test:0042 - Push an integer every 10/1000 seconds. (is_stack: 1)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 1)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 2)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 3)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 4)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 5)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 5)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 4)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 3)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 2)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 1)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 6)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 6)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 7)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 7)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 8)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 8)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 9)
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 9)
+[12862/12862] queuex_123.py|queue_test:0047 - call queuex_push ... (item: 10)
+[12862/12862] queuex_api.py|ctx_init:0117 - Enter ...
+[12862/12864] queuex_123.py|exec_cb:0032 - (data: 10)
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 2588174001923390324)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 2588174001923390324, 'idx': 1})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 1587121373964614091)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 1587121373964614091, 'idx': 2})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 8972576424494140615)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 8972576424494140615, 'idx': 3})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 4689097189221691477)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 4689097189221691477, 'idx': 4})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 8098272801275810401)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 8098272801275810401, 'idx': 5})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 9039847687270749903)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 9039847687270749903, 'idx': 6})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 2860399992155630969)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 2860399992155630969, 'idx': 7})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 1587121373964614091, 'idx': 2})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 2588174001923390324, 'idx': 1})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 2860399992155630969, 'idx': 7})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 4689097189221691477, 'idx': 4})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 8098272801275810401, 'idx': 5})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 8972576424494140615, 'idx': 3})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 9039847687270749903, 'idx': 6})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 1438926804533808911)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 1438926804533808911, 'idx': 8})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 1438926804533808911, 'idx': 8})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 4575013626605114099)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 4575013626605114099, 'idx': 9})
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 4575013626605114099, 'idx': 9})
+[12862/12862] pythonP9.py|os_urandom:0334 - (rand_num: 8706136170148948304)
+[12862/12862] queuex_123.py|queue_test_dict:0068 - call queuex_push ... (item: {'key': 8706136170148948304, 'idx': 10})
+[12862/12862] queuex_123.py|app_release:0101 - Enter ...
+[12862/12862] queuex_123.py|app_release:0106 - call queuex_ctx.release ...
+[12862/12863] queuex_api.py|threadx_handler:0106 - Bye-Bye !!!
+[12862/12865] queuex_123.py|exec_cb:0032 - (data: {'key': 8706136170148948304, 'idx': 10})
+[12862/12862] queuex_api.py|release:0114 - Done.
+[12862/12862] queuex_123.py|app_release:0106 - call queuex_ctx.release ...
+[12862/12864] queuex_api.py|threadx_handler:0106 - Bye-Bye !!!
+[12862/12862] queuex_api.py|release:0114 - Done.
+[12862/12862] queuex_123.py|app_release:0106 - call queuex_ctx.release ...
+[12862/12865] queuex_api.py|threadx_handler:0106 - Bye-Bye !!!
+[12862/12862] queuex_api.py|release:0114 - Done.
+[12862/12862] queuex_123.py|app_release:0110 - Done.
+[12862/12862] queuex_123.py|app_exit:0121 - Done.
+[12862/12862] queuex_123.py|main:0166 - Bye-Bye !!! (app_quit_get: 1)
 ```
 
 ## - statex_123.py - state machine example.
 
 ```bash
 $ make statex_123
-or
+# or
 $ ./statex_123.py -d4
-[7221/7221] statex_api.py|ctx_init:0178 - Enter ...
-[7221/7221] statex_api.py|statex_push:0072 - (name: Idle)
-[7221/7222] statex_123.py|exec_cb_Idle:0064 - (name: Idle)
-[7221/7221] statex_api.py|statex_push:0072 - (name: CableLinked)
-[7221/7222] statex_123.py|exec_cb_CableLinked:0054 - (name: CableLinked)
-[7221/7222] statex_123.py|leave_cb_Idle:0067 - (name: Idle)
-[7221/7221] statex_api.py|statex_push:0072 - (name: NetworkOn)
-[7221/7222] statex_123.py|exec_cb_NetworkOn:0044 - (name: NetworkOn)
-[7221/7222] statex_123.py|leave_cb_CableLinked:0057 - (name: CableLinked)
-[7221/7221] statex_api.py|statex_push:0072 - (name: CloudConnected)
-[7221/7222] statex_123.py|exec_cb_CloudConnected:0034 - (name: CloudConnected)
-[7221/7222] statex_123.py|leave_cb_NetworkOn:0047 - (name: NetworkOn)
-[7221/7221] statex_api.py|statex_remove:0109 - (name: NetworkOn)
-[7221/7221] statex_api.py|statex_pop:0092 - (name: CloudConnected)
-[7221/7221] statex_123.py|exec_cb_CableLinked:0054 - (name: CableLinked)
-[7221/7221] statex_123.py|leave_cb_CloudConnected:0037 - (name: CloudConnected)
-[7221/7221] statex_123.py|app_release:0109 - Enter ...
-[7221/7221] statex_123.py|app_release:0114 - call statex_ctx.release ...
-[7221/7222] statex_api.py|threadx_handler:0167 - Bye-Bye !!!
-[7221/7221] statex_api.py|release:0175 - Done.
-[7221/7221] statex_123.py|app_release:0118 - Done.
-[7221/7221] statex_123.py|app_exit:0130 - Done.
-[7221/7221] statex_123.py|main:0180 - Bye-Bye !!! (is_quit: 1)
-
+[12859/12859] pythonP9.py|argsX_dump:0057 - {}
+[12859/12859] statex_api.py|ctx_init:0178 - Enter ...
+[12859/12859] statex_api.py|statex_push:0072 - (name: Idle)
+[12859/12860] statex_123.py|exec_cb_Idle:0061 - (name: Idle)
+[12859/12859] statex_api.py|statex_push:0072 - (name: CableLinked)
+[12859/12860] statex_123.py|exec_cb_CableLinked:0051 - (name: CableLinked)
+[12859/12860] statex_123.py|leave_cb_Idle:0064 - (name: Idle)
+[12859/12859] statex_api.py|statex_push:0072 - (name: NetworkOn)
+[12859/12860] statex_123.py|exec_cb_NetworkOn:0041 - (name: NetworkOn)
+[12859/12860] statex_123.py|leave_cb_CableLinked:0054 - (name: CableLinked)
+[12859/12859] statex_api.py|statex_push:0072 - (name: CloudConnected)
+[12859/12860] statex_123.py|exec_cb_CloudConnected:0031 - (name: CloudConnected)
+[12859/12860] statex_123.py|leave_cb_NetworkOn:0044 - (name: NetworkOn)
+[12859/12859] statex_api.py|statex_remove:0109 - (name: NetworkOn)
+[12859/12859] statex_api.py|statex_pop:0092 - (name: CloudConnected)
+[12859/12859] statex_123.py|exec_cb_CableLinked:0051 - (name: CableLinked)
+[12859/12859] statex_123.py|leave_cb_CloudConnected:0034 - (name: CloudConnected)
+[12859/12859] statex_123.py|app_release:0116 - Enter ...
+[12859/12859] statex_123.py|app_release:0121 - call statex_ctx.release ...
+[12859/12860] statex_api.py|threadx_handler:0167 - Bye-Bye !!!
+[12859/12859] statex_api.py|release:0175 - Done.
+[12859/12859] statex_123.py|app_release:0125 - Done.
+[12859/12859] statex_123.py|app_exit:0136 - Done.
+[12859/12859] statex_123.py|main:0183 - Bye-Bye !!! (app_quit_get: 1)
 ```
 
 ## - sysinfo_123.py - 查找主機系統資訊，每5秒刷新畫面
 
 ```bash
 $ make sysinfo_123
-or 
+# or 
 $ ./sysinfo_123.py -d 4
-[8510/8510] sysinfo_api.py|__init__:0201 - Enter ...
-[8510/8510] sysinfo_api.py|ctx_init:0190 - Enter ...
-[8510/8510] sysinfo_api.py|start:0212 - Start !!!
-[8510/8510] sysinfo_api.py|parse_args:0206 - Enter ...
-[8510/8510] sysinfo_api.py|keyboard_recv:0151 - press q to quit the loop ...
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - lo - 127.0.0.1/8
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - lo - ('::1', 0, 0)/128
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s3 - 10.0.2.15/24
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s3 - ('fe80::7549:bd5f:d0ed:32cf', 0, 2)/64
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s9 - 192.168.56.104/24
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s9 - ('fe80::e6d1:c758:6c5c:4cbd', 0, 4)/64
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - docker0 - 172.17.0.1/16
-[8510/8511] sysinfo_api.py|os_net_ipaddrs:0067 - enp0s8 - ('fe80::d49:8acb:9f1b:c4cf', 0, 3)/64
-[8510/8510] sysinfo_api.py|sysinfo_show:0145 - (Python version: 3.8.10 (default, Mar 13 2023, 10:26:41) )
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0133 - (os_platform: Linux-5.15.0-67-generic-x86_64-with-glibc2.29)
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0134 - (os_system: Linux)
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0135 - (os_node: build20-vbx)
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0136 - (os_release: 5.15.0-67-generic)
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0137 - (os_version: #74~20.04.1-Ubuntu SMP Wed Feb 22 14:52:34 UTC 2023)
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0138 - (os_machine: x86_64)
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0139 - (os_processor: x86_64)
-[8510/8510] sysinfo_api.py|syinfo_show_uname:0141 - (uname_result: uname_result(system='Linux', node='build20-vbx', release='5.15.0-67-generic', version='#74~20.04.1-Ubuntu SMP Wed Feb 22 14:52:34 UTC 2023', machine='x86_64', processor='x86_64'))
-[8510/8510] sysinfo_api.py|keyboard_recv:0162 - press q to quit the loop ...
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0095 - --------------------------------------------------------------------------------
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0098 - (cpu_usage: [2.0, 0.0, 1.0, 0.0])
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0099 - (cpu_loadavg: (0.14, 0.07, 0.06))
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0100 - (cpu_count: 4)
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0101 - (cpu_num: 1)
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0103 - (cpu_freq: 2808.0, min: 0.0, max: 0.0)
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0112 - (disk_usage: 17.4 %)
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0114 - (mem_total: 8335757312 bytes, mem_usage: 16.1 %)
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0118 - (battery: 78.0 %, secsleft: 00:00:00, AC: True)
-[8510/8511] sysinfo_api.py|sysinfo_show_watch:0125 - (fans: {})
-q[8510/8511] sysinfo_api.py|threadx_handler:0173 - Bye-Bye !!!
-[8510/8510] sysinfo_api.py|release:0187 - Done.
-[8510/8510] sysinfo_123.py|app_release:0031 - Enter ...
-[8510/8510] sysinfo_123.py|app_release:0036 - call sysinfo_ctx.release ...
-[8510/8510] sysinfo_123.py|app_release:0040 - Done.
-[8510/8510] sysinfo_123.py|app_stop:0049 - Done.
-[8510/8510] sysinfo_123.py|main:0107 - Bye-Bye !!! (is_quit: 1)
-
+[12843/12843] pythonP9.py|argsX_dump:0057 - {'keyboard': 1, 'interval': 5}
+[12843/12843] sysinfo_api.py|__init__:0210 - Enter ...
+[12843/12843] sysinfo_api.py|ctx_init:0200 - Enter ...
+[12843/12843] sysinfo_api.py|start:0221 - Start !!!
+[12843/12843] sysinfo_api.py|parse_args:0215 - Enter ...
+[12843/12843] sysinfo_api.py|keyboard_recv:0167 - press q to quit the loop ...
+[12843/12844] sysinfo_api.py|os_net_ipaddrs:0083 - lo - 127.0.0.1/8
+[12843/12844] sysinfo_api.py|os_net_ipaddrs:0083 - lo - ('::1', 0, 0)/128
+[12843/12844] sysinfo_api.py|os_net_ipaddrs:0083 - enp0s3 - 192.168.31.17/24
+[12843/12844] sysinfo_api.py|os_net_ipaddrs:0083 - enp0s3 - ('fe80::6cc1:75e9:876c:43e9', 0, 2)/64
+[12843/12844] sysinfo_api.py|os_net_ipaddrs:0083 - enp0s8 - 192.168.56.101/24
+[12843/12844] sysinfo_api.py|os_net_ipaddrs:0083 - enp0s8 - ('fe80::c5d3:c65a:1734:9ae8', 0, 3)/64
+[12843/12844] sysinfo_api.py|os_net_ipaddrs:0083 - docker0 - 172.17.0.1/16
+--------------------------------------------------------------------------------
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0114 - (cpu_usage: [0.0, 0.0])
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0115 - (cpu_loadavg: (0.09, 0.09, 0.05))
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0116 - (cpu_count: 2)
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0117 - (cpu_num: 1)
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0119 - (cpu_freq: 2419.2, min: 0.0, max: 0.0)
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0128 - (disk_usage: 37.1 %)
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0130 - (mem_total: 4102107136 bytes, mem_usage: 23.4 %)
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0134 - (battery: 60.0 %, secsleft: 00:00:00, AC: True)
+[12843/12844] sysinfo_api.py|sysinfo_show_watch:0141 - (fans: {})
+[12843/12844] threadx_api.py|threadx_sleep:0067 - call wait ... (timeout: 5)
+[12843/12843] threadx_api.py|threadx_wakeup:0061 - call notify ...
+[12843/12844] sysinfo_api.py|threadx_handler:0189 - Bye-Bye !!!
+[12843/12843] sysinfo_api.py|release:0197 - Done.
+[12843/12843] sysinfo_123.py|app_release:0061 - Enter ...
+[12843/12843] sysinfo_123.py|app_release:0066 - call sysinfo_ctx.release ...
+[12843/12843] sysinfo_123.py|app_release:0070 - Done.
+[12843/12843] sysinfo_123.py|app_exit:0081 - Done.
+[12843/12843] sysinfo_123.py|main:0131 - Bye-Bye !!! (app_quit_get: 1)
 ```
 ## - youtube_123.py - a streamlink example.
 
@@ -303,25 +331,24 @@ q[8510/8511] sysinfo_api.py|threadx_handler:0173 - Bye-Bye !!!
 
 ```bash
 $ make youtube_123
-==> python 3.12 - layer_python: /work/codebase/lankahsu520/pythonP9/python
 
+==> python 3.12 - run: youtube_123
+#PYTHONPATH=/work/codebase/lankahsu520/pythonP9/python python -m pythonP9.youtube_123 -d 4
+./youtube_123.py -d 4
+[12838/12838] pythonP9.py|argsX_dump:0057 - {}
+[12838/12838] youtube_123.py|app_start:0041 - (Python version: 3.12.11, chkPYTHONge(3,8,0): True, chkPYTHONle(3,8,0): False)
+[12838/12838] streamlink_api.py|streams_urlparse:0031 - (stream_url: https://www.youtube.com/watch?v=a_9_38JpdYU)
+[12838/12838] streamlink_api.py|streams_urlparse:0032 - (urlparse: ParseResult(scheme='https', netloc='www.youtube.com', path='/watch', params='', query='v=a_9_38JpdYU', fragment=''))
+[12838/12838] streamlink_api.py|streams_choice:0051 - (quality: 360p / dict_keys(['360p', 'worst', 'best']))
+[12838/12838] streamlink_api.py|streams_savetofile:0080 - (filename: ./240p.mp4, chunksize:1024)
+./240p.mp4: 47,866,053 bytes
 
-==> python 3.12 - run: youtube_123.py
-PYTHONPATH=/work/codebase/lankahsu520/pythonP9/python ./youtube_123.py -d 4
-[10130/139874243954496] youtube_123.py|app_start:0033 - (Python version: 3.12.3, chkPYTHONge(3,8,0): True, chkPYTHONle(3,8,0): False)
-[10130/139874243954496] streamlink_api.py|streams_urlparse:0031 - (stream_url: https://www.youtube.com/watch?v=a_9_38JpdYU)
-[10130/139874243954496] streamlink_api.py|streams_urlparse:0032 - (urlparse: ParseResult(scheme='https', netloc='www.youtube.com', path='/watch', params='', query='v=a_9_38JpdYU', fragment=''))
-[10130/139874243954496] streamlink_api.py|streams_choice:0051 - (quality: 240p / dict_keys(['audio_mp4a', 'audio_opus', '144p', '240p', '360p', '480p', '720p', '1080p', 'worst', 'best']))
-[10130/139874243954496] streamlink_api.py|streams_savetofile:0080 - (filename: ./240p.mp4, chunksize:1024)
-./240p.mp4: 37,503,875 bytes
-
-[10130/139874243954496] streamlink_api.py|streams_streaming:0069 - Download complete !!!
-[10130/139874243954496] youtube_123.py|app_release:0053 - Enter ...
-[10130/139874243954496] youtube_123.py|app_release:0058 - call streamlink_ctx.release ...
-[10130/139874243954496] youtube_123.py|app_release:0062 - Done.
-[10130/139874243954496] youtube_123.py|app_exit:0075 - Done.
-[10130/139874243954496] youtube_123.py|main:0125 - Bye-Bye !!! (is_quit: 1)
-
+[12838/12838] streamlink_api.py|streams_streaming:0069 - Download complete !!!
+[12838/12838] youtube_123.py|app_release:0062 - Enter ...
+[12838/12838] youtube_123.py|app_release:0067 - call streamlink_ctx.release ...
+[12838/12838] youtube_123.py|app_release:0071 - Done.
+[12838/12838] youtube_123.py|app_exit:0082 - Done.
+[12838/12838] youtube_123.py|main:0127 - Bye-Bye !!! (app_quit_get: 1)
 ```
 
 # 6. Documentation

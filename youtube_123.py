@@ -36,7 +36,7 @@ def app_quit_set(mode):
 	is_quit=mode
 
 def app_start():
-	argsX_dump()
+	argsX_dump(argsX)
 
 	DBG_IF_LN("(Python version: {}, chkPYTHONge(3,8,0): {}, chkPYTHONle(3,8,0): {})".format( getPYTHONbver(), chkPYTHONge(3,7,0), chkPYTHONle(3,7,0) ))
 
