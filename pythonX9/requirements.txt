@@ -8,7 +8,7 @@ psutil
 ifaddr
 #https://pypi.org/project/streamlink/
 #sudo apt install -y streamlink
-streamlink==6.7.4
+streamlink
 #https://pypi.org/project/lxml/
 #sudo apt install -y python3-lxml
 #lxml
