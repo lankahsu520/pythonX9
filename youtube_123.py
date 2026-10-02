@@ -20,7 +20,7 @@
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
 
-from pythonP9.streamlink_api import *
+from utilsP9.streamlink_api import *
 
 appX_list = []
 is_quit = 0

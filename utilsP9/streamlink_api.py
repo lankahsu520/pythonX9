@@ -18,14 +18,14 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from .pythonP9 import *
+from .utilsP9 import *
 
 #https://streamlink.github.io/api.html
 from streamlink import Streamlink, StreamError, PluginError, NoPluginError
 import urllib.parse as urlparse
 from urllib.parse import unquote as urlunquote
 
-class streamlink_ctx(pythonP9):
+class streamlink_ctx(utilsP9):
 	def streams_urlparse(self):
 		self.urlparse = urlparse.urlparse( urlunquote(self.stream_url) )
 		DBG_IF_LN("(stream_url: {})".format(self.stream_url))

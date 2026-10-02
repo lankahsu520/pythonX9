@@ -18,13 +18,13 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from .pythonP9 import *
+from .utilsP9 import *
 from .threadx_api import *
 
 import select, socket
 import struct
 
-class multicast_ctx(pythonP9, threadx_ctx):
+class multicast_ctx(utilsP9, threadx_ctx):
 
 	def openx(self):
 		self.sockfd = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)

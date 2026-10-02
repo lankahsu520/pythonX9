@@ -1,7 +1,7 @@
 PWD=$(shell pwd)
 -include $(SDK_CONFIG_CONFIG)
 
-MY_NAME = pythonP9
+MY_NAME = utilsP9
 
 #** include *.mk **
 -include define.mk
@@ -17,16 +17,17 @@ LIBNAME_MOD =
 
 #** GITHUB_LIBS **
 GITHUB_LIBS = \
-#														https://github.com/lankahsu520/pythonP9.git
+#														https://github.com/lankahsu520/utilsP9.git
 
 #** PYTHON_FILES **
 PYTHON_FILES = \
-														youtube_123 \
 														dummy_123 \
+														httpd_123 \
 														multicast_123 \
 														queuex_123 \
 														statex_123 \
-														sysinfo_123
+														sysinfo_123 \
+														youtube_123
 
 DEBUG=4
 DEBUG_ARG=-d $(DEBUG)

@@ -18,9 +18,9 @@
 
 #import os, sys, errno, getopt, signal, time, io
 #from time import sleep
-from .pythonP9 import *
+from .utilsP9 import *
 
-class dummy_ctx(pythonP9):
+class dummy_ctx(utilsP9):
 	def release(self):
 		if ( self.is_quit == 0 ):
 			self.is_quit = 1
